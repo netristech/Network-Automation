@@ -26,30 +26,30 @@ with open('/home/brian/inventory_'+datetime.now().strftime('%Y%m%d%H%M%S')+'.csv
             "device_type": "cisco_ios",
         }
 
-    try:
-        net_connect = Netmiko(**conn)
-    except:
-        sys.stdout.write("!")
-        sys.stdout.flush()
-    else:
-        serials=[]
-        hostname = net_connect.find_prompt().split('#')[0]
-        vers = net_connect.send_command('show version')
-        # Special handling for Nexus switches
-        if "Nexus" in vers:
-            inv = net_connect.send_command('show inventory')
-            version = vers[vers.find("system:    version ") + 19:].splitlines()[0].strip()
-            serials.append(inv[inv.find("SN: ") + 4:].splitlines()[0].strip())
-        # Normal handling for IOS switches
+        try:
+            net_connect = Netmiko(**conn)
+        except:
+            sys.stdout.write("!")
+            sys.stdout.flush()
         else:
-            version = vers[vers.find("Version") + 8:vers.find("RELEASE") - 2]
-            for i in re.finditer('System Serial Number', vers, re.IGNORECASE):
-            serials.append(vers[i.end():].splitlines()[0].split(":")[1].strip())
-        report_writer.writerow([hostname, line.rstrip("\n"), version, serials[0]])
-        if len(serials) > 1:
-            for x in range(1, len(serials)):
-            report_writer.writerow([' ',' ',' ',serials[x]])
-        net_connect.disconnect()
-        sys.stdout.write(".")
-        sys.stdout.flush()
+            serials = []
+            hostname = net_connect.find_prompt().split('#')[0]
+            vers = net_connect.send_command('show version')
+            # Special handling for Nexus switches
+            if "Nexus" in vers:
+                inv = net_connect.send_command('show inventory')
+                version = vers[vers.find("system:    version ") + 19:].splitlines()[0].strip()
+                serials.append(inv[inv.find("SN: ") + 4:].splitlines()[0].strip())
+            # Normal handling for IOS switches
+            else:
+                version = vers[vers.find("Version") + 8:vers.find("RELEASE") - 2]
+                for i in re.finditer('System Serial Number', vers, re.IGNORECASE):
+                    serials.append(vers[i.start():].splitlines()[0].split(":")[1].strip())
+            report_writer.writerow([hostname, line.rstrip("\n"), version, serials[0]])
+            if len(serials) > 1:
+                for x in range(1, len(serials)):
+                    report_writer.writerow([' ', ' ', ' ', serials[x]])
+            net_connect.disconnect()
+            sys.stdout.write(".")
+            sys.stdout.flush()
 print "\nInventory report generated successfully"
