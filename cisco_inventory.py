@@ -21,7 +21,7 @@ with open(os.getcwd()+'/inventory_'+datetime.now().strftime('%Y%m%d%H%M%S')+'.cs
     for line in file:
 
         conn = {
-            "host": line,
+            "host": line.rstrip("\n"),
             "username": ciscouser,
             "password": ciscopass,
             "device_type": "cisco_ios",
