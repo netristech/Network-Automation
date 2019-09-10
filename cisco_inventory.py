@@ -2,6 +2,7 @@
 import csv
 import re
 import sys
+import os
 from datetime import datetime
 from getpass import getpass
 from netmiko import Netmiko
@@ -12,7 +13,7 @@ timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
 sys.stdout.write("Please wait while inventory report is being generated")
 sys.stdout.flush()
 
-with open('/home/brian/inventory_'+datetime.now().strftime('%Y%m%d%H%M%S')+'.csv', 'w') as csv_file, open('/home/brian/ips') as file:
+with open(os.getcwd()+'/inventory_'+datetime.now().strftime('%Y%m%d%H%M%S')+'.csv', 'w') as csv_file, open(os.getcwd()+'/ips') as file:
 
     report_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     report_writer.writerow(['Hostname', 'IP Address', 'Software Version', 'Serial Number'])
@@ -52,4 +53,4 @@ with open('/home/brian/inventory_'+datetime.now().strftime('%Y%m%d%H%M%S')+'.csv
             net_connect.disconnect()
             sys.stdout.write(".")
             sys.stdout.flush()
-print "\nInventory report generated successfully"
+print "\nInventory report has been generated"
