@@ -43,7 +43,7 @@ with open(os.getcwd()+'/inventory_'+datetime.now().strftime('%Y%m%d%H%M%S')+'.cs
                 serials.append(inv[inv.find("SN: ") + 4:].splitlines()[0].strip())
             # Normal handling for IOS switches
             else:
-                version = vers[vers.find("Version") + 8:vers.find("RELEASE") - 2]
+                version = vers[vers.find("), Version") + 11:vers.find("RELEASE") - 2]
                 for i in re.finditer('System Serial Number', vers, re.IGNORECASE):
                     serials.append(vers[i.start():].splitlines()[0].split(":")[1].strip())
             report_writer.writerow([hostname, line.rstrip("\n"), version, serials[0]])
