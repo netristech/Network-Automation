@@ -7,13 +7,16 @@ from datetime import datetime
 from getpass import getpass
 from netmiko import Netmiko
 
+input_file = raw_input("Name of file containing IP list [default 'ips']: ")
+if input_file == "":
+    input_file = "ips"
 ciscouser = raw_input("Login username: ")
 ciscopass = getpass()
 timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
 sys.stdout.write("Please wait while inventory report is being generated")
 sys.stdout.flush()
 
-with open(os.getcwd()+'/inventory_'+datetime.now().strftime('%Y%m%d%H%M%S')+'.csv', 'w') as csv_file, open(os.getcwd()+'/ips') as file:
+with open(os.getcwd()+'/inventory_'+datetime.now().strftime('%Y%m%d%H%M%S')+'.csv', 'w') as csv_file, open(os.getcwd()+'/'input_file) as file:
 
     report_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     report_writer.writerow(['Hostname', 'IP Address', 'Software Version', 'Serial Number'])
@@ -49,7 +52,7 @@ with open(os.getcwd()+'/inventory_'+datetime.now().strftime('%Y%m%d%H%M%S')+'.cs
             report_writer.writerow([hostname, line.rstrip("\n"), version, serials[0]])
             if len(serials) > 1:
                 for x in range(1, len(serials)):
-                    report_writer.writerow([' ', ' ', ' ', serials[x]])
+                    report_writer.writerow([hostname+'-SW{}'.format(x), '(stacked)', '(stacked)', serials[x]])
             net_connect.disconnect()
             sys.stdout.write(".")
             sys.stdout.flush()
