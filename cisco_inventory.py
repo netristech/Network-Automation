@@ -16,7 +16,7 @@ timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
 sys.stdout.write("Please wait while inventory report is being generated")
 sys.stdout.flush()
 
-with open(os.getcwd()+'/inventory_'+datetime.now().strftime('%Y%m%d%H%M%S')+'.csv', 'w') as csv_file, open(os.getcwd()+'/'input_file) as file:
+with open(os.getcwd()+'/inventory_'+datetime.now().strftime('%Y%m%d%H%M%S')+'.csv', 'w') as csv_file, open(os.getcwd()+'/'+input_file) as file:
 
     report_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     report_writer.writerow(['Hostname', 'IP Address', 'Software Version', 'Serial Number'])
