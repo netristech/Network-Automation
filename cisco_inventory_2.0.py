@@ -1,4 +1,6 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
+
+#import modules
 import csv
 import re
 import sys
@@ -7,16 +9,24 @@ from datetime import datetime
 from getpass import getpass
 from netmiko import Netmiko
 
-input_file = raw_input("Name of file containing IP list [default 'ips']: ")
-if input_file == "":
-    input_file = "ips"
-ciscouser = raw_input("Login username: ")
-ciscopass = getpass()
 timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+
+# generate input_file from input_subnets containing all IPs to perform inventory scan against
+input_subnets = ""
+while input_subnets == "":
+    input_subnets = raw_input("Enter a space delimited list of subnets (in CIDR notation) to scan: ")
+input_file = os.getcwd()+"/ips_"+timestamp
+input_subnets = input_subnets.split(" ")
+for i in input_subnets:
+    os.system("sudo "+os.getcwd()+"/discover_devices.sh "+i+" "+input_file)
+
+# gather username and password
+cisco_user = raw_input("Login username: ")
+cisco_pass = getpass()
 sys.stdout.write("Please wait while inventory report is being generated")
 sys.stdout.flush()
 
-with open(os.getcwd()+'/inventory_'+datetime.now().strftime('%Y%m%d%H%M%S')+'.csv', 'w') as csv_file, open(os.getcwd()+'/'+input_file) as file:
+with open(os.getcwd()+'/inventory_'+timestamp+'.csv', 'w') as csv_file, open(input_file) as file:
 
     report_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     report_writer.writerow(['Hostname', 'IP Address', 'Software Version', 'Serial Number'])
@@ -25,8 +35,8 @@ with open(os.getcwd()+'/inventory_'+datetime.now().strftime('%Y%m%d%H%M%S')+'.cs
 
         conn = {
             "host": line.rstrip("\n"),
-            "username": ciscouser,
-            "password": ciscopass,
+            "username": cisco_user,
+            "password": cisco_pass,
             "device_type": "cisco_ios",
         }
 
