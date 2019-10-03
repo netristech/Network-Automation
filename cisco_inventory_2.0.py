@@ -62,7 +62,7 @@ with open(os.getcwd()+'/inventory_'+timestamp+'.csv', 'w') as csv_file, open(inp
             report_writer.writerow([hostname, line.rstrip("\n"), version, serials[0]])
             if len(serials) > 1:
                 for x in range(1, len(serials)):
-                    report_writer.writerow([hostname+'-SW{}'.format(x + 1), '(stacked)', '(stacked)', serials[x]])
+                    report_writer.writerow([hostname+'-{}'.format(x + 1), '(stacked)', '(stacked)', serials[x]])
             net_connect.disconnect()
             sys.stdout.write(".")
             sys.stdout.flush()
