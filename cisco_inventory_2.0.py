@@ -29,7 +29,7 @@ sys.stdout.flush()
 with open(os.getcwd()+'/inventory_'+timestamp+'.csv', 'w') as csv_file, open(input_file) as file:
 
     report_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    report_writer.writerow(['Hostname', 'IP Address', 'Software Version', 'Serial Number'])
+    report_writer.writerow(['Hostname', 'IP Address', 'Model', 'Software Version', 'Serial Number'])
 
     for line in file:
 
@@ -53,16 +53,18 @@ with open(os.getcwd()+'/inventory_'+timestamp+'.csv', 'w') as csv_file, open(inp
             if "Nexus" in vers:
                 inv = net_connect.send_command('show inventory')
                 version = vers[vers.find("system:    version ") + 19:].splitlines()[0].strip()
+                model = vers[vers.find("cisco Nexus ") + 6:vers.find(" Chassis (") - 1]
                 serials.append(inv[inv.find("SN: ") + 4:].splitlines()[0].strip())
             # Normal handling for IOS switches
             else:
                 version = vers[vers.find("), Version") + 11:vers.find("RELEASE") - 2]
+                model = vers[vers.find("reload license Level:"):vers.find(") processor")].split("cisco ")[1].split(" (")[0]
                 for i in re.finditer('System Serial Number', vers, re.IGNORECASE):
                     serials.append(vers[i.start():].splitlines()[0].split(":")[1].strip())
-            report_writer.writerow([hostname, line.rstrip("\n"), version, serials[0]])
+            report_writer.writerow([hostname, line.rstrip("\n"), model, version, serials[0]])
             if len(serials) > 1:
                 for x in range(1, len(serials)):
-                    report_writer.writerow([hostname+'-{}'.format(x + 1), '(stacked)', '(stacked)', serials[x]])
+                    report_writer.writerow([hostname+'-{}'.format(x + 1), '(stacked)', model, '(stacked)', serials[x]])
             net_connect.disconnect()
             sys.stdout.write(".")
             sys.stdout.flush()
