@@ -15,11 +15,11 @@ timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
 input_subnets = ""
 while input_subnets == "":
     input_subnets = raw_input("Enter a space delimited list of subnets (in CIDR notation) to scan: ")
+print "Generating IP list. This may take a moment. . ."
 input_file = os.getcwd()+"/ips_"+timestamp
 input_subnets = input_subnets.split(" ")
 for i in input_subnets:
     os.system("sudo "+os.getcwd()+"/discover_devices.sh "+i+" "+input_file)
-print "Generating IP list. This may take a moment. . ."
 
 # gather username and password
 cisco_user = raw_input("Login username: ")
