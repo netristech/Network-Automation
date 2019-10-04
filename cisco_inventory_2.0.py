@@ -49,13 +49,13 @@ with open(os.getcwd()+'/inventory_'+timestamp+'.csv', 'w') as csv_file, open(inp
             serials = []
             hostname = net_connect.find_prompt().split('#')[0]
             vers = net_connect.send_command('show version')
-            # Special handling for Nexus switches
+            # Special handling for Nexus
             if "Nexus" in vers:
                 inv = net_connect.send_command('show inventory')
                 version = vers[vers.find("system:    version ") + 19:].splitlines()[0].strip()
-                model = vers[vers.find("cisco Nexus ") + 6:vers.find(" Chassis (") - 1]
+                model = vers[vers.find("cisco Nexus ") + 6:vers.find("Chassis (") - 1]
                 serials.append(inv[inv.find("SN: ") + 4:].splitlines()[0].strip())
-            # Normal handling for IOS switches
+            # Normal handling for IOS
             else:
                 version = vers[vers.find("), Version") + 11:vers.find("RELEASE") - 2]
                 model = vers[vers.find("reload license Level:"):vers.find(") processor")].split("cisco ")[1].split(" (")[0]
