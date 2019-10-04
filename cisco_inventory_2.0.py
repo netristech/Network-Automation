@@ -19,6 +19,7 @@ input_file = os.getcwd()+"/ips_"+timestamp
 input_subnets = input_subnets.split(" ")
 for i in input_subnets:
     os.system("sudo "+os.getcwd()+"/discover_devices.sh "+i+" "+input_file)
+print "Generating IP list. This may take a moment. . ."
 
 # gather username and password
 cisco_user = raw_input("Login username: ")
@@ -58,7 +59,8 @@ with open(os.getcwd()+'/inventory_'+timestamp+'.csv', 'w') as csv_file, open(inp
             # Normal handling for IOS
             else:
                 version = vers[vers.find("), Version") + 11:vers.find("RELEASE") - 2]
-                model = vers[vers.find("reload license Level:"):vers.find(") processor")].split("cisco ")[1].split(" (")[0]
+                model_ind = vers[:vers.find(") processor")].splitlines()
+                model = model_ind[len(model_ind) - 1].split(" ")[1]
                 for i in re.finditer('System Serial Number', vers, re.IGNORECASE):
                     serials.append(vers[i.start():].splitlines()[0].split(":")[1].strip())
             report_writer.writerow([hostname, line.rstrip("\n"), model, version, serials[0]])
