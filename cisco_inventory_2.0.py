@@ -15,9 +15,9 @@ timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
 input_subnets = ""
 while input_subnets == "":
     input_subnets = raw_input("Enter a space delimited list of subnets (in CIDR notation) to scan: ")
-print "Generating IP list. This may take a moment. . ."
+print "Generating IP list. This may take a moment."
 input_file = os.getcwd()+"/ips_"+timestamp
-input_subnets = input_subnets.split(" ")
+input_subnets = input_subnets.split()
 for i in input_subnets:
     os.system("sudo "+os.getcwd()+"/discover_devices.sh "+i+" "+input_file)
 
@@ -27,7 +27,7 @@ cisco_pass = getpass()
 sys.stdout.write("Please wait while inventory report is being generated")
 sys.stdout.flush()
 
-with open(os.getcwd()+'/inventory_'+timestamp+'.csv', 'w') as csv_file, open(input_file) as file:
+with open(os.getcwd()+'/inv_'+timestamp+'.csv', 'w') as csv_file, open(input_file) as file:
 
     report_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     report_writer.writerow(['Hostname', 'IP Address', 'Model', 'Software Version', 'Serial Number'])
@@ -43,13 +43,13 @@ with open(os.getcwd()+'/inventory_'+timestamp+'.csv', 'w') as csv_file, open(inp
 
         try:
             net_connect = Netmiko(**conn)
+            vers = net_connect.send_command('show version')
         except:
             sys.stdout.write("!")
             sys.stdout.flush()
         else:
             serials = []
             hostname = net_connect.find_prompt().split('#')[0]
-            vers = net_connect.send_command('show version')
             # Special handling for Nexus
             if "Nexus" in vers:
                 inv = net_connect.send_command('show inventory')
@@ -59,14 +59,13 @@ with open(os.getcwd()+'/inventory_'+timestamp+'.csv', 'w') as csv_file, open(inp
             # Normal handling for IOS
             else:
                 version = vers[vers.find("), Version") + 11:vers.find("RELEASE") - 2]
-                model_ind = vers[:vers.find(") processor")].splitlines()
-                model = model_ind[len(model_ind) - 1].split(" ")[1]
+                model = re.search("cisco(.+?)processor", vers).group(1).split()[0]
                 for i in re.finditer('System Serial Number', vers, re.IGNORECASE):
                     serials.append(vers[i.start():].splitlines()[0].split(":")[1].strip())
             report_writer.writerow([hostname, line.rstrip("\n"), model, version, serials[0]])
             if len(serials) > 1:
                 for x in range(1, len(serials)):
-                    report_writer.writerow([hostname+'-{}'.format(x + 1), '(stacked)', model, '(stacked)', serials[x]])
+                    report_writer.writerow([hostname+'-{}'.format(x + 1), '(stacked)', '(stacked)', '(stacked)', serials[x]])
             net_connect.disconnect()
             sys.stdout.write(".")
             sys.stdout.flush()
