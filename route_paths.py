@@ -40,12 +40,13 @@ def main():
         }
         try:
             net_connect = Netmiko(**conn)
+            hostname = net_connect.find_prompt().split('#')[0]
         except:
             pass
         else:
             break
-    report_writer = csv.writer("trace_report_"+str(source_dev), delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    report_writer.writerow(['Trace Report from '+str(source_dev), ''])
+    report_writer = csv.writer("trace_report_"+hostname, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    report_writer.writerow(['Trace Report from '+hostname+"("str(source_dev)+")", ''])
     report_writer.writerow(['Destination', 'Results'])
     if __name__ == '__main__':
         with Pool(10) as pool:
