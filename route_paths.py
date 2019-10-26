@@ -45,11 +45,12 @@ def main():
             pass
         else:
             break
-    report_writer = csv.writer("trace_report_"+hostname, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    report_writer.writerow(['Trace Report from '+hostname+"("+str(source_dev)+")", ''])
-    report_writer.writerow(['Destination', 'Results'])
-    if __name__ == '__main__':
-        with Pool(10) as pool:
-            pool.map(trace, list(dest_ips))
+    with open('trace_report_"+hostname, 'w') as csvfile:
+        report_writer = csv.writer(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        report_writer.writerow(['Trace Report from '+hostname+"("+str(source_dev)+")", ''])
+        report_writer.writerow(['Destination', 'Results'])
+        if __name__ == '__main__':
+            with Pool(10) as pool:
+                pool.map(trace, list(dest_ips))
 
 main()
