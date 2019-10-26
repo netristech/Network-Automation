@@ -14,7 +14,7 @@ def main():
 
     while True:
         try:
-            source_dev = ipaddress.IPv4Address(raw_input("Source device to originate traceroute: "))
+            source_dev = ipaddress.IPv4Address(u""+raw_input("Source device to originate traceroute: "))
         except:
             pass
         else:
@@ -23,7 +23,7 @@ def main():
         try:
             dest_ips = raw_input("Destination IP or IPs (space delimited): ").split(" ")
             for i in range(0, len(dest_ips)):
-                dest_ips[i] = ipaddress.IPv4Address(dest_ips[i])
+                dest_ips[i] = ipaddress.IPv4Address(u""+dest_ips[i])
         except:
             pass
         else:
