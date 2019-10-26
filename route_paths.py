@@ -2,16 +2,14 @@
 
 #imports
 from __future__ import print_function
+import sys
 import ipaddress
 import csv
-from multiprocessing import Pool
+from multiprocessing import Process
 from getpass import getpass
 from netmiko import Netmiko
 
 def main():
-    def trace(ipaddr):
-        report_writer.writerow([ipaddr, net_connect.send_command('traceroute '+ipaddr)])
-
     while True:
         try:
             source_dev = ipaddress.IPv4Address(u""+raw_input("Source device to originate traceroute: "))
@@ -45,12 +43,21 @@ def main():
             pass
         else:
             break
-    with open('trace_report_"+hostname, 'w') as csvfile:
+    with open("trace_report_"+hostname+".csv", "w") as csvfile:
         report_writer = csv.writer(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         report_writer.writerow(['Trace Report from '+hostname+"("+str(source_dev)+")", ''])
         report_writer.writerow(['Destination', 'Results'])
-        if __name__ == '__main__':
-            with Pool(10) as pool:
-                pool.map(trace, list(dest_ips))
+        sys.stdout.write("Please wait while the report is being generated ")
+        sys.stdout.flush()
+        for ip in list(dest_ips):
+            output = net_connect.send_command_timing("traceroute "+str(ip))
+            while (':' in output) or ('?' in output):
+                output = net_connect.send_command_timing("\n")
+            report_writer.writerow([str(ip), output])
+            sys.stdout.write(". ")
+            sys.stdout.flush()
+            output = ""
+    net_connect.disconnect()
 
 main()
+print("\nReport generation complete!")
