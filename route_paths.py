@@ -3,6 +3,7 @@
 #imports
 from __future__ import print_function
 import sys
+import re
 import ipaddress
 import csv
 from multiprocessing import Process
@@ -50,10 +51,10 @@ def main():
         sys.stdout.write("Please wait while the report is being generated ")
         sys.stdout.flush()
         for ip in list(dest_ips):
-            output = net_connect.send_command_timing("traceroute "+str(ip))
-            while (':' in output) or ('?' in output):
-                output = net_connect.send_command_timing("\n")
-            report_writer.writerow([str(ip), output])
+            output = net_connect.send_command_timing("traceroute "+str(ip)+"\n", expect_string=hostname)
+            #while (':' in output) or ('?' in output):
+                #output = net_connect.send_command_timing("\n")
+            report_writer.writerow([str(ip), output.strip()])
             sys.stdout.write(". ")
             sys.stdout.flush()
             output = ""
