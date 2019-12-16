@@ -8,6 +8,7 @@ import os
 from datetime import datetime
 from getpass import getpass
 from netmiko import Netmiko
+from maclookup import ApiClient
 
 timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
 
@@ -25,10 +26,10 @@ sys.stdout.flush()
 with open(os.getcwd()+'/port_report_'+timestamp+'.csv', 'w') as csv_file, open(os.getcwd()+'/port_report_'+timestamp+'.html', 'w') as html_file:
 
     report_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    report_writer.writerow(['Hostname', 'Port', 'Description', 'MAC Address', 'VLAN', 'IP Address'])
+    report_writer.writerow(['Hostname', 'Port', 'Description', 'MAC Address', 'VLAN', 'Vendor', 'IP Address'])
     html_file.write("<html>\n<head>\n<title>Cisco Switchport Report</title>\n")
-    html_file.write("<style>\n* { padding: 8px; }\n</style>\n</head>\n<body>\n<table>\n")
-    html_file.write("<tr>\n<td>Hostname</td>\n<td>Interface</td>\n<td>Description</td>\n<td>MAC Address</td>\n<td>VLAN</td>\n<td>IP Address</td>\n</tr>\n")
+    html_file.write("<style>\n* { padding: 8px; margin: 0; border: 0px; border-spacing: 0px; }\ntr { border-bottom: 1px solid #ccc; }\ntr:first-child { font-weight: bold; }\ntr:nth-child(odd) { background-color: #f2f2f2; }\n</style>\n")
+    html_file.write("</head>\n<body>\n<table>\n<tr>\n<td>Hostname</td>\n<td>Interface</td>\n<td>Description</td>\n<td>MAC Address</td>\n<td>VLAN</td>\n<td>Vendor</td>\n<td>IP Address</td>\n</tr>\n")
 
     for i in input_ips.split():
 
@@ -58,6 +59,7 @@ with open(os.getcwd()+'/port_report_'+timestamp+'.csv', 'w') as csv_file, open(o
                         desc = "none"
                         mac_add = "not found"
                         vlan_id = "none"
+                        vendor = "not found"
                         ip_add = "not found"
                         for k in int_conf.splitlines():
                             if "description" in k:
@@ -71,6 +73,9 @@ with open(os.getcwd()+'/port_report_'+timestamp+'.csv', 'w') as csv_file, open(o
                                 else:
                                     vlan_id = l.split()[0]
                                     mac_add = l.split()[1]
+                                if mac_add != "not found":
+                                    client = ApiClient('at_HLIetICZRkY5hYSOne4r3TFMK3MA8')
+                                    vendor = client.get_vendor(mac_add)
                                 ip_list = net_connect.send_command("sh ip arp | inc "+mac_add)
                                 if re.search('([0-9]{1,3}\.){3}[0-9]{1,3}', ip_list):
                                     ip_add = re.search('([0-9]{1,3}\.){3}[0-9]{1,3}', ip_list).group(1).strip()
