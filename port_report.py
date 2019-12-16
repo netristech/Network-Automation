@@ -22,8 +22,7 @@ cisco_pass = getpass()
 sys.stdout.write("Please wait while port report is being generated")
 sys.stdout.flush()
 
-with open(os.getcwd()+'/port_report('+timestamp+').csv', 'w') as csv_file, 
-    open(os.getcwd()+'/port_report('+timestamp+').html', 'w') as html_file:
+with open(os.getcwd()+'/port_report_'+timestamp+'.csv', 'w') as csv_file, open(os.getcwd()+'/port_report_'+timestamp+'.html', 'w') as html_file:
 
     report_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     report_writer.writerow(['Hostname', 'Port', 'Description', 'MAC Address', 'VLAN', 'IP Address'])
@@ -58,13 +57,14 @@ with open(os.getcwd()+'/port_report('+timestamp+').csv', 'w') as csv_file,
                     if "mode trunk" not in int_conf:
                         desc = "none"
                         mac_add = "not found"
+                        vlan_id = "none"
                         ip_add = "not found"
                         for k in int_conf.splitlines():
                             if "description" in k:
-                            desc = k
+                                desc = k[13:]
                         mac_list = net_connect.send_command("show mac add int "+j.split()[0])
                         for l in mac_list.splitlines():
-                            if re.search('([0-9A-F]{4}[\.-]){2}[0-9A-F]{4}', l):
+                            if re.search('([0-9a-fA-F]\.?){12}', l):
                                 if l.split()[0] == "*":
                                     vlan_id = l.split()[1]
                                     mac_add = l.split()[2]
@@ -72,10 +72,10 @@ with open(os.getcwd()+'/port_report('+timestamp+').csv', 'w') as csv_file,
                                     vlan_id = l.split()[0]
                                     mac_add = l.split()[1]
                                 ip_list = net_connect.send_command("sh ip arp | inc "+mac_add)
-                                if re.search('([0-9]{1,3}[\.-]){3}[0-9]{1,3}', ip_list):
-                                    ip_add = re.search('([0-9]{1,3}[\.-]){3}[0-9]{1,3}', ip_list).group(1).strip()
-                            report_writer.writerow([hostname, j.split()[0], desc, mac_add, vlan_id, ip_add])
-                            html_file.write("<tr>\n<td>"+hostname+"</td>\n<td>"+j.split()[0]+"</td>\n<td>"+desc+"</td>\n<td>"+mac_add+"</td>\n<td>"+vlan_id+"</td>\n<td>"+ip_add+"</td>\n</tr>\n")
+                                if re.search('([0-9]{1,3}\.){3}[0-9]{1,3}', ip_list):
+                                    ip_add = re.search('([0-9]{1,3}\.){3}[0-9]{1,3}', ip_list).group(1).strip()
+                                report_writer.writerow([hostname, j.split()[0], desc, mac_add, vlan_id, ip_add])
+                                html_file.write("<tr>\n<td>"+hostname+"</td>\n<td>"+j.split()[0]+"</td>\n<td>"+desc+"</td>\n<td>"+mac_add+"</td>\n<td>"+vlan_id+"</td>\n<td>"+ip_add+"</td>\n</tr>\n")
             net_connect.disconnect()
             sys.stdout.write(".")
             sys.stdout.flush()
