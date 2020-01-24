@@ -62,13 +62,11 @@ def main():
                     rem_comm = "no ip dhcp relay address "
                 # Normal handling for IOS
                 for vlan in vlans:
-                    print(net_connect.send_command(f'show run interface vlan {vlan}'))
                     for i in rem_ips:
                         net_connect.send_command(rem_comm+""+i)
                     for i in add_ips:
                         net_connect.send_command(add_comm+""+i)
-                    print("Updated to:")
-                    print(net_connect.send_command(f'show run interface vlan {vlan}'))
+                    print(f"Updated DHCP relays for VLAN {vlan}"))
                 net_connect.disconnect()
                 print(f"Successfully updated DHCP relays on {hostname}")
 
