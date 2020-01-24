@@ -66,7 +66,7 @@ def main():
                         net_connect.send_command(rem_comm+""+i)
                     for i in add_ips:
                         net_connect.send_command(add_comm+""+i)
-                    print(f"Updated DHCP relays for VLAN {vlan}"))
+                    print(f"Updated DHCP relays for VLAN {vlan}")
                 net_connect.disconnect()
                 print(f"Successfully updated DHCP relays on {hostname}")
 
