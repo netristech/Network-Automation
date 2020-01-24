@@ -29,11 +29,11 @@ def main():
                     vlans.pop(i)
         except:
             if input("Invalid data entered. Press any key to continue or 'q' to quit.") == 'c':
-                quit = True
+                exit()
         else:
             break
 
-    if not quit and len(add_ips) > 0 or len(rem_ips) > 0:
+    if and len(add_ips) > 0 or len(rem_ips) > 0:
         # gather username and password
         cisco_user = input("username: ")
         cisco_pass = getpass()
