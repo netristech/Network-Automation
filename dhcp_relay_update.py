@@ -16,19 +16,19 @@ def main():
         try:
             dev_ips = input("Destination IP or IPs (space delimited): ").split()
             for i in range(0, len(dev_ips)):
-                dev_ips[i] = ipaddress.IPv4Address(u""+dev_ips[i])
+                dev_ips[i] = ipaddress.IPv4Address(dev_ips[i])
             add_ips = input("DHCP relay IP(s) to add (space delimited): ").split()
             for i in range(0, len(add_ips)):
-                add_ips[i] = ipaddress.IPv4Address(u""+add_ips[i])
+                add_ips[i] = ipaddress.IPv4Address(add_ips[i])
             rem_ips = input("DHCP relay IP(s) to remove (space delimited): ").split()
             for i in range(0, len(rem_ips)):
-                rem_ips[i] = ipaddress.IPv4Address(u""+rem_ips[i])                
+                rem_ips[i] = ipaddress.IPv4Address(rem_ips[i])                
             vlans = input("VLAN ID(s) to update (number only, space delimited): ").split()
             for i in range(0, len(vlans)):
-                if not isnumeric(u""+vlans[i]) or vlans[i] < 0 or vlans[i] > 4094:
+                if not vlans[i].isnumeric() or int(vlans[i]) < 0 or int(vlans[i]) > 4094:
                     vlans.pop(i)
         except:
-            if input("Invalid data entered. Press any key to continue or 'q' to quit.") == 'c':
+            if input("Invalid data entered. Press any key to continue or 'q' to quit. ") == 'q':
                 exit()
         else:
             break
@@ -38,13 +38,12 @@ def main():
         cisco_user = input("username: ")
         cisco_pass = getpass()
         add_comm = "ip helper-address "
-        rem_comm = "no ip helper-address"
+        rem_comm = "no ip helper-address "
         print("Please wait while the update is being performed")
         
         for ip in dev_ips:
-
             conn = {
-                "host": ip.rstrip("\n"),
+                "host": str(ip).rstrip("\n"),
                 "username": cisco_user,
                 "password": cisco_pass,
                 "device_type": "cisco_ios",
@@ -61,15 +60,13 @@ def main():
                 if "Nexus" in vers:
                     add_comm = "ip dhcp relay address "
                     rem_comm = "no ip dhcp relay address "
-                # Normal handling for IOS
                 for vlan in vlans:
                     for i in rem_ips:
-                        net_connect.send_command(rem_comm+""+i)
+                        net_connect.send_config_set(['interface vlan '+vlan, rem_comm+str(i)])
                     for i in add_ips:
-                        net_connect.send_command(add_comm+""+i)
+                        net_connect.send_config_set(['interface vlan '+vlan, add_comm+str(i)])
                     print(f"Updated DHCP relays for VLAN {vlan}")
                 net_connect.disconnect()
                 print(f"Successfully updated DHCP relays on {hostname}")
-
 main()
 print("\nUpdate completed!")
