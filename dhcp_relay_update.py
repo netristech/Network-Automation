@@ -28,11 +28,12 @@ def main():
                 if not isnumeric(u""+vlans[i]) or vlans[i] < 0 or vlans[i] > 4094:
                     vlans.pop(i)
         except:
-            print("Invalid data entered. Try again.")
+            if input("Invalid data entered. Press any key to continue or 'q' to quit.") == 'c':
+                quit = True
         else:
             break
 
-    if len(add_ips) > 0 or len(rem_ips) > 0:
+    if not quit and len(add_ips) > 0 or len(rem_ips) > 0:
         # gather username and password
         cisco_user = input("username: ")
         cisco_pass = getpass()
