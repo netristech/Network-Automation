@@ -18,8 +18,8 @@ from getpass import getpass
 server = input("CUCM device IP to connect to [default 172.30.167.149]: ")
 if server == '':
     server = '172.30.167.149'
-username = input("Username for connection to CUCM: ")
-password = getpass()
+username = input("CUCM Username: ")
+password = getpass("CUCM Password: ")
 
 # Build Client Object for AXL Service
 history = HistoryPlugin()
