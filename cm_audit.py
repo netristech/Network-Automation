@@ -87,4 +87,4 @@ for node in node:
     if len(node.CmDevices.item) > 0:
         for item in node.CmDevices.item:
             for ip in item.IPAddress.item:
-                print(ip.IP)
+                print(f"{item.name} {ip.IP}")
