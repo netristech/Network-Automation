@@ -16,7 +16,7 @@ from lxml import etree
 
 # Cluster specific variables
 username = 'dunhbrus'
-password = 'B82c03d19!'
+password = ''
 server = '172.30.167.149'
 
 # Build Client Object for AXL Service
