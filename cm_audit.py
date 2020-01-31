@@ -50,15 +50,28 @@ def show_history():
 
 items = []
 try:
-    resp = axl_service.listPhone(searchCriteria={'name': 'SEP%'}, returnedTags={'name': ''})
+    resp = axl_service.getPhone(name='SEPD4AD71BF32E0')
+#    resp = axl_service.listPhone(searchCriteria={'name': '%'}, returnedTags={'name': ''})
 except Fault:
     show_history()
 
-#print(resp)
+#phone_uuid = resp['return'].phone.uuid.lstrip('{').rstrip('}')
+#line_uuid = resp['return'].phone.lines.line[0].uuid.lstrip('{').rstrip('}')
+#dirn_uuid = resp['return'].phone.lines.line[0].dirn.uuid.lstrip('{').rstrip('}')
+#rpn_uuid = resp['return'].phone.lines.line[0].dirn.routePartitionName.uuid
+rpn = resp['return'].phone.lines.line[0].dirn.routePartitionName._value_1
+pat = resp['return'].phone.lines.line[0].dirn.pattern
 
+try:
+    resp = axl_service.getLine(routePartitionName=rpn, pattern=pat)
+except Fault:
+    show_history()
+#print(resp)
+print(resp['return'].line.shareLineAppearanceCssName._value_1)
+
+'''
 for phone in resp['return'].phone:
     items.append(phone.name)
-#    print(phone.name)
 
 cm_select_criteria = {
     'MaxReturnedDevices': '1',
@@ -87,4 +100,4 @@ for node in node:
         for item in node.CmDevices.item:
             for ip in item.IPAddress.item:
                 print(f"{item.Name} {ip.IP}")
-
+'''
