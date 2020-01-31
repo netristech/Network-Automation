@@ -80,15 +80,15 @@ try:
 except Fault:
     show_history()
 else:
-    node = resp.SelectCmDeviceResult.CmNodes.item
-    for node in node:
-        print(f"{node.cmDevices.item.name} {node.cmDevices.item.IPAddress.item.IP}")
-'''
+    nodes = resp.SelectCmDeviceResult.CmNodes.item
+    for node in nodes:
+#        print(f"{node.cmDevices.item.name} {node.cmDevices.item.IPAddress.item.IP}")
         if len(node.CmDevices.item) > 0:
             for item in node.CmDevices.item:
                 for ip in item.IPAddress.item:
                     print(f"{item.Name} {ip.IP}")
 
+'''
 # Get Additional phone and line information
 #phone_uuid = resp['return'].phone.uuid.lstrip('{').rstrip('}')
 #line_uuid = resp['return'].phone.lines.line[0].uuid.lstrip('{').rstrip('}')
