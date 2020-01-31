@@ -62,7 +62,7 @@ for phone in resp['return'].phone:
 
 # Get IP addresses for all phones in list
 cm_select_criteria = {
-    'MaxReturnedDevices': '1',
+    'MaxReturnedDevices': '100',
     'DeviceClass': 'Phone',
     'Model': '255',
     'Status': 'Any',
@@ -82,7 +82,7 @@ except Fault:
 else:
     node = resp.SelectCmDeviceResult.CmNodes.item
     for node in node:
-        print(f"{item.name} {node.cmDevices.item.IPAddress.item.IP}")
+        print(f"{node.cmDevices.item.name} {node.cmDevices.item.IPAddress.item.IP}")
 '''
         if len(node.CmDevices.item) > 0:
             for item in node.CmDevices.item:
