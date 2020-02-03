@@ -53,13 +53,23 @@ items = []
 
 # Get a list of all phone names and store in a list
 try:
-#    resp = axl_service.getPhone(name='SEPD4AD71BF32E0')
     resp = axl_service.listPhone(searchCriteria={'name': '%'}, returnedTags={'name': ''})
 except Fault:
     show_history()
 for phone in resp['return'].phone:
     items.append(phone.name)
 
+# Gather additional phone information
+
+for item in items:
+    try:
+        resp = axl_service.getPhone(name=item)
+    except Fault:
+        show_history()
+    else:
+        print(resp)
+
+'''
 # Get IP addresses for all phones in list
 cm_select_criteria = {
     'MaxReturnedDevices': '100',
@@ -75,6 +85,8 @@ cm_select_criteria = {
     'DownloadStatus': 'Any'
 }
 
+phones = []
+
 try:
     resp = client.service.selectCmDeviceExt(CmSelectionCriteria=cm_select_criteria, StateInfo='')
 except Fault:
@@ -82,13 +94,12 @@ except Fault:
 else:
     nodes = resp.SelectCmDeviceResult.CmNodes.item
     for node in nodes:
-#        print(f"{node.cmDevices.item.name} {node.cmDevices.item.IPAddress.item.IP}")
         if len(node.CmDevices.item) > 0:
             for item in node.CmDevices.item:
                 for ip in item.IPAddress.item:
-                    print(f"{item.Name} {ip.IP}")
+                    ip_add = ip.IP
 
-'''
+
 # Get Additional phone and line information
 #phone_uuid = resp['return'].phone.uuid.lstrip('{').rstrip('}')
 #line_uuid = resp['return'].phone.lines.line[0].uuid.lstrip('{').rstrip('}')
