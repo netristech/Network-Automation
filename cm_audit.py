@@ -65,7 +65,7 @@ for phone in resp['return'].phone:
 
 # Gather additional phone information
 
-phones = []
+#phones = []
 
 with open(f'{os.getcwd()}/cm_audit_{timestamp}.csv', 'w') as csv_file:
 
@@ -104,7 +104,7 @@ with open(f'{os.getcwd()}/cm_audit_{timestamp}.csv', 'w') as csv_file:
             'NodeName': '',
             'SelectBy': 'Name',
             'SelectItems': {
-                'item': items
+                'item': item
             },
             'Protocol': 'Any',
             'DownloadStatus': 'Any'
@@ -122,5 +122,5 @@ with open(f'{os.getcwd()}/cm_audit_{timestamp}.csv', 'w') as csv_file:
                         for ip in item.IPAddress.item:
                             phone_ip = ip.IP
         
-        phones.append('{"name": '+phone_name+', "ip": '+phone_ip+', "description": '+phone_desc+', "model": '+phone_model+', "Phone CSS": '+phone_css+', "Device Pool Name": '+phone_devpool+', "Location": '+phone_loc+', "Route Partition": '+phone_rpn+', "External Mask": '+phone_mask+', "Line CSS": '+line_css+'}')
+ #       phones.append('{"name": '+phone_name+', "ip": '+phone_ip+', "description": '+phone_desc+', "model": '+phone_model+', "Phone CSS": '+phone_css+', "Device Pool Name": '+phone_devpool+', "Location": '+phone_loc+', "Route Partition": '+phone_rpn+', "External Mask": '+phone_mask+', "Line CSS": '+line_css+'}')
         report_writer.writerow([phone_name, phone_ip, phone_desc, phone_model, phone_css, phone_devpool, phone_loc, phone_rpn, phone_mask, line_css])
