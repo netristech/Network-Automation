@@ -61,18 +61,35 @@ for phone in resp['return'].phone:
 
 # Gather additional phone information
 
+phones = []
+
 for item in items:
+    phone_name = item
+
     try:
         resp = axl_service.getPhone(name=item)
     except Fault:
         show_history()
     else:
-        print(resp)
+        phone_desc = resp['return'].phone.description
+        phone_model = resp['return'].phone.model
+        phone_css = resp['return'].phone.callingSearchSpaceName._value_1
+        phone_devpool = resp['return'].phone.devicePoolName._value_1
+        phone_loc = resp['return'].phone.locationName._value_1
+        phone_rpn = resp['return'].phone.lines.line[0].dirn.routePartitionName._value_1
+        phone_pat = resp['return'].phone.lines.line[0].dirn.pattern
+        phone_mask = resp['return'].phone.lines.line[0].e164Mask
+        
+    try:
+        resp = axl_service.getLine(routePartitionName=phone_rpn, pattern=phone_pat)
+    except Fault:
+        show_history()
+    else:
+        line_css = resp['return'].line.shareLineAppearanceCssName._value_1
 
-'''
 # Get IP addresses for all phones in list
 cm_select_criteria = {
-    'MaxReturnedDevices': '100',
+    'MaxReturnedDevices': '1',
     'DeviceClass': 'Phone',
     'Model': '255',
     'Status': 'Any',
@@ -99,7 +116,7 @@ else:
                 for ip in item.IPAddress.item:
                     ip_add = ip.IP
 
-
+'''
 # Get Additional phone and line information
 #phone_uuid = resp['return'].phone.uuid.lstrip('{').rstrip('}')
 #line_uuid = resp['return'].phone.lines.line[0].uuid.lstrip('{').rstrip('}')
@@ -114,5 +131,4 @@ except Fault:
     show_history()
 #print(resp)
 print(resp['return'].line.shareLineAppearanceCssName._value_1)
-
 '''
