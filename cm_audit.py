@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 
+import os
 import ipaddress
+import csv
 from getpass import getpass
+from datetime import datetime
 from zeep import Client
 from zeep.cache import SqliteCache
 from zeep.transports import Transport
@@ -16,6 +19,7 @@ from lxml import etree
 #disable_warnings(InsecureRequestWarning)
 
 #get session variables from user
+timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
 server = input("CUCM device IP to connect to: ")
 username = input("CUCM Username: ")
 password = getpass("CUCM Password: ")
@@ -53,7 +57,7 @@ items = []
 
 # Get a list of all phone names and store in a list
 try:
-    resp = axl_service.listPhone(searchCriteria={'name': '%'}, returnedTags={'name': ''})
+    resp = axl_service.listPhone(searchCriteria={'name': '%', 'devicePoolName': 'US_DAYTFL%'}, returnedTags={'name': ''})
 except Fault:
     show_history()
 for phone in resp['return'].phone:
@@ -63,72 +67,60 @@ for phone in resp['return'].phone:
 
 phones = []
 
-for item in items:
-    phone_name = item
+with open(f'{os.getcwd()}/cm_audit_{timestamp}.csv', 'w') as csv_file:
 
-    try:
-        resp = axl_service.getPhone(name=item)
-    except Fault:
-        show_history()
-    else:
-        phone_desc = resp['return'].phone.description
-        phone_model = resp['return'].phone.model
-        phone_css = resp['return'].phone.callingSearchSpaceName._value_1
-        phone_devpool = resp['return'].phone.devicePoolName._value_1
-        phone_loc = resp['return'].phone.locationName._value_1
-        phone_rpn = resp['return'].phone.lines.line[0].dirn.routePartitionName._value_1
-        phone_pat = resp['return'].phone.lines.line[0].dirn.pattern
-        phone_mask = resp['return'].phone.lines.line[0].e164Mask
+    report_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    report_writer.writerow(['Name', 'IP Address', 'Description', 'Model', 'Phone CSS', 'Device Pool', 'Location', 'Route Parition', 'External Mask', 'Line CSS'])    
+    for item in items:
+        phone_name = item
+
+        try:
+            resp = axl_service.getPhone(name=item)
+        except Fault:
+            show_history()
+        else:
+            phone_desc = resp['return'].phone.description
+            phone_model = resp['return'].phone.model
+            phone_css = resp['return'].phone.callingSearchSpaceName._value_1
+            phone_devpool = resp['return'].phone.devicePoolName._value_1
+            phone_loc = resp['return'].phone.locationName._value_1
+            phone_rpn = resp['return'].phone.lines.line[0].dirn.routePartitionName._value_1
+            phone_pat = resp['return'].phone.lines.line[0].dirn.pattern
+            phone_mask = resp['return'].phone.lines.line[0].e164Mask
+            
+        try:
+            resp = axl_service.getLine(routePartitionName=phone_rpn, pattern=phone_pat)
+        except Fault:
+            show_history()
+        else:
+            line_css = resp['return'].line.shareLineAppearanceCssName._value_1
+
+        # Get IP addresses for all phones in list
+        cm_select_criteria = {
+            'MaxReturnedDevices': '1',
+            'DeviceClass': 'Phone',
+            'Model': '255',
+            'Status': 'Any',
+            'NodeName': '',
+            'SelectBy': 'Name',
+            'SelectItems': {
+                'item': items
+            },
+            'Protocol': 'Any',
+            'DownloadStatus': 'Any'
+        }
+
+        try:
+            resp = client.service.selectCmDeviceExt(CmSelectionCriteria=cm_select_criteria, StateInfo='')
+        except Fault:
+            show_history()
+        else:
+            nodes = resp.SelectCmDeviceResult.CmNodes.item
+            for node in nodes:
+                if len(node.CmDevices.item) > 0:
+                    for item in node.CmDevices.item:
+                        for ip in item.IPAddress.item:
+                            phone_ip = ip.IP
         
-    try:
-        resp = axl_service.getLine(routePartitionName=phone_rpn, pattern=phone_pat)
-    except Fault:
-        show_history()
-    else:
-        line_css = resp['return'].line.shareLineAppearanceCssName._value_1
-
-# Get IP addresses for all phones in list
-cm_select_criteria = {
-    'MaxReturnedDevices': '1',
-    'DeviceClass': 'Phone',
-    'Model': '255',
-    'Status': 'Any',
-    'NodeName': '',
-    'SelectBy': 'Name',
-    'SelectItems': {
-        'item': items
-    },
-    'Protocol': 'Any',
-    'DownloadStatus': 'Any'
-}
-
-phones = []
-
-try:
-    resp = client.service.selectCmDeviceExt(CmSelectionCriteria=cm_select_criteria, StateInfo='')
-except Fault:
-    show_history()
-else:
-    nodes = resp.SelectCmDeviceResult.CmNodes.item
-    for node in nodes:
-        if len(node.CmDevices.item) > 0:
-            for item in node.CmDevices.item:
-                for ip in item.IPAddress.item:
-                    ip_add = ip.IP
-
-'''
-# Get Additional phone and line information
-#phone_uuid = resp['return'].phone.uuid.lstrip('{').rstrip('}')
-#line_uuid = resp['return'].phone.lines.line[0].uuid.lstrip('{').rstrip('}')
-#dirn_uuid = resp['return'].phone.lines.line[0].dirn.uuid.lstrip('{').rstrip('}')
-#rpn_uuid = resp['return'].phone.lines.line[0].dirn.routePartitionName.uuid
-rpn = resp['return'].phone.lines.line[0].dirn.routePartitionName._value_1
-pat = resp['return'].phone.lines.line[0].dirn.pattern
-
-try:
-    resp = axl_service.getLine(routePartitionName=rpn, pattern=pat)
-except Fault:
-    show_history()
-#print(resp)
-print(resp['return'].line.shareLineAppearanceCssName._value_1)
-'''
+        phones.append('{"name": '+phone_name+', "ip": '+phone_ip+', "description": '+phone_desc+', "model": '+phone_model+', "Phone CSS": '+phone_css+', "Device Pool Name": '+phone_devpool+', "Location": '+phone_loc+', "Route Partition": '+phone_rpn+', "External Mask": '+phone_mask+', "Line CSS": '+line_css+'}')
+        report_writer.writerow([phone_name, phone_ip, phone_desc, phone_model, phone_css, phone_devpool, phone_loc, phone_rpn, phone_mask, line_css])
