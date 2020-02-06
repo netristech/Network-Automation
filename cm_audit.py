@@ -83,7 +83,7 @@ def main():
                 phone_css = resp['return'].phone.callingSearchSpaceName._value_1
                 phone_devpool = resp['return'].phone.devicePoolName._value_1
                 phone_loc = resp['return'].phone.locationName._value_1
-                if hasattr(resp['return'].phone.lines, line):
+                if hasattr(resp['return'].phone.lines, 'line'):
                     phone_rpn = resp['return'].phone.lines.line[0].dirn.routePartitionName._value_1
                     phone_pat = resp['return'].phone.lines.line[0].dirn.pattern
                     phone_mask = resp['return'].phone.lines.line[0].e164Mask
