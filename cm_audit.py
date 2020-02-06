@@ -72,7 +72,6 @@ def main():
         report_writer.writerow(['Name', 'IP Address', 'Description', 'Model', 'Phone CSS', 'Device Pool', 'Location', 'Route Parition', 'External Mask', 'Line CSS'])    
         for item in items:
             phone_name = item
-
             try:
                 resp = axl_service.getPhone(name=item)
             except Fault:
@@ -87,16 +86,14 @@ def main():
                     phone_rpn = resp['return'].phone.lines.line[0].dirn.routePartitionName._value_1
                     phone_pat = resp['return'].phone.lines.line[0].dirn.pattern
                     phone_mask = resp['return'].phone.lines.line[0].e164Mask
+                    try:
+                        resp = axl_service.getLine(routePartitionName=phone_rpn, pattern=phone_pat)
+                    except Fault:
+                        show_history()
+                    else:
+                        line_css = resp['return'].line.shareLineAppearanceCssName._value_1                    
                 else:
-                    phone_rpn = 'none'
-                    phone_pat = 'none'
-                    phone_mask = 'none'
-                try:
-                    resp = axl_service.getLine(routePartitionName=phone_rpn, pattern=phone_pat)
-                except Fault:
-                    show_history()
-                else:
-                    line_css = resp['return'].line.shareLineAppearanceCssName._value_1
+                    phone_rpn, phone_mask, line_css = 'no line present'
 
             # Get IP addresses for all phones in list
             cm_select_criteria = {
