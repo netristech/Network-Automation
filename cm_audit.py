@@ -93,7 +93,7 @@ def main():
                     else:
                         line_css = resp['return'].line.shareLineAppearanceCssName._value_1                    
                 else:
-                    phone_rpn, phone_mask, line_css = 'no line present'
+                    phone_rpn = phone_mask = line_css = 'no line present'
 
             # Get IP addresses for all phones in list
             cm_select_criteria = {
