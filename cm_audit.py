@@ -83,21 +83,20 @@ def main():
                 phone_css = resp['return'].phone.callingSearchSpaceName._value_1
                 phone_devpool = resp['return'].phone.devicePoolName._value_1
                 phone_loc = resp['return'].phone.locationName._value_1
-                try:
+                if len(resp['return'].phone.lines.line) > 0:
                     phone_rpn = resp['return'].phone.lines.line[0].dirn.routePartitionName._value_1
                     phone_pat = resp['return'].phone.lines.line[0].dirn.pattern
                     phone_mask = resp['return'].phone.lines.line[0].e164Mask
-                except:
+                else:
                     phone_rpn = 'none'
                     phone_pat = 'none'
                     phone_mask = 'none'
-                
-            try:
-                resp = axl_service.getLine(routePartitionName=phone_rpn, pattern=phone_pat)
-            except Fault:
-                show_history()
-            else:
-                line_css = resp['return'].line.shareLineAppearanceCssName._value_1
+                try:
+                    resp = axl_service.getLine(routePartitionName=phone_rpn, pattern=phone_pat)
+                except Fault:
+                    show_history()
+                else:
+                    line_css = resp['return'].line.shareLineAppearanceCssName._value_1
 
             # Get IP addresses for all phones in list
             cm_select_criteria = {
