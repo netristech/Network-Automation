@@ -52,9 +52,8 @@ def main():
         for hist in [history.last_sent, history.last_received]:
             print(etree.tostring(hist["envelope"], encoding="unicode", pretty_print=True))
 
-    items = []
-
     # Get a list of all phone names and store in a list
+    items = []
     try:
         resp = axl_service.listPhone(searchCriteria={'name': '%', 'devicePoolName': 'US_DAYTFL%'}, returnedTags={'name': ''})
     except Fault:
@@ -63,22 +62,32 @@ def main():
         items.append(phone.name)
 
     # Gather additional phone information
-
-    #phones = []
-
-    with open(f'{os.getcwd()}/cm_audit_{timestamp}.csv', 'w') as csv_file:
-
+    key = {}
+    with open(f'{os.getcwd()}/cm_audit_{timestamp}.csv', 'w') as csv_file, open(f'{os.path.dirname(os.getcwd())}/key.csv', newline='') as key_file:
+        
+        # Parse key file and store contents in dictionary
+        key_reader = csv.reader(key_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        for line in key_reader:
+            key.update({ line[0]: { "key": line[1] } })
+        
+        # Seed CSV report file with column headers
         report_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        report_writer.writerow(['Name', 'IP Address', 'Description', 'Model', 'Phone CSS', 'Device Pool', 'Location', 'Route Parition', 'External Mask', 'Line CSS'])    
+        report_writer.writerow(['Name', 'IP Address', 'MAC Address', 'Extension', 'Description', 'Phone CSS', 'Device Pool', 'Location', 'Route Parition', 'External Mask', 'Line CSS', 'Notes'])
+
         for item in items:
-            phone_name = item
+
+            # Set important variables for each phone
+            if item.startswith('SEP'):
+                mac_address = item[3:]
+            else:
+                mac_address = 'unknown'            
             try:
                 resp = axl_service.getPhone(name=item)
             except Fault:
                 show_history()
             else:
                 phone_desc = resp['return'].phone.description
-                phone_model = resp['return'].phone.model
+                #phone_model = resp['return'].phone.model
                 phone_css = resp['return'].phone.callingSearchSpaceName._value_1
                 phone_devpool = resp['return'].phone.devicePoolName._value_1
                 phone_loc = resp['return'].phone.locationName._value_1
@@ -93,7 +102,7 @@ def main():
                     else:
                         line_css = resp['return'].line.shareLineAppearanceCssName._value_1                    
                 else:
-                    phone_rpn = phone_mask = line_css = 'no line present'
+                    phone_rpn = phone_pat = phone_mask = line_css = 'unknown'
 
             # Get IP addresses for all phones in list
             cm_select_criteria = {
@@ -122,7 +131,7 @@ def main():
                             for ip in item.IPAddress.item:
                                 phone_ip = ip.IP
             
-            #phones.append('{"name": '+phone_name+', "ip": '+phone_ip+', "description": '+phone_desc+', "model": '+phone_model+', "Phone CSS": '+phone_css+', "Device Pool Name": '+phone_devpool+', "Location": '+phone_loc+', "Route Partition": '+phone_rpn+', "External Mask": '+phone_mask+', "Line CSS": '+line_css+'}')
-            report_writer.writerow([phone_name, phone_ip, phone_desc, phone_model, phone_css, phone_devpool, phone_loc, phone_rpn, phone_mask, line_css])
+            # Write results to CSV file                                
+            report_writer.writerow([item, phone_ip, mac_address, phone_pat, phone_desc, phone_css, phone_devpool, phone_loc, phone_rpn, phone_mask, line_css, notes])
 
 main()
