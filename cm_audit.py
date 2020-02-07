@@ -131,6 +131,17 @@ def main():
                             for ip in item.IPAddress.item:
                                 phone_ip = ip.IP
             
+            # Check if device IP is in proper subnet and set location key
+            loc_key = notes = ""
+            for k in key:
+                if ipaddress.IPv4Network(f"{phone_ip}/32").subnet_of(ipaddress.IPv4Network(k)):
+                    loc_key = k['key']   
+            if loc_key == "":
+                notes = "Device not in proper VLAN / subnet!"
+            else:
+                if loc_key not in (phone_css, phone_devpool, phone_loc, phone_rpn):
+                    notes = "CSS, device pool, location, or RPN inconsistent!"
+                        
             # Write results to CSV file                                
             report_writer.writerow([item, phone_ip, mac_address, phone_pat, phone_desc, phone_css, phone_devpool, phone_loc, phone_rpn, phone_mask, line_css, notes])
 
