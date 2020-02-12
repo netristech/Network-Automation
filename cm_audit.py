@@ -53,13 +53,13 @@ def main():
             print(etree.tostring(hist["envelope"], encoding="unicode", pretty_print=True))
 
     # Get a list of all phone names and store in a list
-    items = []
+    phones = []
     try:
-        resp = axl_service.listPhone(searchCriteria={'name': '%', 'devicePoolName': 'US_DAYTFL%'}, returnedTags={'name': ''})
+        resp = axl_service.listPhone(searchCriteria={'name': '%', 'devicePoolName': 'US_DAYT%'}, returnedTags={'name': ''})
     except Fault:
         show_history()
     for phone in resp['return'].phone:
-        items.append(phone.name)
+        phones.append(phone.name)
 
     # Gather additional phone information
     key = {}
@@ -74,18 +74,18 @@ def main():
         report_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         report_writer.writerow(['Name', 'IP Address', 'MAC Address', 'Extension', 'Description', 'Phone CSS', 'Device Pool', 'Location', 'Route Parition', 'External Mask', 'Line CSS', 'Notes'])
 
-        for item in items:
+        for phone in phones:
 
             # Set important variables for each phone
-            if item.startswith('SEP'):
-                mac_address = item[3:]
-            else:
-                mac_address = 'unknown'            
             try:
-                resp = axl_service.getPhone(name=item)
+                resp = axl_service.getPhone(name=phone)
             except Fault:
                 show_history()
             else:
+                if phone.startswith('SEP'):
+                    mac_address = phone[3:]
+                else:
+                    mac_address = 'unknown'            
                 phone_desc = resp['return'].phone.description
                 #phone_model = resp['return'].phone.model
                 phone_css = resp['return'].phone.callingSearchSpaceName._value_1
@@ -102,7 +102,7 @@ def main():
                     else:
                         line_css = resp['return'].line.shareLineAppearanceCssName._value_1                    
                 else:
-                    phone_rpn = phone_pat = phone_mask = line_css = 'unknown'
+                    phone_rpn = phone_pat = phone_mask = line_css = ""
 
             # Get IP addresses for all phones in list
             cm_select_criteria = {
@@ -113,7 +113,7 @@ def main():
                 'NodeName': '',
                 'SelectBy': 'Name',
                 'SelectItems': {
-                    'item': item
+                    'item': phone
                 },
                 'Protocol': 'Any',
                 'DownloadStatus': 'Any'
@@ -134,15 +134,19 @@ def main():
             # Check if device IP is in proper subnet and set location key
             loc_key = notes = ""
             for k in key:
-                if ipaddress.IPv4Network(f"{phone_ip}/32").subnet_of(ipaddress.IPv4Network(k)):
-                    loc_key = k['key']   
+                if ipaddress.ip_network(f"{phone_ip}/32").subnet_of(ipaddress.ip_network(k)):
+                    loc_key = key[k]['key']
             if loc_key == "":
-                notes = "Device not in proper VLAN / subnet!"
-            else:
-                if loc_key not in (phone_css, phone_devpool, phone_loc, phone_rpn):
-                    notes = "CSS, device pool, location, or RPN inconsistent!"
-                        
+                notes = "Device not in voice VLAN / subnet! "
+            elif not phone_css.startswith(f"{loc_key}_") or \
+            not phone_devpool.startswith(f"{loc_key}_") or \
+            (phone_rpn != "" and not phone_rpn.startswith(f"{loc_key}_")) or \
+            phone_loc != loc_key:
+                notes = "Configuration inconsistent! "
+            if line_css not in ("", "unknown", " ", None):
+                notes += "Line CSS configuration found! "
+
             # Write results to CSV file                                
-            report_writer.writerow([item, phone_ip, mac_address, phone_pat, phone_desc, phone_css, phone_devpool, phone_loc, phone_rpn, phone_mask, line_css, notes])
+            report_writer.writerow([phone, phone_ip, mac_address, phone_pat, phone_desc, phone_css, phone_devpool, phone_loc, phone_rpn, phone_mask, line_css, notes])
 
 main()
