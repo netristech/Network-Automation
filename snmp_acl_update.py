@@ -6,7 +6,6 @@ import sys
 import os
 import re
 import ipaddress
-#import csv
 from datetime import datetime
 from getpass import getpass
 from netmiko import Netmiko
@@ -54,14 +53,18 @@ def main():
                 hostname = net_connect.find_prompt().split('#')[0]
                 # Special handling for Nexus
                 if "Nexus" in vers:
+                    #add handling for nexus switches here
                     pass
                 acl = net_connect.send_command('show running-config | inc snmp-server community bstar')
                 #for i in rem_ips:
                     #net_connect.send_config_set(['interface vlan '+vlan, rem_comm+str(i)])
                 for i in add_ips:
-                    #net_connect.send_config_set(['access-list '+acl.split()[-1]+' permit '+i])
-                    print(f"access-list {acl.split()[-1]} permit {i}")
+                    net_connect.send_config_set([f"access-list {acl.split()[-1]} permit {i}"])
+                
+                # Save config and disconnect session
+                net_connect.save_config()
                 net_connect.disconnect()
                 print(f"Successfully updated SNMP ACL on {hostname}")
+
 main()
 print("\nUpdate completed!")
