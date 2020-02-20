@@ -60,7 +60,7 @@ def main():
                     #net_connect.send_config_set(['interface vlan '+vlan, rem_comm+str(i)])
                 for i in add_ips:
                     #net_connect.send_config_set(['access-list '+acl.split()[-1]+' permit '+i])
-                    print(f"{acl.split()[-1]} {i}")
+                    print(f"access-list {acl.split()[-1]} permit {i}")
                 net_connect.disconnect()
                 print(f"Successfully updated SNMP ACL on {hostname}")
 main()
