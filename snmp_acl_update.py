@@ -56,6 +56,8 @@ def main():
                     #add handling for nexus switches here
                     pass
                 acl = net_connect.send_command('show running-config | inc snmp-server community bstar')
+                if acl == "":
+                    acl = net_connect.send_command('show running-config | inc snmp-server community GIpublicD')
                 #for i in rem_ips:
                     #net_connect.send_config_set(['interface vlan '+vlan, rem_comm+str(i)])
                 for i in add_ips:
