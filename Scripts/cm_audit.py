@@ -55,7 +55,8 @@ def main():
     # Get a list of all phone names and store in a list
     phones = []
     try:
-        resp = axl_service.listPhone(searchCriteria={'name': '%', 'devicePoolName': 'US_DAYT%'}, returnedTags={'name': ''})
+        #resp = axl_service.listPhone(searchCriteria={'name': '%', 'devicePoolName': 'US_DAYT%'}, returnedTags={'name': ''})
+        resp = axl_service.listPhone(searchCriteria={'name': '%'}, returnedTags={'name': ''})
     except Fault:
         show_history()
     for phone in resp['return'].phone:
@@ -141,10 +142,9 @@ def main():
             elif not phone_css.startswith(f"{loc_key}_") or \
             not phone_devpool.startswith(f"{loc_key}_") or \
             (phone_rpn != "" and not phone_rpn.startswith(f"{loc_key}_")) or \
+            line_css not in ("", " ", None, phone_css) or \
             phone_loc != loc_key:
                 notes = "Configuration inconsistent! "
-            if line_css not in ("", "unknown", " ", None):
-                notes += "Line CSS configuration found! "
 
             # Write results to CSV file                                
             report_writer.writerow([phone, phone_ip, mac_address, phone_pat, phone_desc, phone_css, phone_devpool, phone_loc, phone_rpn, phone_mask, line_css, notes])
