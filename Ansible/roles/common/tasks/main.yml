@@ -2,5 +2,7 @@
 - name: Gather Facts
   ios_facts:
     gather_subset: config
+  
+- name: Set hostname variable
   set_fact:
     hostname: "{{ ansible_net_hostname }}"
