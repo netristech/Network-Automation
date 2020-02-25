@@ -1,0 +1,12 @@
+---
+- hosts: all
+  connection: local
+  gather_facts: no 
+  
+  tasks:
+  - name: show version
+    ios_command:
+      commands: show version
+    register: version
+
+  - debug: msg="{{ version.stdout }}"
