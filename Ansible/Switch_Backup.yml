@@ -1,7 +1,5 @@
 ---
 - name: Test playbook
-  connection: network_cli
-  network_os: ios
   gather_facts: False
   hosts: all
   tasks:
