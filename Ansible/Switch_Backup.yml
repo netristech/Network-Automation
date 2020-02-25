@@ -1,5 +1,8 @@
 ---
-- hosts: all
+- name: Test playbook
+  connection: network_cli
+  gather_facts: false
+  hosts: all
   tasks:
   - name: show version
     ios_command:
