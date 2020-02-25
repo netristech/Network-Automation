@@ -16,3 +16,4 @@
       answer:
       - "\r"
       - "\r"
+    timeout: 120
