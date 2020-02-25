@@ -3,6 +3,3 @@
   ios_facts:
     gather_subset: config
   
-- name: Set hostname variable
-  set_fact:
-    ios_hostname: "{{ ansible_net_hostname }}"
