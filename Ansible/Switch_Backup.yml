@@ -1,7 +1,8 @@
 ---
 - name: Test playbook
   connection: network_cli
-  gather_facts: false
+  ansible_network_os: ios
+  gather_facts: False
   hosts: all
   tasks:
   - name: show version
