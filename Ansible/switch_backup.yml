@@ -1,12 +1,10 @@
 ---
 - hosts: all
   connection: local
-  gather_facts: no 
+  gather_facts: no
+  become: yes
+  become_method: enable
   
-  tasks:
-  - name: show version
-    ios_command:
-      commands: show version
-    register: version
-
-  - debug: msg="{{ version.stdout }}"
+  roles:
+    - common
+    - backup
