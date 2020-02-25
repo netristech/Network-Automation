@@ -3,12 +3,16 @@
   ios_command:
     commands:
     - command: "copy startup-config tftp://{{ tftp_server }}/{{ hostname }}_config_{{ date }}"
-      prompt: "Address or name of remote host [{{ tftp_server }}]?"
-      answer: "\r"
-      prompt: "Destination filename [{{ hostname }}_config_{{ date }}]?"
-      answer: "\r"
+      prompt: 
+      - "Address or name of remote host [{{ tftp_server }}]?"
+      - "Destination filename [{{ hostname }}_config_{{ date }}]?"
+      answer: 
+      - "\r"
+      - "\r"
     - command: "copy flash:vlan.dat tftp://{{ tftp_server }}/{{ hostname }}_vlan.dat_{{ date }}"
-      prompt: "Address or name of remote host [{{ tftp_server }}]?"
-      answer: "\r"
-      prompt: "Destination filename [{{ hostname }}_vlan.dat_{{ date }}]?"
-      answer: "\r"
+      prompt:
+      - "Address or name of remote host [{{ tftp_server }}]?"
+      - "Destination filename [{{ hostname }}_vlan.dat_{{ date }}]?"
+      answer:
+      - "\r"
+      - "\r"
