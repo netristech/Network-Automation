@@ -5,4 +5,4 @@
   
 - name: Set hostname variable
   set_fact:
-    hostname: "{{ ansible_net_hostname }}"
+    ios_hostname: "{{ ansible_net_hostname }}"
