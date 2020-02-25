@@ -1,7 +1,9 @@
 ---
 - name: Test playbook
+  connection: local
   gather_facts: False
   hosts: all
+  
   tasks:
   - name: show version
     ios_command:
