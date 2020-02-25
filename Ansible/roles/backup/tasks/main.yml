@@ -1,19 +1,9 @@
 ---
 - name: Perform Backup
-  ios_command:
-    commands:
-    - command: "copy startup-config tftp://{{ tftp_server }}/{{ ansible_net_hostname }}_config_{{ date }}"
-      prompt: 
-      - "Address or name of remote host [{{ tftp_server }}]?"
-      - "Destination filename [{{ ansible_net_hostname }}_config_{{ date }}]?"
-      answer: 
-      - "\r"
-      - "\r"
-    - command: "copy flash:vlan.dat tftp://{{ tftp_server }}/{{ ansible_net_hostname }}_vlan.dat_{{ date }}"
-      prompt:
-      - "Address or name of remote host [{{ tftp_server }}]?"
-      - "Destination filename [{{ ansible_net_hostname }}_vlan.dat_{{ date }}]?"
-      answer:
-      - "\r"
-      - "\r"
-    timeout: 120
+  ntc_save_config:
+    platform: cisco_ios_ssh
+    host: "{{ inventory_hostname }}"
+    username: dunhbrus
+    password: "{{ dunhbrus_pw }}"
+    local_file: "/home/bbraun/test_{{ date }}"
+    
