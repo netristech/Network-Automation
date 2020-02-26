@@ -1,6 +1,6 @@
 ---
 - name: Perform Backup (IOS)
-  ios_command:
+  cli_command:
     commands:
     - command: "copy startup-config tftp://{{ tftp_server }}/{{ ansible_net_hostname }}_config_{{ date }}"
       prompt: "[confirm]"
@@ -11,7 +11,7 @@
   when: ansible_network_os == 'ios'
 
 - name: Perform Backup (NX-OS)
-  nxos_command:
+  cli_command:
     commands:
     - command: "copy startup-config tftp://{{ tftp_server }}/{{ ansible_net_hostname }}_config_{{ date }} vrf management"
       prompt: "[confirm]"
