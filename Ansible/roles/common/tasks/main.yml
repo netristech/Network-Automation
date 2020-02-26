@@ -1,5 +1,8 @@
 ---
-- name: Gather Facts
+- name: Gather IOS Facts
   ios_facts:
-    gather_subset: config
+  when: ansible_network_os == 'ios'
   
+- name: Gather NS-OX Facts
+  nxos_facts:
+  when: ansible_network_os == 'nxos'
