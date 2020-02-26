@@ -2,8 +2,6 @@
 - hosts: all
   connection: network_cli
   gather_facts: no
-  #become: yes
-  #become_method: enable
   
   roles:
     - common

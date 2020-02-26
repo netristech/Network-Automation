@@ -8,4 +8,3 @@
     - command: "{{ tftp_vlan_backup }}"
       prompt: "[confirm]"
       answer: "\r"
-  #when: ansible_network_os == "ios"
