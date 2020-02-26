@@ -1,12 +1,9 @@
 ---
-- name: Perform Configuration Backup
+- name: Perform Backup
   cli_command:
-  - command: "{{ tftp_config_backup }}"
+    command: "{{ item }}"
     prompt: "[confirm]"
     answer: "\r"
-
-- name: Perform VLAN Database Backup
-  cli_command:
-  - command: "{{ tftp_vlan_backup }}"
-    prompt: "[confirm]"
-    answer: "\r"
+  with_items:
+  - "{{ tftp_config_backup }}"
+  - "{{ tftp_vlan_backup }}"
