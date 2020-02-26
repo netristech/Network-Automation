@@ -1,3 +1,0 @@
----
-tftp_config_backup: "copy startup-config tftp://{{ tftp_server }}/{{ ansible_net_hostname }}_config_{{ date }} vrf management"
-tftp_vlan_backup: "copy flash:vlan.dat tftp://{{ tftp_server }}/{{ ansible_net_hostname }}_vlan_{{ date }} vrf management"
