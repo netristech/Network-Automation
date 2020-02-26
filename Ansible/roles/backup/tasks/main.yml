@@ -8,7 +8,7 @@
     - command: "copy flash:vlan.dat tftp://{{ tftp_server }}/{{ ansible_net_hostname }}_vlan.dat_{{ date }}"
       prompt: "[confirm]"
       answer: "\r"
-  when: ansible_network_os == 'ios'
+  when: ansible_network_os == "ios"
 
 - name: Perform Backup (NX-OS)
   cli_command:
@@ -19,4 +19,4 @@
     - command: "copy flash:vlan.dat tftp://{{ tftp_server }}/{{ ansible_net_hostname }}_vlan.dat_{{ date }} vrf management"
       prompt: "[confirm]"
       answer: "\r"
-  when: ansible_network_os == 'nxos'
+  when: ansible_network_os == "nxos"
