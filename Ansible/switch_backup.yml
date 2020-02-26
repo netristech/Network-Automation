@@ -1,10 +1,14 @@
 ---
 - hosts: all
-  connection: local
-  gather_facts: no
+  connection: network_cli
+  gather_facts: yes
   #become: yes
   #become_method: enable
   
-  roles:
-    - common
-    - backup
+  #roles:
+    #- common
+    #- backup
+  
+  tasks:
+  - debug:
+    msg: ansible_network_system
