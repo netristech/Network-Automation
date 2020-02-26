@@ -1,22 +1,11 @@
 ---
-- name: Perform Backup (IOS)
+- name: Perform Backup
   cli_command:
     commands:
-    - command: "copy startup-config tftp://{{ tftp_server }}/{{ ansible_net_hostname }}_config_{{ date }}"
+    - command: "{{ tftp_config_backup }}"
       prompt: "[confirm]"
       answer: "\r"
-    - command: "copy flash:vlan.dat tftp://{{ tftp_server }}/{{ ansible_net_hostname }}_vlan.dat_{{ date }}"
+    - command: "{{ tftp_vlan_backup }}"
       prompt: "[confirm]"
       answer: "\r"
-  when: ansible_network_os == "ios"
-
-- name: Perform Backup (NX-OS)
-  cli_command:
-    commands:
-    - command: "copy startup-config tftp://{{ tftp_server }}/{{ ansible_net_hostname }}_config_{{ date }} vrf management"
-      prompt: "[confirm]"
-      answer: "\r"
-    - command: "copy flash:vlan.dat tftp://{{ tftp_server }}/{{ ansible_net_hostname }}_vlan.dat_{{ date }} vrf management"
-      prompt: "[confirm]"
-      answer: "\r"
-  when: ansible_network_os == "nxos"
+  #when: ansible_network_os == "ios"
