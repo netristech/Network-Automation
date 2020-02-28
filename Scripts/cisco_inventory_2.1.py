@@ -29,7 +29,6 @@ def main():
 
         # Generate IP file
         input_file = f"{os.getcwd()}/ips_{timestamp}"
-        input_subnets = input_subnets.split()
         for i in input_subnets:
             os.system(f"sudo {os.getcwd()}/discover_devices.sh {i} {input_file}")        
         
