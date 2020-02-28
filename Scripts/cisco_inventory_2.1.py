@@ -67,7 +67,8 @@ def main():
                     if "Nexus" in vers:
                         inv = net_connect.send_command('show inventory')
                         version = vers[vers.find("system:    version ") + 19:].splitlines()[0].strip()
-                        model = vers[vers.find("cisco Nexus ") + 6:vers.find("Chassis (") - 1]
+                        #model = vers[vers.find("cisco Nexus ") + 6:vers.find("Chassis (") - 1]
+                        model = inv[inv.find("PID: ") + 5:].splitlines()[0].strip()
                         serials.append(inv[inv.find("SN: ") + 4:].splitlines()[0].strip())
                     
                     # Normal handling for IOS
