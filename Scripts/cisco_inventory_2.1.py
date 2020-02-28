@@ -85,5 +85,6 @@ def main():
                     net_connect.disconnect()
                     sys.stdout.write(".")
                     sys.stdout.flush()
+        os.remove(f"{os.getcwd()}/ips_{timestamp}")
 main()
 print("\nInventory report has been generated")
