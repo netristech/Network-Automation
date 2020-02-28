@@ -16,7 +16,7 @@ def main():
     # generate input_file from input_subnets containing all IPs to perform inventory scan against
     while True:
         try:
-            input_subnets = input("Enter a space delimited list of subnets (in CIDR notation) to scan: ")
+            input_subnets = input("Enter a space delimited list of subnets (in CIDR notation) to scan: ").split()
             for i in range(0, len(input_subnets)):
                 input_subnets[i] = ipaddress.IPv4Network(input_subnets[i])
         except:
