@@ -25,7 +25,7 @@ def main():
         else:
             break
     
-    if len(input_subnets > 0):
+    if len(input_subnets) > 0:
         print("Generating IP list. This may take a moment.")
         
         # gather username and password
