@@ -26,7 +26,12 @@ def main():
             break
     
     if len(input_subnets) > 0:
-        print("Generating IP list. This may take a moment.")
+
+        # Generate IP file
+        input_file = f"{os.getcwd()}/ips_{timestamp}"
+        input_subnets = input_subnets.split()
+        for i in input_subnets:
+            os.system(f"sudo {os.getcwd()}/discover_devices.sh {i} {input_file}")        
         
         # gather username and password
         cisco_user = input("Device Username: ")
@@ -35,14 +40,14 @@ def main():
         sys.stdout.flush()
         
         # Open csv file for write operation
-        with open(f'{os.getcwd()}/inv_{timestamp}.csv', 'w') as csv_file:
+        with open(f'{os.getcwd()}/inv_{timestamp}.csv', 'w') as csv_file, open(input_file) as file:
             report_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             report_writer.writerow(['Hostname', 'IP Address', 'Model', 'Software Version', 'Serial Number'])
-            for ip in input_subnets:
+            for line in file:
                 
                 # Create connection object for Netmiko
                 conn = {
-                    "host": str(ip).rstrip("\n"),
+                    "host": line.rstrip("\n"),
                     "username": cisco_user,
                     "password": cisco_pass,
                     "device_type": "cisco_ios",
@@ -72,7 +77,7 @@ def main():
                         model = re.search("cisco(.+?)processor", vers).group(1).split()[0]
                         for i in re.finditer('System Serial Number', vers, re.IGNORECASE):
                             serials.append(vers[i.start():].splitlines()[0].split(":")[1].strip())
-                    report_writer.writerow([hostname, str(ip).rstrip("\n"), model, version, serials[0]])
+                    report_writer.writerow([hostname, line.rstrip("\n"), model, version, serials[0]])
                     if len(serials) > 1:
                         for x in range(1, len(serials)):
                             report_writer.writerow([hostname+'-{}'.format(x + 1), '(stacked)', '(stacked)', '(stacked)', serials[x]])
