@@ -26,7 +26,7 @@ def main():
     # Build Client Object for AXL Service
     history = HistoryPlugin()
 
-    axl_wsdl = "/root/scripts/axlsqltoolkit/AXLAPI.wsdl"
+    axl_wsdl = "/root/axlsqltoolkit/AXLAPI.wsdl"
     axl_location = f"https://{server}:8443/axl/"
     axl_binding = "{http://www.cisco.com/AXLAPIService/}AXLAPIBinding"
 
@@ -53,6 +53,7 @@ def main():
             print(etree.tostring(hist["envelope"], encoding="unicode", pretty_print=True))
 
     # Get a list of all phone names and store in a list
+    print("Gathering phone names. . .")
     phones = []
     try:
         #resp = axl_service.listPhone(searchCriteria={'name': '%', 'devicePoolName': 'US_DAYT%'}, returnedTags={'name': ''})
@@ -64,7 +65,7 @@ def main():
 
     # Gather additional phone information
     key = {}
-    with open(f'{os.getcwd()}/cm_audit_{timestamp}.csv', 'w') as csv_file, open(f'{os.path.dirname(os.getcwd())}/key.csv', newline='') as key_file:
+    with open(f'/root/cm_audit_{timestamp}.csv', 'w') as csv_file, open('/root/key.csv', newline='') as key_file:
         
         # Parse key file and store contents in dictionary
         key_reader = csv.reader(key_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
@@ -75,6 +76,7 @@ def main():
         report_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         report_writer.writerow(['Name', 'IP Address', 'MAC Address', 'Extension', 'Description', 'Phone CSS', 'Device Pool', 'Location', 'Route Parition', 'External Mask', 'Line CSS', 'Notes'])
 
+        print("Generating Report. . .")
         for phone in phones:
 
             # Set important variables for each phone
@@ -89,11 +91,17 @@ def main():
                     mac_address = 'unknown'            
                 phone_desc = resp['return'].phone.description
                 #phone_model = resp['return'].phone.model
-                phone_css = resp['return'].phone.callingSearchSpaceName._value_1
+                if resp['return'].phone.callingSearchSpaceName._value_1 not in ("", " ", None):
+                    phone_css = resp['return'].phone.callingSearchSpaceName._value_1
+                else:
+                    phone_css = 'unknown'
                 phone_devpool = resp['return'].phone.devicePoolName._value_1
                 phone_loc = resp['return'].phone.locationName._value_1
                 if hasattr(resp['return'].phone.lines, 'line'):
-                    phone_rpn = resp['return'].phone.lines.line[0].dirn.routePartitionName._value_1
+                    if resp['return'].phone.lines.line[0].dirn.routePartitionName._value_1 not in ("", " ", None):
+                        phone_rpn = resp['return'].phone.lines.line[0].dirn.routePartitionName._value_1
+                    else:
+                        phone_rpn = 'unknown'
                     phone_pat = resp['return'].phone.lines.line[0].dirn.pattern
                     phone_mask = resp['return'].phone.lines.line[0].e164Mask
                     try:
@@ -150,3 +158,4 @@ def main():
             report_writer.writerow([phone, phone_ip, mac_address, phone_pat, phone_desc, phone_css, phone_devpool, phone_loc, phone_rpn, phone_mask, line_css, notes])
 
 main()
+print("Report has been generated")
