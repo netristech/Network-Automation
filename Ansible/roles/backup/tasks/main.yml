@@ -4,6 +4,8 @@
     command: "{{ item }}"
     prompt: "[confirm]"
     answer: "\r"
+  vars:
+    ansible_command_timeout: 60
   with_items:
   - "{{ tftp_config_backup }}"
   - "{{ tftp_vlan_backup }}"
