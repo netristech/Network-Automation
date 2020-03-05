@@ -152,7 +152,7 @@ def main():
             (phone_rpn != "" and not phone_rpn.startswith(f"{loc_key}_")) or \
             line_css not in ("", " ", None, phone_css) or \
             phone_loc != loc_key:
-                notes = "Configuration inconsistent! "
+                notes = f"Configuration inconsistent! Expected {loc_key}"
 
             # Write results to CSV file                                
             report_writer.writerow([phone, phone_ip, mac_address, phone_pat, phone_desc, phone_css, phone_devpool, phone_loc, phone_rpn, phone_mask, line_css, notes])
