@@ -142,17 +142,25 @@ def main():
             
             # Check if device IP is in proper subnet and set location key
             loc_key = notes = ""
+            matches = []
             for k in key:
                 if ipaddress.ip_network(f"{phone_ip}/32").subnet_of(ipaddress.ip_network(k)):
                     loc_key = key[k]['key']
             if loc_key == "":
                 notes = "Device not in voice VLAN / subnet! "
-            elif not phone_css.startswith(f"{loc_key}_") or \
-            not phone_devpool.startswith(f"{loc_key}_") or \
-            (phone_rpn != "" and not phone_rpn.startswith(f"{loc_key}_")) or \
-            line_css not in ("", " ", None, phone_css) or \
-            phone_loc != loc_key:
-                notes = f"Configuration inconsistent! Expected {loc_key}"
+            else:
+                if not phone_css.startswith(f"{loc_key}_"):
+                    matches.append("Phone CSS ")
+                if not phone_devpool.startswith(f"{loc_key}_"):
+                    matches.append("Device Pool ")
+                if (phone_rpn != "" and not phone_rpn.startswith(f"{loc_key}_")):
+                    matches.append("Route Partition ")
+                if phone_loc != loc_key:
+                    matches.append("Phone location ")
+                if line_css not in ("", " ", None, phone_css):
+                    matches.append("Line CSS ")
+                if len(notes) > 0:
+                    notes += f"Inconsistent configuration found in: {matches}, expected location: {loc_key}. "
 
             # Write results to CSV file                                
             report_writer.writerow([phone, phone_ip, mac_address, phone_pat, phone_desc, phone_css, phone_devpool, phone_loc, phone_rpn, phone_mask, line_css, notes])
