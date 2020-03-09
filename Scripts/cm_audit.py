@@ -159,7 +159,7 @@ def main():
                     matches.append("Phone location ")
                 if line_css not in ("", " ", None, phone_css):
                     matches.append("Line CSS ")
-                if len(notes) > 0:
+                if len(matches) > 0:
                     notes += f"Inconsistent configuration found in: {matches}, expected location: {loc_key}. "
 
             # Write results to CSV file                                
