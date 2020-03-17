@@ -72,5 +72,16 @@ def main():
         except Fault:
             show_history()
         else:
-            print(resp)
+            if hasattr(resp['return'].phone.lines, 'line'):
+                if resp['return'].phone.lines.line[0].dirn.routePartitionName._value_1 not in ("", " ", None):
+                    phone_rpn = resp['return'].phone.lines.line[0].dirn.routePartitionName._value_1
+                else:
+                    phone_pat = resp['return'].phone.lines.line[0].dirn.pattern
+                    try:
+                        resp = axl_service.getLine(routePartitionName=phone_rpn, pattern=phone_pat)
+                    except Fault:
+                        show_history()
+                    else:
+                        print(resp)
+
 main()
