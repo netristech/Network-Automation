@@ -56,32 +56,106 @@ def main():
     print("Gathering phone names. . .")
     phones = []
     try:
-        resp = axl_service.listPhone(searchCriteria={'name': 'SEP7001B5DB1366'}, returnedTags={'name': ''})
-        #resp = axl_service.listPhone(searchCriteria={'name': '%'}, returnedTags={'name': ''})
+        #resp = axl_service.listPhone(searchCriteria={'name': '%', 'devicePoolName': 'US_DAYT%'}, returnedTags={'name': ''})
+        resp = axl_service.listPhone(searchCriteria={'name': '%', 'devicePoolname': 'US_BETHPA%'}, returnedTags={'name': ''})
     except Fault:
         show_history()
     for phone in resp['return'].phone:
         phones.append(phone.name)
 
     # Gather additional phone information
-    for phone in phones:
+    #key = {}
+    with open(f'/root/cm_forward_{timestamp}.csv', 'w') as csv_file:#, open('/root/key.csv', newline='') as key_file:
+        
+        # Parse key file and store contents in dictionary
+        #key_reader = csv.reader(key_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        #for line in key_reader:
+            #key.update({ line[0]: { "key": line[1] } })
+        
+        # Seed CSV report file with column headers
+        report_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        report_writer.writerow(['Name', 'Extension', 'Phone IP', 'Location', 'Current ForwardAll CSS', 'Proposed ForwardAll CSS'])
 
-        # Set important variables for each phone
-        try:
-            resp = axl_service.getPhone(name=phone)
-        except Fault:
-            show_history()
-        else:
-            if hasattr(resp['return'].phone.lines, 'line'):
-                if resp['return'].phone.lines.line[0].dirn.routePartitionName._value_1 not in ("", " ", None):
-                    phone_rpn = resp['return'].phone.lines.line[0].dirn.routePartitionName._value_1
-                else:
+        print("Generating Report. . .")
+        for phone in phones:
+
+            # Set important variables for each phone
+            try:
+                resp = axl_service.getPhone(name=phone)
+            except Fault:
+                show_history()
+            else:      
+                name = resp['return'].phone.description
+                phone_loc = resp['return'].phone.locationName._value_1
+                if hasattr(resp['return'].phone.lines, 'line'):
+                    if resp['return'].phone.lines.line[0].dirn.routePartitionName._value_1 not in ("", " ", None):
+                        phone_rpn = resp['return'].phone.lines.line[0].dirn.routePartitionName._value_1
+                    else:
+                        phone_rpn = 'unknown'
                     phone_pat = resp['return'].phone.lines.line[0].dirn.pattern
                     try:
                         resp = axl_service.getLine(routePartitionName=phone_rpn, pattern=phone_pat)
                     except Fault:
                         show_history()
                     else:
-                        print(resp)
+                        forward_css = resp['return'].line.callForwardAll.callingSearchSpaceName._value_1                    
+                else:
+                    phone_rpn = phone_pat = forward_css = ""
+
+            # Get IP addresses for all phones in list
+            cm_select_criteria = {
+                'MaxReturnedDevices': '1',
+                'DeviceClass': 'Phone',
+                'Model': '255',
+                'Status': 'Any',
+                'NodeName': '',
+                'SelectBy': 'Name',
+                'SelectItems': {
+                    'item': phone
+                },
+                'Protocol': 'Any',
+                'DownloadStatus': 'Any'
+            }
+
+            try:
+                resp = client.service.selectCmDeviceExt(CmSelectionCriteria=cm_select_criteria, StateInfo='')
+            except Fault:
+                show_history()
+            else:
+                nodes = resp.SelectCmDeviceResult.CmNodes.item
+                for node in nodes:
+                    if len(node.CmDevices.item) > 0:
+                        for item in node.CmDevices.item:
+                            for ip in item.IPAddress.item:
+                                phone_ip = ip.IP
+            
+            # Check if device IP is in proper subnet and set location key
+            '''loc_key = notes = ""
+            matches = []
+            for k in key:
+                if ipaddress.ip_network(f"{phone_ip}/32").subnet_of(ipaddress.ip_network(k)):
+                    loc_key = key[k]['key']
+            if loc_key == "":
+                notes = "Device not in voice VLAN / subnet! "
+            else:
+                if not phone_css.startswith(f"{loc_key}_"):
+                    matches.append("Phone CSS ")
+                if not phone_devpool.startswith(f"{loc_key}_"):
+                    matches.append("Device Pool ")
+                if (phone_rpn != "" and not phone_rpn.startswith(f"{loc_key}_")):
+                    matches.append("Route Partition ")
+                if phone_loc != loc_key:
+                    matches.append("Phone location ")
+                if line_css not in ("", " ", None, phone_css):
+                    matches.append("Line CSS ")
+                if len(matches) > 0:
+                    notes += f"Inconsistent configuration found in: {matches}, expected location: {loc_key}. "
+'''
+            # Write results to CSV file
+            new_css = "US_BETHPA_LongDistance"
+            if forward_css in (new_css, "", None):
+                new_css = "No Change"
+            report_writer.writerow([name, phone_pat, phone_loc, phone_ip, forward_css, new_css])
 
 main()
+print("Report has been generated")
