@@ -1,0 +1,5 @@
+---
+- name: Test reachability to US02
+  net_ping:
+    dest: 172.30.152.129
+    count: 1
