@@ -56,7 +56,7 @@ def main():
                     report_writer.writerow(['VLAN ID', 'VLAN Description', 'Subnet'])
                     vlans = net_connect.send_command("show vlan brief")
                     for vlan in vlans.splitlines():
-                        if vlan.split()[0].isdigit() == True:
+                        if len(vlan) > 0 and vlan.split()[0].isdigit():
                             vlan_id = vlan.split()[0]
                             vlan_desc = vlan.split()[1]
                             svi = net_connect.send_command(f"show run interface Vlan{vlan_id}")
