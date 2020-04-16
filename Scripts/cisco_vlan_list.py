@@ -59,6 +59,7 @@ def main():
                         if len(vlan) > 0 and vlan.split()[0].isdigit():
                             vlan_id = vlan.split()[0]
                             vlan_desc = vlan.split()[1]
+                            subnet = "NA"
                             svi = net_connect.send_command(f"show run interface Vlan{vlan_id}")
                             for line in svi.splitlines():
                                 if line.startswith("ip address "):
