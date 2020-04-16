@@ -66,8 +66,8 @@ def main():
                                 if line.startswith("ip address "):
                                     subnet = ipaddress.IPv4Network(line.split()[2:])
                             report_writer.writerow([vlan_id, vlan_desc, str(subnet)])
-            net_connect.disconnect()
-            sys.stdout.write(".")
-            sys.stdout.flush()
+                net_connect.disconnect()
+                sys.stdout.write(".")
+                sys.stdout.flush()
 main()
 print("\nVlan report has been generated")
