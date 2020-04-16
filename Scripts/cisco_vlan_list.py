@@ -32,13 +32,11 @@ def main():
         cisco_pass = getpass("Device Password: ")
         sys.stdout.write("Please wait while inventory report is being generated")
         sys.stdout.flush()
-        
-        # Open csv file for write operation
         for ip in dev_ips:
             
             # Create connection object for Netmiko
             conn = {
-                "host": ip,
+                "host": ip.strip(),
                 "username": cisco_user,
                 "password": cisco_pass,
                 "device_type": "cisco_ios",
