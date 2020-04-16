@@ -63,7 +63,7 @@ def main():
                             svi = net_connect.send_command(f"show run interface Vlan{vlan_id}")
                             for line in svi.splitlines():
                                 if line.lstrip().startswith("ip address "):
-                                    subnet = ipaddress.IPv4Network(line.split()[2:])
+                                    subnet = ipaddress.ip_network(line.strip("ip address").strip(), strict=False)
                             report_writer.writerow([vlan_id, vlan_desc, str(subnet)])
                 net_connect.disconnect()
                 sys.stdout.write(".")
