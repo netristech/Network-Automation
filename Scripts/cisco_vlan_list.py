@@ -13,24 +13,24 @@ from netmiko import Netmiko
 def main():
     timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
 
-    # generate input_file from input_subnets containing all IPs to perform inventory scan against
+    # gather list of device IPs used to generate VLAN list
     while True:
         try:
-            input_subnets = input("Enter a space delimited list of subnets (in CIDR notation) to scan: ").split()
-            for i in range(0, len(input_subnets)):
-                input_subnets[i] = ipaddress.IPv4Network(input_subnets[i])
+            dev_ips = input("Enter a space delimited list of device IPs: ").split()
+            for i in range(0, len(dev_ips)):
+                dev_ips[i] = ipaddress.IPv4Address(dev_ips[i])
         except:
             if input("Invalid data entered. Press any key to continue or 'q' to quit. ") == 'q':
                 exit()
         else:
             break
     
-    if len(input_subnets) > 0:
+    if len(dev_ips) > 0:
 
         # Generate IP file
-        input_file = f"{os.getcwd()}/ips_{timestamp}"
-        for i in input_subnets:
-            os.system(f"sudo {os.getcwd()}/discover_devices.sh {i} {input_file}")        
+        #input_file = f"{os.getcwd()}/ips_{timestamp}"
+        #for i in input_subnets:
+            #os.system(f"sudo {os.getcwd()}/discover_devices.sh {i} {input_file}")        
         
         # gather username and password
         cisco_user = input("Device Username: ")
@@ -39,14 +39,14 @@ def main():
         sys.stdout.flush()
         
         # Open csv file for write operation
-        with open(f'{os.getcwd()}/inv_{timestamp}.csv', 'w') as csv_file, open(input_file) as file:
+        with open(f'{os.getcwd()}/inv_{timestamp}.csv', 'w') as csv_file:
             report_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            report_writer.writerow(['Hostname', 'IP Address', 'Model', 'Software Version', 'Serial Number'])
-            for line in file:
+            report_writer.writerow(['VLAN ID', 'VLAN Description', 'Subnet'])
+            for ip in dev_ips:
                 
                 # Create connection object for Netmiko
                 conn = {
-                    "host": line.rstrip("\n"),
+                    "host": ip,
                     "username": cisco_user,
                     "password": cisco_pass,
                     "device_type": "cisco_ios",
@@ -60,31 +60,27 @@ def main():
                     sys.stdout.write("!")
                     sys.stdout.flush()
                 else:
-                    serials = []
-                    hostname = net_connect.find_prompt().split('#')[0]
                     
                     # Special handling for Nexus
                     if "Nexus" in vers:
-                        inv = net_connect.send_command('show inventory')
-                        #version = vers[vers.find("system:    version ") + 19:].splitlines()[0].strip()
-                        version = vers[vers.find("NXOS: version ") + 14:].splitlines()[0].strip()
-                        #model = vers[vers.find("cisco Nexus ") + 6:vers.find("Chassis (") - 1]
-                        model = inv[inv.find("PID: ") + 5:inv.find(",  VID:")].splitlines()[0].strip()
-                        serials.append(inv[inv.find("SN: ") + 4:].splitlines()[0].strip())
+                        subnets = net_connect.send_command("show run | sec 'interface Vlan'")
                     
                     # Normal handling for IOS
                     else:
-                        version = vers[vers.find("), Version") + 11:vers.find("RELEASE") - 2]
-                        model = re.search("cisco(.+?)processor", vers).group(1).split()[0]
-                        for i in re.finditer('System Serial Number', vers, re.IGNORECASE):
-                            serials.append(vers[i.start():].splitlines()[0].split(":")[1].strip())
-                    report_writer.writerow([hostname, line.rstrip("\n"), model, version, serials[0]])
-                    if len(serials) > 1:
-                        for x in range(1, len(serials)):
-                            report_writer.writerow([hostname+'-{}'.format(x + 1), '(stacked)', '(stacked)', '(stacked)', serials[x]])
+                        subnets = net_connect.send_command("show run | sec interface Vlan"    
+                    vlans = net_connect.send_command("show vlan brief")
+                    for vlan in vlans.splitlines():
+                        if vlan.split()[0].isnumeric():
+                            vlan_id = vlan.split()[0]
+                            vlan_desc = vlan.split()[1]
+                            svi = net_connect.send_command(f"show run interface Vlan{vlan_id}")
+                            for line in svi.splitlines():
+                                if line.startswith("ip address "):
+                                    subnet = ipaddress.IPv4Network(line.split()[2:])
+                            report_writer.writerow([vlan_id, vlan_desc, str(subnet)])
                     net_connect.disconnect()
                     sys.stdout.write(".")
                     sys.stdout.flush()
-        os.remove(f"{os.getcwd()}/ips_{timestamp}")
+        #os.remove(f"{os.getcwd()}/ips_{timestamp}")
 main()
 print("\nInventory report has been generated")
