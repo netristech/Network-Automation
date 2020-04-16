@@ -36,7 +36,7 @@ def main():
             
             # Create connection object for Netmiko
             conn = {
-                "host": ip.strip(),
+                "host": str(ip),
                 "username": cisco_user,
                 "password": cisco_pass,
                 "device_type": "cisco_ios",
