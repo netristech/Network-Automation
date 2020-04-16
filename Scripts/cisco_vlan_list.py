@@ -2,16 +2,16 @@
 
 #import modules
 import csv
-import re
+#import re
 import sys
 import os
 import ipaddress
-from datetime import datetime
+#from datetime import datetime
 from getpass import getpass
 from netmiko import Netmiko
 
 def main():
-    timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+    #timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
 
     # gather list of device IPs used to generate VLAN list
     while True:
@@ -26,11 +26,6 @@ def main():
             break
     
     if len(dev_ips) > 0:
-
-        # Generate IP file
-        #input_file = f"{os.getcwd()}/ips_{timestamp}"
-        #for i in input_subnets:
-            #os.system(f"sudo {os.getcwd()}/discover_devices.sh {i} {input_file}")        
         
         # gather username and password
         cisco_user = input("Device Username: ")
@@ -39,30 +34,31 @@ def main():
         sys.stdout.flush()
         
         # Open csv file for write operation
-        with open(f'{os.getcwd()}/inv_{timestamp}.csv', 'w') as csv_file:
-            report_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            report_writer.writerow(['VLAN ID', 'VLAN Description', 'Subnet'])
-            for ip in dev_ips:
-                
-                # Create connection object for Netmiko
-                conn = {
-                    "host": ip,
-                    "username": cisco_user,
-                    "password": cisco_pass,
-                    "device_type": "cisco_ios",
-                }
+        for ip in dev_ips:
+            
+            # Create connection object for Netmiko
+            conn = {
+                "host": ip,
+                "username": cisco_user,
+                "password": cisco_pass,
+                "device_type": "cisco_ios",
+            }
 
-                # Attempt connection
-                try:
-                    net_connect = Netmiko(**conn)
-                    vers = net_connect.send_command('show version')
-                except:
-                    sys.stdout.write("!")
-                    sys.stdout.flush()
-                else:   
+            # Attempt connection
+            try:
+                net_connect = Netmiko(**conn)
+                vers = net_connect.send_command('show version')
+            except:
+                sys.stdout.write("!")
+                sys.stdout.flush()
+            else:
+                hostname = net_connect.find_prompt().split('#')[0]
+                with open(f'{os.getcwd()}/{hostname}_vlans.csv', 'w') as csv_file:
+                    report_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                    report_writer.writerow(['VLAN ID', 'VLAN Description', 'Subnet'])
                     vlans = net_connect.send_command("show vlan brief")
                     for vlan in vlans.splitlines():
-                        if vlan.split()[0].isnumeric():
+                        if vlan.split()[0].isdigit() == True:
                             vlan_id = vlan.split()[0]
                             vlan_desc = vlan.split()[1]
                             svi = net_connect.send_command(f"show run interface Vlan{vlan_id}")
@@ -70,9 +66,8 @@ def main():
                                 if line.startswith("ip address "):
                                     subnet = ipaddress.IPv4Network(line.split()[2:])
                             report_writer.writerow([vlan_id, vlan_desc, str(subnet)])
-                    net_connect.disconnect()
-                    sys.stdout.write(".")
-                    sys.stdout.flush()
-        #os.remove(f"{os.getcwd()}/ips_{timestamp}")
+            net_connect.disconnect()
+            sys.stdout.write(".")
+            sys.stdout.flush()
 main()
-print("\nInventory report has been generated")
+print("\nVlan report has been generated")
