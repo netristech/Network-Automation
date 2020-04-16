@@ -59,15 +59,7 @@ def main():
                 except:
                     sys.stdout.write("!")
                     sys.stdout.flush()
-                else:
-                    
-                    # Special handling for Nexus
-                    if "Nexus" in vers:
-                        subnets = net_connect.send_command("show run | sec 'interface Vlan'")
-                    
-                    # Normal handling for IOS
-                    else:
-                        subnets = net_connect.send_command("show run | sec interface Vlan"    
+                else:   
                     vlans = net_connect.send_command("show vlan brief")
                     for vlan in vlans.splitlines():
                         if vlan.split()[0].isnumeric():
