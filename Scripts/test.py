@@ -52,7 +52,9 @@ def main():
                 stack = net_connect.send_command("show switch")
                 for switch in stack.splitlines():
                     if len(switch) > 0:
-                        if switch.split()[0].startswith("*") or switch.split()[0].isdigit():
+                        if switch.split()[0].startswith("*"):
+                            switch = switch.lstrip("*")
+                        if switch.split()[0].isdigit():
                             print(switch)
                 net_connect.disconnect()
 main()
