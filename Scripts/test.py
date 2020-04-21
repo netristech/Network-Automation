@@ -30,8 +30,7 @@ def main():
         # gather username and password
         cisco_user = input("Device Username: ")
         cisco_pass = getpass("Device Password: ")
-        sys.stdout.write("Please wait while inventory report is being generated")
-        sys.stdout.flush()
+
         for ip in dev_ips:
             
             # Create connection object for Netmiko
@@ -52,7 +51,7 @@ def main():
                 hostname = net_connect.find_prompt().split('#')[0]
                 stack = net_connect.send_command("show switch")
                 for switch in stack.splitlines():
-                    if len(switch) > 0 and switch.split()[0].isdigit():
+                    if len(switch) > 0 and switch.split()[0].isdigit() or switch.split()[0].startswith("*"):
                         print(switch)
                 net_connect.disconnect()
 main()
