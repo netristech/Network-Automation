@@ -51,8 +51,9 @@ def main():
                 hostname = net_connect.find_prompt().split('#')[0]
                 stack = net_connect.send_command("show switch")
                 for switch in stack.splitlines():
-                    if len(switch) > 0 and switch.split()[0].isdigit() or switch.split()[0].startswith("*"):
-                        print(switch)
+                    if len(switch) > 0:
+                        if switch.split()[0].startswith("*") or switch.split()[0].isdigit():
+                            print(switch)
                 net_connect.disconnect()
 main()
 print("\nVlan report has been generated")
