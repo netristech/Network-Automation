@@ -56,9 +56,8 @@ def main():
                             switch = switch.lstrip("*")
                         if switch.split()[0].isdigit():
                             print(switch)
-                switch_vers = vers.splitlines()[vers.splitlines().find("------ -----") + 1:vers.splitlines().find("---------") - 2]
+                switch_vers = vers.slice(vers.find("* ") - 2, vers.find("INSTALL" + 6))
                 if len(switch_vers) > 0:
-                    for line in switch_vers:
-                        print(line)
+                    print(switch_vers)
                 net_connect.disconnect()
 main()
