@@ -56,10 +56,9 @@ def main():
                             switch = switch.lstrip("*")
                         if switch.split()[0].isdigit():
                             print(switch)
-                vers_list = net_connect.send_command("show version | begin [\*]").splitlines()[0:len(switch)]
-                for line in vers_list:
-                    if len(line) > 0:
+                switch_vers = vers.splitlines()[vers.splitlines().find("------ -----") + 1:vers.splitlines().find("---------") - 2]
+                if len(switch_vers) > 0:
+                    for line in switch_vers:
                         print(line)
                 net_connect.disconnect()
 main()
-print("\nVlan report has been generated")
