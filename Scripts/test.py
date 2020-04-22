@@ -76,7 +76,7 @@ def main():
                 if len(mgmt_ips) > 0:
                     for ip in mgmt_ips.splitlines():
                         if ip.lstrip().startswith("ip address"):
-                            mgmt_ip = str(ip.split()[2:])
+                            mgmt_ip = f"{ip.split()[2]} {ip.split()[3]}"
                 print(mgmt_ip)
                 def_route = net_connect.send_command("show running-config | inc ip default").split()[2]
                 print(def_route)
