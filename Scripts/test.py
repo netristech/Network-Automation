@@ -56,11 +56,12 @@ def main():
                             switch = switch.lstrip("*")
                         if switch.split()[0].isdigit():
                             print(switch)
-                switch_vers = vers[slice(vers.find("* ") - 2, vers.find("Switch 02"), 1)]
+                switch_vers = vers[slice(vers.find("* "), vers.find("Switch 02"), 1)]
                 switch_vers = switch_vers.splitlines()
                 while "" in switch_vers:
                     switch_vers.remove("")
                 if len(switch_vers) > 0:
-                    print(switch_vers)
+                    for line in switch_vers:
+                        print(line)
                 net_connect.disconnect()
 main()
