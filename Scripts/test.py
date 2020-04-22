@@ -58,7 +58,7 @@ def main():
                                 switch = switch.lstrip("*")
                             if switch.split()[0].isdigit():
                                 print(switch)
-                switch_vers = vers[slice(vers.find("* "), vers.find("\n\r"), 1)]
+                switch_vers = vers[slice(vers.find("* "), vers.find(""), 1)]
                 if len(switch_vers) > 0:
                     switch_vers = switch_vers.splitlines()
                     while "" in switch_vers:
