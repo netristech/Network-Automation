@@ -63,5 +63,12 @@ def main():
                 if len(switch_vers) > 0:
                     for line in switch_vers:
                         print(line)
+                switch_SNs = []
+                for line in vers.splitlines():
+                    if line.startswith("System Serial Number"):
+                        switch_SNs.append(line)
+                if len(switch_SNs) > 0:
+                    for line in switch_SNs:
+                        print(line)
                 net_connect.disconnect()
 main()
