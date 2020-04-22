@@ -58,6 +58,7 @@ def main():
                                 switch = switch.lstrip("*")
                             if switch.split()[0].isdigit():
                                 print(switch)
+                '''
                 switch_vers = vers[slice(vers.find("* "), vers.find(""), 1)]
                 if len(switch_vers) > 0:
                     switch_vers = switch_vers.splitlines()
@@ -66,10 +67,16 @@ def main():
                 if len(switch_vers) > 0:
                     for line in switch_vers:
                         print(line)
-                switch_SNs = []
+                '''        
+                switch_vers, switch_SNs = []
                 for line in vers.splitlines():
                     if line.startswith("System Serial Number"):
                         switch_SNs.append(line.split()[4])
+                    if line.split()[-1] == "INSTALL":
+                        switch_vers.append(line)
+                if len(switch_vers) > 0:
+                    for line in switch_vers:
+                        print(line)
                 if len(switch_SNs) > 0:
                     for line in switch_SNs:
                         print(line)
