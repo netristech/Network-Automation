@@ -49,6 +49,7 @@ def main():
                 print(f"Could not connect to device at {str(ip)}")
             else:
                 hostname = net_connect.find_prompt().split('#')[0]
+                print(hostname)
                 stack = net_connect.send_command("show switch")
                 for switch in stack.splitlines():
                     if len(switch) > 0:
@@ -70,5 +71,12 @@ def main():
                 if len(switch_SNs) > 0:
                     for line in switch_SNs:
                         print(line)
+                mgmt_ips = net_connect.send_command("show running-config interface Vlan 1")
+                mgmt_ip = "unknown"
+                if len(mgmt_ips) > 0:
+                    for ip in mgmt_ips.splitlines():
+                        if ip.lstrip().startswith("ip address"):
+                            mgmt_ip = ip.split()[2:]
+                print(mgmt_ip)
                 net_connect.disconnect()
 main()
