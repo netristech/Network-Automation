@@ -68,7 +68,8 @@ def main():
                     for line in switch_vers:
                         print(line)
                 '''        
-                switch_vers, switch_SNs = []
+                switch_vers = []
+                switch_SNs = []
                 for line in vers.splitlines():
                     if line.startswith("System Serial Number"):
                         switch_SNs.append(line.split()[4])
