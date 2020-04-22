@@ -73,7 +73,7 @@ def main():
                 for line in vers.splitlines():
                     if line.startswith("System Serial Number"):
                         switch_SNs.append(line.split()[4])
-                    if line.split()[-1] == "INSTALL":
+                    if "INSTALL" in line:
                         switch_vers.append(line)
                 if len(switch_vers) > 0:
                     for line in switch_vers:
