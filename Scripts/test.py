@@ -51,16 +51,18 @@ def main():
                 hostname = net_connect.find_prompt().split('#')[0]
                 print(hostname)
                 stack = net_connect.send_command("show switch")
-                for switch in stack.splitlines():
-                    if len(switch) > 0:
-                        if switch.split()[0].startswith("*"):
-                            switch = switch.lstrip("*")
-                        if switch.split()[0].isdigit():
-                            print(switch)
-                switch_vers = vers[slice(vers.find("* "), vers.find("Switch 02"), 1)]
-                switch_vers = switch_vers.splitlines()
-                while "" in switch_vers:
-                    switch_vers.remove("")
+                if len(stack) > 0:
+                    for switch in stack.splitlines():
+                        if len(switch) > 0:
+                            if switch.split()[0].startswith("*"):
+                                switch = switch.lstrip("*")
+                            if switch.split()[0].isdigit():
+                                print(switch)
+                switch_vers = vers[slice(vers.find("* "), vers.find("\n\r"), 1)]
+                if len(switch_vers) > 0:
+                    switch_vers = switch_vers.splitlines()
+                    while "" in switch_vers:
+                        switch_vers.remove("")
                 if len(switch_vers) > 0:
                     for line in switch_vers:
                         print(line)
