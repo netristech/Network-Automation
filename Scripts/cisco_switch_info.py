@@ -65,6 +65,7 @@ def main():
                     sw_image = ['S/W Image']
                     sw_sn = ['Serial Number']
                     hostname = net_connect.find_prompt().split('#')[0]
+                    def_route = "unknown"
 
                     # Setup Heading in Report
                     report_writer.writerow([hostname, '', ''])
@@ -99,7 +100,13 @@ def main():
                         for ip in mgmt_ips.splitlines():
                             if ip.lstrip().startswith("ip address"):
                                 mgmt_ip = f"{ip.split()[2]} {ip.split()[3]}"
-                    def_route = net_connect.send_command("show running-config | inc ip default").split()[2]
+                    try:
+                        def_route = net_connect.send_command("show running-config | inc ip default").split()[2]
+                    except:
+                        try:
+                            def_route = net_connect.send_command("show running-config | inc ip route 0.0.0.0").split()[4]
+                        except:
+                            pass
 
                     # Build report
                     vars = [sw_role, sw_mac, sw_prio, sw_hwver, sw_ports, sw_model, sw_swver, sw_image, sw_sn]
