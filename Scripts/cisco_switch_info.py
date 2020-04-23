@@ -55,6 +55,7 @@ def main():
                     sys.stdout.flush()
                 else:
                     # Setup initial values
+                    vars = []
                     sw_role = ['Role']
                     sw_mac = ['MAC Address']
                     sw_prio = ['Priority']
@@ -111,9 +112,11 @@ def main():
                     # Build report
                     vars = [sw_role, sw_mac, sw_prio, sw_hwver, sw_ports, sw_model, sw_swver, sw_image, sw_sn]
                     for i in vars:
-                        report_writer.writerow([i[0], 'Switch# 1', i[1]])
-                        for j in i[2:]:
-                            report_writer.writerow(['', f'Switch# {j + 2}', i[j]])
+                        if len(i) > 1:
+                            report_writer.writerow([i[0], 'Switch# 1', i[1]])
+                        if len(i) > 3:
+                            for j in i[2:]:
+                                report_writer.writerow(['', f'Switch# {j + 2}', i[j]])
                     report_writer.writerow(['Management Information', 'Hostname', hostname])
                     report_writer.writerow(['', 'IP Address', mgmt_ip])
                     report_writer.writerow(['', 'Gateway', def_route])
