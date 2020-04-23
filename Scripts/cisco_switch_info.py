@@ -54,11 +54,6 @@ def main():
                     sys.stdout.write("!")
                     sys.stdout.flush()
                 else:
-                    # Setup Heading in Report
-                    report_writer.writerow([hostname, '', ''])
-                    report_writer.writerow(['','',''])
-                    report_writer.writerow(['Item', '', 'Specification'])
-                    
                     # Setup initial values
                     sw_role = ['Role']
                     sw_mac = ['MAC Address']
@@ -70,6 +65,11 @@ def main():
                     sw_image = ['S/W Image']
                     sw_sn = ['Serial Number']
                     hostname = net_connect.find_prompt().split('#')[0]
+
+                    # Setup Heading in Report
+                    report_writer.writerow([hostname, '', ''])
+                    report_writer.writerow(['','',''])
+                    report_writer.writerow(['Item', '', 'Specification'])                    
 
                     # Collect data
                     stack = net_connect.send_command("show switch")                    
