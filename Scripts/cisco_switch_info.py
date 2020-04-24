@@ -116,10 +116,11 @@ def main():
                             report_writer.writerow([vars[i][0], f"Switch# {i + 1}", vars[i][1]])
                         if len(vars[i]) > 2:
                             for j in range(2, len(vars[i]), 1):
-                                report_writer.writerow(['', f'Switch# {j}', vars[i][j]])
+                                report_writer.writerow([" ", f"Switch# {i+ 1}", vars[i][j]])
                     report_writer.writerow(['Management Information', 'Hostname', hostname])
                     report_writer.writerow(['', 'IP Address', mgmt_ip])
                     report_writer.writerow(['', 'Gateway', def_route])
+                    report_writer.writerow(['','',''])
                     net_connect.disconnect()
                     sys.stdout.write(".")
                     sys.stdout.flush()
