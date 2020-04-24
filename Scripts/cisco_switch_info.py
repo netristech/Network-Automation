@@ -111,12 +111,12 @@ def main():
 
                     # Build report
                     vars = [sw_role, sw_mac, sw_prio, sw_hwver, sw_ports, sw_model, sw_swver, sw_image, sw_sn]
-                    for i in vars:
-                        if len(i) > 1:
-                            report_writer.writerow([i[0], 'Switch# 1', i[1]])
-                        if len(i) > 3:
-                            for j in i[2:]:
-                                report_writer.writerow(['', f'Switch# {j + 2}', i[j]])
+                    for i in range(0, len(vars), 1):
+                        if len(vars[i]) > 1:
+                            report_writer.writerow([vars[i][0], f"Switch# {i + 1}", vars[i][1]])
+                        if len(vars[i]) > 2:
+                            for j in range(2, len(vars[i]), 1):
+                                report_writer.writerow(['', f'Switch# {j}', vars[i][j]])
                     report_writer.writerow(['Management Information', 'Hostname', hostname])
                     report_writer.writerow(['', 'IP Address', mgmt_ip])
                     report_writer.writerow(['', 'Gateway', def_route])
