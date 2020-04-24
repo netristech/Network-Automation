@@ -96,8 +96,11 @@ def main():
                             sw_model.append(line.split()[2])
                             sw_swver.append(line.split()[3])
                             sw_image.append(line.split()[4])
-                    mgmt_ips = net_connect.send_command("show running-config interface Vlan 1")
                     mgmt_ip = "unknown"
+                    try:
+                        mgmt_ips = net_connect.send_command("show running-config interface Vlan 1")
+                    except:
+                        pass
                     if len(mgmt_ips) > 0:
                         for ip in mgmt_ips.splitlines():
                             if ip.lstrip().startswith("ip address"):
