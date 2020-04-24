@@ -86,8 +86,8 @@ def main():
                                     sw_prio.append(switch.split()[3])
                                     sw_hwver.append(switch.split()[4])
                     for line in vers.splitlines():
-                        if line.startswith("System Serial Number"):
-                            sw_sn.append(line.split()[4])
+                        if ("System Serial Number", "System serial number", "system serial number") in line:
+                            sw_sn.append(line.split(":")[1])
                         if "INSTALL" in line:
                             if line.startswith("*"):
                                 line = line.lstrip("*")
@@ -109,14 +109,14 @@ def main():
                         except:
                             pass
 
-                    # Build report
+                    # Build and format report (FDS format)
                     vars = [sw_role, sw_mac, sw_prio, sw_hwver, sw_ports, sw_model, sw_swver, sw_image, sw_sn]
                     for i in range(0, len(vars), 1):
                         if len(vars[i]) > 1:
-                            report_writer.writerow([vars[i][0], f"Switch# {i + 1}", vars[i][1]])
+                            report_writer.writerow([vars[i][0], f"Switch# 1", vars[i][1]])
                         if len(vars[i]) > 2:
                             for j in range(2, len(vars[i]), 1):
-                                report_writer.writerow([" ", f"Switch# {i+ 1}", vars[i][j]])
+                                report_writer.writerow([" ", f"Switch# {j}", vars[i][j]])
                     report_writer.writerow(['Management Information', 'Hostname', hostname])
                     report_writer.writerow(['', 'IP Address', mgmt_ip])
                     report_writer.writerow(['', 'Gateway', def_route])
