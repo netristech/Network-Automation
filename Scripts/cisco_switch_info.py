@@ -2,7 +2,7 @@
 
 #import modules
 import csv
-#import re
+import re
 import sys
 import os
 import ipaddress
@@ -86,7 +86,8 @@ def main():
                                     sw_prio.append(switch.split()[3])
                                     sw_hwver.append(switch.split()[4])
                     for line in vers.splitlines():
-                        if ("System Serial Number", "System serial number", "system serial number") in line:
+                        if any(re.findall(r'system serial number', line, re.IGNORECASE)):
+                        #if ("System Serial Number", "System serial number", "system serial number") in line:
                             sw_sn.append(line.split(":")[1])
                         if "INSTALL" in line:
                             if line.startswith("*"):
