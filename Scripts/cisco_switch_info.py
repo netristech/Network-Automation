@@ -102,10 +102,11 @@ def main():
                     except:
                         pass
                     if len(mgmt_ips) > 0:
-                        for ip in mgmt_ips.splitlines():
-                            if ip.lstrip().startswith("ip address"):
-                                mgmt_ip = f"{ip.split()[2]} {ip.split()[3]}"
-                            else mgmt_ip = ip
+                        for i in mgmt_ips.splitlines():
+                            if i.lstrip().startswith("ip address"):
+                                mgmt_ip = f"{i.split()[2]} {i.split()[3]}"
+                            else:
+                                mgmt_ip = ip
                     try:
                         def_route = net_connect.send_command("show running-config | inc ip default").split()[2]
                     except:
