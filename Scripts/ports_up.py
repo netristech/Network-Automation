@@ -57,7 +57,8 @@ def main():
                         ports = net_connect.send_command('show ip int bri | inc administratively')
                     for line in ports.splitlines():
                         int = line.split()[0]
-                        net_connect.send_config_set([f'interface {int}', f'no shutdown'])
+                        if int.startswith('Gig'):
+                            net_connect.send_config_set([f'interface {int}', f'no shutdown'])
                     net_connect.save_config()
                     net_connect.disconnect()
                     sys.stdout.write(".")
