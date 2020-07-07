@@ -45,8 +45,7 @@ def main():
                     net_connect = Netmiko(**conn)
                     vers = net_connect.send_command('show version')
                 except:
-                    sys.stdout.write("!")
-                    sys.stdout.flush()
+                    print(f"Error connecting to {str(ip)}")
                 else:
                     
                     # Special handling for Nexus
@@ -61,8 +60,6 @@ def main():
                             net_connect.send_config_set([f'interface {int}', f'no shutdown'])
                     net_connect.save_config()
                     net_connect.disconnect()
-                    sys.stdout.write(".")
-                    sys.stdout.flush()
-        os.remove(f"{os.getcwd()}/ips_{timestamp}")
+
 main()
-print("\nInventory report has been generated")
+print("\nAll ports have been brought up.")
