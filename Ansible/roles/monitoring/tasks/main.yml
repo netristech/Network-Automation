@@ -1,16 +1,14 @@
 ---
-#- name: Test reachability to US02 (Nexus)
-#  net_ping:
-#    dest: 172.30.152.129
-#    count: 1
-#    vrf: management
-#  when: ansible_network_os == "nxos"
+- name: Test reachability to US02 (Nexus)
+  net_ping:
+    dest: 172.30.152.129
+    count: 1
+    vrf: management
+  when: ansible_network_os == "nxos"
 
-#- name: Test reachability to US02 (IOS)
-#  net_ping:
-#    dest: 172.30.152.129
-#    count: 1
-#  when: ansible_network_os == "ios" 
+- name: Test reachability to US02 (IOS)
+  net_ping:
+    dest: 172.30.152.129
+    count: 1
+  when: ansible_network_os == "ios" 
 
-- name: Test Reachability
-  
