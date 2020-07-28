@@ -82,6 +82,6 @@ def main():
                 sys.stdout.write(".")
                 sys.stdout.flush()
         html_file.write("</table>\n</body>\n</html>")
-    print "\nInventory report has been generated"
+    print('Port report has been generated')
 
     main()
