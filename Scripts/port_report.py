@@ -15,13 +15,13 @@ def main():
     # get list of IPs to generate port report from
     input_ips = ""
     while input_ips == "":
-        input_ips = raw_input("Enter a space delimited list of the switch IP addresses: ")
+        input_ips = input('Enter a space delimited list of the switch IP addresses: ')
 
     # gather username and password
-    cisco_user = raw_input("Username: ")
-    cisco_pass = getpass()
-    sys.stdout.write("Please wait while port report is being generated")
-    sys.stdout.flush()
+    cisco_user = input('Device Username: ')
+    cisco_pass = getpass('Device Password: ')
+    #sys.stdout.write("Please wait while port report is being generated")
+    #sys.stdout.flush()
 
     with open(os.getcwd()+'/port_report_'+timestamp+'.csv', 'w') as csv_file, open(os.getcwd()+'/port_report_'+timestamp+'.html', 'w') as html_file:
 
@@ -34,7 +34,7 @@ def main():
         for i in input_ips.split():
 
             conn = {
-                "host": i.rstrip("\n"),
+                "host": i.rstrip('\n'),
                 "username": cisco_user,
                 "password": cisco_pass,
                 "device_type": "cisco_ios",
@@ -44,14 +44,15 @@ def main():
                 net_connect = Netmiko(**conn)
                 vers = net_connect.send_command('show version')
             except:
-                sys.stdout.write("!")
-                sys.stdout.flush()
+                #sys.stdout.write("!")
+                #sys.stdout.flush()
+                print(f'Error Connecting to {i}') 
             else:
                 hostname = net_connect.find_prompt().split('#')[0]
                 if "Nexus" in vers:
-                    int_list = net_connect.send_command("show interface brief")
+                    int_list = net_connect.send_command('show interface brief')
                 else:
-                    int_list = net_connect.send_command("show ip interface brief")
+                    int_list = net_connect.send_command('show ip interface brief')
                 for j in int_list.splitlines():
                     if "down" not in j and "up" in j:
                         int_conf = net_connect.send_command("show run int "+j.split()[0])
@@ -79,8 +80,8 @@ def main():
                                     report_writer.writerow([hostname, j.split()[0], desc, mac_add, vlan_id, ip_add])
                                     html_file.write("<tr>\n<td>"+hostname+"</td>\n<td>"+j.split()[0]+"</td>\n<td>"+desc+"</td>\n<td>"+mac_add+"</td>\n<td>"+vlan_id+"</td>\n<td>"+ip_add+"</td>\n</tr>\n")
                 net_connect.disconnect()
-                sys.stdout.write(".")
-                sys.stdout.flush()
+                #sys.stdout.write(".")
+                #sys.stdout.flush()
         html_file.write("</table>\n</body>\n</html>")
     print('Port report has been generated')
 
