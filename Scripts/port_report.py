@@ -15,7 +15,7 @@ def main():
     # get list of IPs to generate port report from
     input_ips = ""
     while input_ips == "":
-        input_ips = input('Enter a space delimited list of the switch IP addresses: ')
+        input_ips = input('Enter a space delimited list of device IPs: ')
 
     # gather username and password
     cisco_user = input('Device Username: ')
