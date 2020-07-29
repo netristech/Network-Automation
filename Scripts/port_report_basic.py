@@ -64,16 +64,12 @@ def main():
                             status = "up"
                         else:
                             status = "down"
-                        desc = "none"
-                        mac_add = "not found"
-                        vlan_id = "none"
-                        vendor = " "
-                        ip_add = " "                            
+                        desc, mac_add, vlan_id, vendor, ip_add = " "                         
                         int_conf = net_connect.send_command("show run int "+j.split()[0])
-                        for k in int_conf.splitlines():
-                            if "description" in k:
-                                desc = k[13:]                  
-                            if "mode trunk" not in int_conf:
+                        if "mode trunk" not in int_conf:
+                            for k in int_conf.splitlines():
+                                if "description" in k:
+                                    desc = k[13:]
                                 mac_list = net_connect.send_command("show mac address interface "+j.split()[0])
                                 for l in mac_list.splitlines():
                                     if re.search('([0-9a-fA-F]\.?){12}', l):
@@ -86,8 +82,8 @@ def main():
                                         ip_list = net_connect.send_command("show ip arp | inc "+mac_add)
                                         if re.search(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', ip_list):
                                             ip_add = re.search(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', ip_list).group(1)
-                            report_writer.writerow([hostname, j.split()[0], status, desc, mac_add, vlan_id, ip_add])
-                            html_file.write("<tr>\n<td>"+hostname+"</td>\n<td>"+j.split()[0]+"</td>\n<td>"+status+"</td>\n<td>"+desc+"</td>\n<td>"+mac_add+"</td>\n<td>"+vlan_id+"</td>\n<td>"+ip_add+"</td>\n</tr>\n")
+                                report_writer.writerow([hostname, j.split()[0], status, desc, mac_add, vlan_id, ip_add])
+                                html_file.write("<tr>\n<td>"+hostname+"</td>\n<td>"+j.split()[0]+"</td>\n<td>"+status+"</td>\n<td>"+desc+"</td>\n<td>"+mac_add+"</td>\n<td>"+vlan_id+"</td>\n<td>"+ip_add+"</td>\n</tr>\n")
                     net_connect.disconnect()
             html_file.write("</table>\n</body>\n</html>")
 
