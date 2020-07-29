@@ -90,6 +90,6 @@ def main():
                             html_file.write("<tr>\n<td>"+hostname+"</td>\n<td>"+j.split()[0]+"</td>\n<td>"+status+"</td>\n<td>"+desc+"</td>\n<td>"+mac_add+"</td>\n<td>"+vlan_id+"</td>\n<td>"+ip_add+"</td>\n</tr>\n")
                     net_connect.disconnect()
             html_file.write("</table>\n</body>\n</html>")
-        print("Port report has been generated")
 
-    main()
+main()
+print("Port report has been generated")
