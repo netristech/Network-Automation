@@ -84,6 +84,7 @@ def main():
                                             ip_add = re.search(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', ip_list).group(1)
                                 report_writer.writerow([hostname, j.split()[0], status, desc, mac_add, vlan_id, ip_add])
                                 html_file.write("<tr>\n<td>"+hostname+"</td>\n<td>"+j.split()[0]+"</td>\n<td>"+status+"</td>\n<td>"+desc+"</td>\n<td>"+mac_add+"</td>\n<td>"+vlan_id+"</td>\n<td>"+ip_add+"</td>\n</tr>\n")
+                    print(f"Process completed on {str(ip)}")
                     net_connect.disconnect()
             html_file.write("</table>\n</body>\n</html>")
 
