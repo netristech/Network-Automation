@@ -15,7 +15,7 @@ def main():
     # get list of IPs to generate port report from
     while True:
         try:
-            input_ips = input("Enter a space delimited list of device IPs: ")
+            input_ips = input("Enter a space delimited list of device IPs: ").split()
             for i in range(0, len(input_ips)):
                 input_ips[i] = ipaddress.ip_address(input_ips[i])
         except:
