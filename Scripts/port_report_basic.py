@@ -34,10 +34,10 @@ def main():
         with open(os.getcwd()+'/port_report_'+timestamp+'.csv', 'w') as csv_file, open(os.getcwd()+'/port_report_'+timestamp+'.html', 'w') as html_file:
 
             report_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            report_writer.writerow(['Hostname', 'Interface', 'Status', 'Description', 'MAC Address', 'VLAN', 'IP Address'])
+            report_writer.writerow(['Hostname', 'Interface', 'Status', 'Description'])
             html_file.write("<html>\n<head>\n<title>Cisco Switchport Report</title>\n")
             html_file.write("<style>\n* { padding: 8px; margin: 0; border: 0px; border-spacing: 0px; }\ntr { border-bottom: 1px solid #ccc; }\ntr:first-child { font-weight: bold; }\ntr:nth-child(odd) { background-color: #f2f2f2; }\n</style>\n")
-            html_file.write("</head>\n<body>\n<table>\n<tr>\n<td>Hostname</td>\n<td>Interface</td>\n<td>Status</td>\n<td>Description</td>\n<td>MAC Address</td>\n<td>VLAN</td>\n<td>IP Address</td>\n</tr>\n")
+            html_file.write("</head>\n<body>\n<table>\n<tr>\n<td>Hostname</td>\n<td>Interface</td>\n<td>Status</td>\n<td>Description</td>\n</tr>\n")
 
             for ip in input_ips:
 
@@ -64,26 +64,13 @@ def main():
                             status = "up"
                         else:
                             status = "down"
-                        desc = mac_add = vlan_id = vendor = ip_add = " "                         
+                        desc = " "                         
                         int_conf = net_connect.send_command("show run int "+j.split()[0])
-                        if "mode trunk" not in int_conf:
-                            for k in int_conf.splitlines():
-                                if "description" in k:
-                                    desc = k[13:]
-                                mac_list = net_connect.send_command("show mac address interface "+j.split()[0])
-                                for l in mac_list.splitlines():
-                                    if re.search('([0-9a-fA-F]\.?){12}', l):
-                                        if l.split()[0] == "*":
-                                            vlan_id = l.split()[1]
-                                            mac_add = l.split()[2]
-                                        else:
-                                            vlan_id = l.split()[0]
-                                            mac_add = l.split()[1]
-                                        ip_list = net_connect.send_command("show ip arp | inc "+mac_add)
-                                        if re.search(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', ip_list):
-                                            ip_add = re.search(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', ip_list).group(1)
-                                report_writer.writerow([hostname, j.split()[0], status, desc, mac_add, vlan_id, ip_add])
-                                html_file.write("<tr>\n<td>"+hostname+"</td>\n<td>"+j.split()[0]+"</td>\n<td>"+status+"</td>\n<td>"+desc+"</td>\n<td>"+mac_add+"</td>\n<td>"+vlan_id+"</td>\n<td>"+ip_add+"</td>\n</tr>\n")
+                        for k in int_conf.splitlines():
+                            if "description" in k:
+                                desc = k[13:]
+                        report_writer.writerow([hostname, j.split()[0], status, desc])
+                        html_file.write("<tr>\n<td>"+hostname+"</td>\n<td>"+j.split()[0]+"</td>\n<td>"+status+"</td>\n<td>"+desc+"</td>\n</tr>\n")
                     print(f"Process completed on {str(ip)}")
                     net_connect.disconnect()
             html_file.write("</table>\n</body>\n</html>")
