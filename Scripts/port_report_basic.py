@@ -64,7 +64,7 @@ def main():
                             status = "up"
                         else:
                             status = "down"
-                        desc, mac_add, vlan_id, vendor, ip_add = " "                         
+                        desc = mac_add = vlan_id = vendor = ip_add = " "                         
                         int_conf = net_connect.send_command("show run int "+j.split()[0])
                         if "mode trunk" not in int_conf:
                             for k in int_conf.splitlines():
