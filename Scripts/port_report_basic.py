@@ -4,6 +4,7 @@
 import csv
 import os
 import re
+import ipaddress
 from datetime import datetime
 from getpass import getpass
 from netmiko import Netmiko
@@ -51,7 +52,7 @@ def main():
                     net_connect = Netmiko(**conn)
                     vers = net_connect.send_command('show version')
                 except:
-                    print(f"Error Connecting to {ip}") 
+                    print(f"Error Connecting to {str(ip)}") 
                 else:
                     hostname = net_connect.find_prompt().split('#')[0]
                     if "Nexus" in vers:
@@ -89,6 +90,6 @@ def main():
                             html_file.write("<tr>\n<td>"+hostname+"</td>\n<td>"+j.split()[0]+"</td>\n<td>"+status+"</td>\n<td>"+desc+"</td>\n<td>"+mac_add+"</td>\n<td>"+vlan_id+"</td>\n<td>"+ip_add+"</td>\n</tr>\n")
                     net_connect.disconnect()
             html_file.write("</table>\n</body>\n</html>")
-        print('Port report has been generated')
+        print("Port report has been generated")
 
     main()
