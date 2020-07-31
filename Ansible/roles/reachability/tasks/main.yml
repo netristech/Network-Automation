@@ -1,5 +1,6 @@
 ---
 - name: Test Reachability
+  delegate_to: localhost
   net_ping:
     dest: "{{ inventory_hostname }}"
     count: 1
