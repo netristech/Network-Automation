@@ -1,5 +1,4 @@
 ---
 - name: Test Reachability
   delegate_to: localhost
-  shell:
-    command: "ping -c 1 -W 2 {{ inventory_hostname }}"
+  shell: "ping -c 1 -W 2 {{ inventory_hostname }}"
