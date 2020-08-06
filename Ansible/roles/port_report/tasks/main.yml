@@ -1,1 +1,4 @@
 ---
+- name: Write CSV Header
+  delegate_to: localhost
+  shell: "echo 'Port,Description,VLAN ID,MAC Address,IP Address' > {{ inventory_hostname }}_port_report_{{ timestamp }}"
