@@ -1,4 +1,14 @@
 ---
-- name: Write CSV Header
+- name: Write CSV File and Header
   delegate_to: localhost
-  shell: "echo 'Port,Description,VLAN ID,MAC Address,IP Address' > {{ inventory_hostname }}_port_report_{{ date }}"
+  shell: "echo 'Hostname,Port,Description,VLAN ID,MAC Address,IP Address' > {{ inventory_hostname }}_port_report_{{ date }}"
+
+- name: Get Interfaces
+  cli_command:
+    command: show ip interf brief
+  when: ansible_network_os == 'ios'
+  register: int_list
+  
+- name: Parse Interfaces
+  loop: "{{ int_list.stdout_lines }}"
+  
