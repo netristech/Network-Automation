@@ -1,7 +1,7 @@
 ---
 - name: Write CSV File and Header
   delegate_to: localhost
-  shell: "echo 'Hostname,Port,Description,VLAN ID,MAC Address,IP Address' > port_report_{{ date }}"
+  shell: "echo 'Hostname,Port,Status,Description,VLAN ID,MAC Address,IP Address' > port_report_{{ date }}"
 
 - name: Get Interfaces - IOS
   cli_command:
@@ -30,5 +30,5 @@
     register: int_config
   - name: Write CSV Line
     delegate_to: localhost
-    shell: "ehco '{{ inventory_hostname }},{{ item.split()[0] }},{{ stat }},,,,' > port_report_{{ date }}"
+    shell: "ehco '{{ inventory_hostname }},{{ item.split()[0] }},{{ stat }},,,,' >> port_report_{{ date }}"
   loop: "{{ int_list.stdout_lines }}"
