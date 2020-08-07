@@ -2,12 +2,12 @@
 - name: Register Up
   set_fact:
     stat: "up"
-  when: "'up' in {{ item }}"
+  when: "item | search('up')"
   
 - name: Register Down
   set_fact:
     stat: "down"
-  when: "'down' in {{ item }}"
+  when: "item | search('down')"
   
 - name: Get Port Config
   cli_command:
