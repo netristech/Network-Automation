@@ -1,14 +1,4 @@
 ---
-- name: Register Up
-  set_fact:
-    stat: "up"
-  when: "item | search('up')"
-  
-- name: Register Down
-  set_fact:
-    stat: "down"
-  when: "item | search('down')"
-  
-- name: Write CSV Line
-  delegate_to: localhost
-  shell: "ehco '{{ inventory_hostname }},{{ item.split()[0] }},{{ stat }},,,,' >> {{ csv_file }}"
+- name: Print Some stuff
+  debug:
+    msg: "{{ item.key }}, {{ item.value.state }}"
