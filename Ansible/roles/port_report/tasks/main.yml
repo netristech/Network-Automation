@@ -15,21 +15,6 @@
   register: int_list
   when: ansible_network_os == 'nxos'
   
-- name: Parse Interfaces
-  block:
-    - name: Register Up
-      set_fact:
-        stat: "up"
-      when: "'up' in {{ item }}"
-    - name: Register Down
-      set_fact:
-        stat: "down"
-      when: "'down' in {{ item }}"
-    - name: Get Port Config
-      cli_command:
-        command: "show runnning-config interface {{ item.split()[0] }}"
-      register: int_config
-    - name: Write CSV Line
-      delegate_to: localhost
-      shell: "ehco '{{ inventory_hostname }},{{ item.split()[0] }},{{ stat }},,,,' >> {{ csv_file }}"
+- name: Main Loop
+  include_tasks: loop.yml
   loop: "{{ int_list.stdout_lines }}"
