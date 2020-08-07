@@ -9,11 +9,6 @@
     stat: "down"
   when: "item | search('down')"
   
-- name: Get Port Config
-  cli_command:
-    command: "show runnning-config interface {{ item.split()[0] }}"
-  register: int_config
-  
 - name: Write CSV Line
   delegate_to: localhost
   shell: "ehco '{{ inventory_hostname }},{{ item.split()[0] }},{{ stat }},,,,' >> {{ csv_file }}"
