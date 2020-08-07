@@ -3,6 +3,11 @@
   delegate_to: localhost
   shell: "echo 'Hostname,Port,Status,Description,VLAN ID,MAC Address,IP Address' > {{ csv_file }}"
 
-- name: Get Interfaces
+#- name: Get Interfaces
+#  debug:
+#    msg: "{{ ansible_net_interfaces }}"
+    
+- name: Loop over subelements of the dictionary
   debug:
-    msg: "{{ ansible_net_interfaces }}"
+    msg: "Key={{ item.0.key }} value={{ item.1 }}"
+  loop: "{{ ansible_net_interfaces | dict2items | subelements('value') }}"
