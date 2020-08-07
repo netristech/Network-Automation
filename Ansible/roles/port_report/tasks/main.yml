@@ -7,7 +7,6 @@
 #  debug:
 #    msg: "{{ ansible_net_interfaces }}"
     
-- name: Loop over subelements of the dictionary
-  debug:
-    msg: "Key={{ item.0.key }} value={{ item.1 }}"
-  loop: "{{ ansible_net_interfaces | dict2items | subelements('value') }}"
+- name: Loop through interfaces
+  msg: "{{ item }}"
+  loop: "{{ lookup('dict', ansible_net_interfaces) }}"
