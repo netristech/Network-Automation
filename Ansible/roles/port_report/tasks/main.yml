@@ -8,6 +8,5 @@
 #    msg: "{{ ansible_net_interfaces }}"
     
 - name: Loop through interfaces
-  debug:
-    msg: "{{ item }}"
+  include_tasks: loop.yml
   loop: "{{ lookup('dict', ansible_net_interfaces) }}"
