@@ -3,18 +3,6 @@
   delegate_to: localhost
   shell: "echo 'Hostname,Port,Status,Description,VLAN ID,MAC Address,IP Address' > {{ csv_file }}"
 
-- name: Get Interfaces - IOS
-  cli_command:
-    command: "show ip interf brief"
-  register: int_list
-  when: ansible_network_os == 'ios'
-
-- name: Get Interfaces - NXOS
-  cli_command:
-    command: "show interf brief"
-  register: int_list
-  when: ansible_network_os == 'nxos'
-  
-- name: Main Loop
-  include_tasks: loop.yml
-  loop: "{{ int_list.stdout_lines }}"
+- name: Get Interfaces
+  debug:
+    msg: "{{ ansible_net_interfaces }}"
