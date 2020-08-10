@@ -1,11 +1,11 @@
 ---
 - name: Set Hostname
-  vars:
+  set_fact:
     interface: "{{ item.key }}"
   when: item.key is defined
   
 - name: Set Status
-  vars:
+  set_fact:
     status: "{{ item.value.state }}"
   when: item.value.state is defined
   
