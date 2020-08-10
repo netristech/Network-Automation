@@ -1,5 +1,14 @@
 ---
-- name: Print Some stuff
-  debug:
-    msg: "{{ item.key }}, {{ item.value.state }}"
+- name: Set Hostname
+  vars:
+    interface: "{{ item.key }}"
+  when: item.key is defined
+  
+- name: Set Status
+  vars:
+    status: "{{ item.value.state }}"
   when: item.value.state is defined
+  
+- name: Print Results
+  debug:
+    msg: "{{ interface }}, {{ status }}"
