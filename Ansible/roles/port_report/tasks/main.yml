@@ -1,12 +1,12 @@
 ---
 - name: Write CSV File and Header
   delegate_to: localhost
-  shell: "echo 'Hostname,Port,Status,Description,VLAN ID,MAC Address,IP Address' > {{ csv_file }}"
+  shell: "echo 'Port,Description,Status,Mode,MAC Address,IP Address' > {{ csv_file }}"
 
-- name: Get Interfaces
-  debug:
-    msg: "{{ ansible_net_interfaces }}"
+#- name: Get Interfaces
+#  debug:
+#    msg: "{{ ansible_net_interfaces }}"
     
-#- name: Loop through interfaces
-#  include_tasks: loop.yml
-#  loop: "{{ lookup('dict', ansible_net_interfaces) }}"
+- name: Loop through interfaces
+  include_tasks: loop.yml
+  loop: "{{ lookup('dict', ansible_net_interfaces) }}"
