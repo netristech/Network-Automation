@@ -1,2 +1,2 @@
 ---
-csv_file: "/root/port_report_{{ date }}.csv"
+csv_file: "/root/{{ hostname }}_port_report_{{ date }}.csv"
