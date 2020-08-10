@@ -1,14 +1,43 @@
 ---
-- name: Set Hostname
+- name: Set Defaults
+  set_fact:
+    interface: " "
+    desc: " "
+    stat: "down"
+    mode: "access"
+    mac: " "
+    ip: " "
+
+- name: Set Interface
   set_fact:
     interface: "{{ item.key }}"
   when: item.key is defined
   
+- name: Set Description
+  set_fact:
+    desc: "{{ item.value.description }}"
+  when: item.value.description is defined
+  
 - name: Set Status
   set_fact:
-    status: "{{ item.value.state }}"
+    stat: "{{ item.value.state }}"
   when: item.value.state is defined
   
-- name: Print Results
-  debug:
-    msg: "{{ interface }}, {{ status }}"
+- name: Set Mode
+  set_fact:
+    mode: "{{ item.value.mode }}"
+  when: item.value.mode is defined
+  
+- name: Set MAC
+  set_fact:
+    mac: "{{ item.value.macaddress }}"
+  when: item.value.macaddress is defined
+  
+- name: Set IP
+  set_fact:
+    ip: "{{ item.value.ipv4.address }}/{{ item.value.ipv4.masklen }}"
+  when: item.value.ipv4.address is defined
+  
+- name: Wite Line to CSV
+  delegate_to: localhost
+  shell: "echo '{{ interface }},{{ desc }},{{ stat }},{{ mode }},{{ mac }},{{ ip }}' >> {{ csv_file }}"
