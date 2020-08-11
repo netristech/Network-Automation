@@ -17,7 +17,7 @@
     from: BBMUS@bbraunusa.com
     to: "{{ email }}"
     attach:
-    - "/root/{{ csv_file }}"
+    - "{{ csv_file }}"
 
 - name: Delete Local CSV File
   delegate_to: localhost
