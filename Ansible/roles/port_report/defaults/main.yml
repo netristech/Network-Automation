@@ -1,3 +1,3 @@
 ---
 csv_file: "/root/{{ hostname }}_port_report_{{ date }}.csv"
-email: "brian.dunham@bbraunusa.com"
+email: "email@domain.com"
