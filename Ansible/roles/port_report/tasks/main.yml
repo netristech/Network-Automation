@@ -3,10 +3,11 @@
   delegate_to: localhost
   shell: "echo 'Port,Description,Status,Mode,MAC Address,IP Address' > {{ csv_file }}"
 
-- name: Get Interfaces
+- name: Loop through interfaces
+  #include_tasks: loop.yml
+  cli_command:
+    command: "show running-config interface {{ item.key }}"
+  register: int_conf
   debug:
-    msg: "{{ ansible_net_gather_network_resources }}"
-    
-#- name: Loop through interfaces
-#  include_tasks: loop.yml
-#  loop: "{{ lookup('dict', ansible_net_interfaces) }}"
+    msg: int_conf
+  loop: "{{ lookup('dict', ansible_net_interfaces) }}"
