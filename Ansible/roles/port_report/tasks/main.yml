@@ -8,6 +8,7 @@
   loop: "{{ lookup('dict', ansible_net_interfaces) }}"
   
 - name: Email CSV
+  delegate_to: localhost
   mail:
     host: 212.0.16.135
     port: 25
@@ -17,4 +18,7 @@
     to: "{{ email }}"
     attach:
     - "/root/{{ csv_file }}"
+
+- name: Delete Local CSV File
   delegate_to: localhost
+  shell: "rm -f {{ csv_file }}"
