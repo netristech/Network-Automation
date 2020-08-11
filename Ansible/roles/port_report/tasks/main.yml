@@ -9,5 +9,5 @@
     command: "show running-config interface {{ item.key }}"
   register: int_conf
   debug:
-    msg: {{ int_conf }}
+    msg: "{{ int_conf }}"
   loop: "{{ lookup('dict', ansible_net_interfaces) }}"
