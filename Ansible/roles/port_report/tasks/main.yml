@@ -4,10 +4,17 @@
   shell: "echo 'Port,Description,Status,Mode,MAC Address,IP Address' > {{ csv_file }}"
 
 - name: Loop through interfaces
-  #include_tasks: loop.yml
-  cli_command:
-    command: "show running-config interface {{ item.key }}"
-  register: int_conf
-  debug:
-    msg: "{{ int_conf }}"
+  include_tasks: loop.yml
   loop: "{{ lookup('dict', ansible_net_interfaces) }}"
+  
+- name: Email CSV
+  mail:
+    host: 212.0.16.135
+    port: 25
+    subject: "Port Report For {{ hostname }}"
+    body: Your report has been generated and is attached to this email.
+    from: BBMUS@bbraunusa.com
+    to: "{{ email }}"
+    attach:
+    - "/root/{{ csv_file }}"
+  delegate_to: localhost
