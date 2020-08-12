@@ -31,7 +31,7 @@
 - name: Get MAC from table
   cli_command:
     command: "show mac address interf {{ item.key }}"
-  register: mac_list
+  register: mac
   
 - name: Set IP
   set_fact:
