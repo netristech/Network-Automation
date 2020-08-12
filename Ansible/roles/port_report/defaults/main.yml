@@ -1,3 +1,3 @@
 ---
-csv_file: "/root/{{ hostname }}_port_report_{{ date }}.csv"
+csv_file: "/root/{{ ansible_net_hostname }}_port_report_{{ date }}.csv"
 email: "email@domain.com"
