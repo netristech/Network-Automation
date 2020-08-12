@@ -28,16 +28,16 @@
     mode: "{{ item.value.mode }}"
   when: item.value.mode is defined
   
-- name: Set MAC
-  set_fact:
-    mac: "{{ item.value.macaddress }}"
-  when: item.value.macaddress is defined
+- name: Get MAC from table
+  cli_command:
+    command: "show mac address interf {{ item.key }}"
+  register: mac_list
   
 - name: Set IP
   set_fact:
     ip: "{{ item.value.ipv4.address }}/{{ item.value.ipv4.masklen }}"
   when: item.value.ipv4.address is defined
   
-- name: Wite Line to CSV
+- name: Write Line to CSV
   delegate_to: localhost
   shell: "echo '{{ interface }},{{ desc }},{{ stat }},{{ mode }},{{ mac }},{{ ip }}' >> {{ csv_file }}"
