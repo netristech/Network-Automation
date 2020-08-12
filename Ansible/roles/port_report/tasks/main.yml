@@ -12,7 +12,7 @@
   mail:
     host: 212.0.16.135
     port: 25
-    subject: "Port Report For {{ hostname }}"
+    subject: "Port Report For {{ ansible_net_hostname }}"
     body: Your report has been generated and is attached to this email.
     from: BBMUS@bbraunusa.com
     to: "{{ email }}"
