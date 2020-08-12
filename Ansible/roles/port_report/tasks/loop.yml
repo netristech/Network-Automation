@@ -32,6 +32,7 @@
   cli_command:
     command: "show mac address interf {{ item.key }}"
   register: mac
+  when: item.key is search("Gig.*|Fast.*|Eth.*")
   
 - name: Set IP
   set_fact:
