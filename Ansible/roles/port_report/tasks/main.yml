@@ -4,9 +4,9 @@
   shell: "echo 'Port,Description,Status,Mode,MAC Address,IP Address' > {{ csv_file }}"
 
 - name: Loop through interfaces
-  #include_tasks: loop.yml
-  debug:
-    msg: "{{ item }}"
+  include_tasks: loop.yml
+  #debug:
+    #msg: "{{ item }}"
   loop: "{{ lookup('dict', ansible_net_interfaces) }}"
   
 - name: Email CSV
