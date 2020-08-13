@@ -1,22 +1,30 @@
 ---
+- name: Set Defaults
+  set_fact:
+    interface: ' '
+    desc: ' '
+    stat: ' '
+    mac: ' '
+    ip: ' '
+    
 - name: Set Interface
   set_fact:
-    interface: "{{ item.key | default(' ') }}"
+    interface: "{{ item.key }}"
   when: item.key is defined
   
 - name: Set Description
   set_fact:
-    desc: "{{ item.value.description | default(' ') }}"
+    desc: "{{ item.value.description }}"
   when: item.value.description is defined
   
 - name: Set Status
   set_fact:
-    stat: "{{ item.value.state | default(' ') }}"
+    stat: "{{ item.value.state }}"
   when: item.value.state is defined
   
 - name: Set Status 2
   set_fact:
-    stat: "{{ item.value.operstatus | default(' ') }}"
+    stat: "{{ item.value.operstatus }}"
   when: item.value.operstatus is defined
   
 - name: Get MAC from table
@@ -27,14 +35,14 @@
   
 - name: Set MAC address
   set_fact:
-    mac: "{{ mac_list.stdout | regex_search('\\b(?:[0-9a-f]{4}\\.){2}[0-9a-f]{4}\\b') | default(' ') }}"
+    mac: "{{ mac_list.stdout | regex_search('\\b(?:[0-9a-f]{4}\\.){2}[0-9a-f]{4}\\b') }}"
   when: mac_list.stdout is defined
   
 - name: Get IP from ARP
   cli_command:
     command: "show ip arp | inc {{ mac }}"
   register: arp_list
-  when: mac is defined
+  when: mac != ' '
   
 - name: Set IP address
   set_fact:
