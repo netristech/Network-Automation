@@ -46,7 +46,7 @@
   
 - name: Set IP address
   set_fact:
-    ip: "{{ arp_list.stdout | regex_search('\\b(?:[0-9]{1,3}\\.){3}[0-9]{1,3}\\b')"
+    ip: "{{ arp_list.stdout | regex_search('\\b(?:[0-9]{1,3}\\.){3}[0-9]{1,3}\\b') }}"
   when: arp_list.stdout is defined
   
 - name: Set IP address - fallback
