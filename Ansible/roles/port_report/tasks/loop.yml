@@ -31,8 +31,13 @@
 - name: Get MAC from table
   cli_command:
     command: "show mac address interf {{ item.key }}"
-  register: mac
-  when: item.key is search("Gig.*|Fast.*|Eth.*")
+  register: mac_list
+  when: item.key is search("Gig.*|gig.*|Fast.*|fast.*|Eth.*|eth.*")
+  
+- name: Set MAC address
+  set_fact:
+    mac: "{{ mac_list.stdout | regex_search(([0-9a-f]{4}.){2}[0-9a-f]{4}) }}"
+  when: mac_list is defined
   
 - name: Set IP
   set_fact:
