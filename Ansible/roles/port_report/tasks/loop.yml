@@ -37,7 +37,7 @@
 - name: Set MAC address
   set_fact:
     mac: "{{ mac_list.stdout | regex_search('\\b(?:[0-9a-f]{4}\\.){2}[0-9a-f]{4}\\b') }}"
-  when: mac_list is defined
+  when: mac_list.stdout is defined
   
 - name: Set IP
   set_fact:
