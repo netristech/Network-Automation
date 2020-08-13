@@ -3,8 +3,8 @@
   set_fact:
     interface: " "
     desc: " "
-    stat: "down"
-    mode: "access"
+    stat: " "
+    mode: " "
     mac: " "
     ip: " "
 
