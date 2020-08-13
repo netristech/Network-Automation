@@ -1,11 +1,11 @@
 ---
 - name: Set Defaults
   set_fact:
-    interface: ' '
-    desc: ' '
-    stat: ' '
-    mac: ' '
-    ip: ' '
+    interface: ''
+    desc: ''
+    stat: ''
+    mac: ''
+    ip: ''
     
 - name: Set Interface
   set_fact:
@@ -42,7 +42,7 @@
   cli_command:
     command: "show ip arp | inc {{ mac }}"
   register: arp_list
-  when: mac != ' '
+  when: mac != ''
   
 - name: Set IP address
   set_fact:
