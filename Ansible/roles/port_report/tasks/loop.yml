@@ -1,31 +1,22 @@
 ---
-- name: Set Defaults
-  set_fact:
-    interface: " "
-    desc: " "
-    stat: " "
-    mode: " "
-    mac: " "
-    ip: " "
-
 - name: Set Interface
   set_fact:
-    interface: "{{ item.key }}"
+    interface: "{{ item.key | default(' ') }}"
   when: item.key is defined
   
 - name: Set Description
   set_fact:
-    desc: "{{ item.value.description }}"
+    desc: "{{ item.value.description | default(' ') }}"
   when: item.value.description is defined
   
 - name: Set Status
   set_fact:
-    stat: "{{ item.value.state }}"
+    stat: "{{ item.value.state | default(' ') }}"
   when: item.value.state is defined
   
 - name: Set Mode
   set_fact:
-    mode: "{{ item.value.mode }}"
+    mode: "{{ item.value.mode | default(' ') }}"
   when: item.value.mode is defined
   
 - name: Get MAC from table
@@ -36,12 +27,12 @@
   
 - name: Set MAC address
   set_fact:
-    mac: "{{ mac_list.stdout | regex_search('\\b(?:[0-9a-f]{4}\\.){2}[0-9a-f]{4}\\b') }}"
+    mac: "{{ mac_list.stdout | regex_search('\\b(?:[0-9a-f]{4}\\.){2}[0-9a-f]{4}\\b') | default(' ') }}"
   when: mac_list.stdout is defined
   
 - name: Set IP
   set_fact:
-    ip: "{{ item.value.ipv4.address }}/{{ item.value.ipv4.masklen }}"
+    ip: "{{ item.value.ipv4.address }}/{{ item.value.ipv4.masklen | default(' ') }}"
   when: item.value.ipv4.address is defined
   
 - name: Write Line to CSV
