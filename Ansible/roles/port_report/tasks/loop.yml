@@ -51,8 +51,13 @@
   
 - name: Set IP address - fallback
   set_fact:
-    ip: "{{ item.value.ipv4.address }}/{{ item.value.ipv4.masklen | default(' ') }}"
+    ip: "{{ item.value.ipv4.address }}"
   when: item.value.ipv4.address is defined
+  
+- name: Set IP address - fallback 2
+  set_fact:
+    ip: "{{ item.value.ipv4[0].address }}"
+  when: item.value.ipv4[0].address is defined  
   
 - name: Write Line to CSV
   delegate_to: localhost
