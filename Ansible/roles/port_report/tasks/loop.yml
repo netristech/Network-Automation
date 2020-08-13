@@ -19,11 +19,6 @@
     stat: "{{ item.value.operstatus | default(' ') }}"
   when: item.value.operstatus is defined
   
-- name: Set Mode
-  set_fact:
-    mode: "{{ item.value.mode | default(' ') }}"
-  when: item.value.mode is defined
-  
 - name: Get MAC from table
   cli_command:
     command: "show mac address interf {{ item.key }}"
@@ -39,7 +34,7 @@
   cli_command:
     command: "show ip arp | inc {{ mac }}"
   register: arp_list
-  when: mac != ' '
+  when: mac is defined
   
 - name: Set IP address
   set_fact:
