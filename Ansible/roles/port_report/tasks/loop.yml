@@ -14,6 +14,11 @@
     stat: "{{ item.value.state | default(' ') }}"
   when: item.value.state is defined
   
+- name: Set Status 2
+  set_fact:
+    stat: "{{ item.value.operstatus | default(' ') }}"
+  when: item.value.operstatus is defined
+  
 - name: Set Mode
   set_fact:
     mode: "{{ item.value.mode | default(' ') }}"
@@ -30,11 +35,22 @@
     mac: "{{ mac_list.stdout | regex_search('\\b(?:[0-9a-f]{4}\\.){2}[0-9a-f]{4}\\b') | default(' ') }}"
   when: mac_list.stdout is defined
   
-- name: Set IP
+- name: Get IP from ARP
+  cli_command:
+    command: "show ip arp | inc {{ mac }}"
+  register: arp_list
+  when: mac != ' '
+  
+- name: Set IP address
+  set_fact:
+    ip: "{{ arp_list.stdout | regex_search('\\b(?:[0-9]{1,3}\\.){3}[0-9]{1,3}\\b')"
+  when: arp_list.stdout is defined
+  
+- name: Set IP address - fallback
   set_fact:
     ip: "{{ item.value.ipv4.address }}/{{ item.value.ipv4.masklen | default(' ') }}"
   when: item.value.ipv4.address is defined
   
 - name: Write Line to CSV
   delegate_to: localhost
-  shell: "echo '{{ interface }},{{ desc }},{{ stat }},{{ mode }},{{ mac }},{{ ip }}' >> {{ csv_file }}"
+  shell: "echo '{{ interface }},{{ desc }},{{ stat }},{{ mac }},{{ ip }}' >> {{ csv_file }}"
