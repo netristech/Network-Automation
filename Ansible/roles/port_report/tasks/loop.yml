@@ -61,4 +61,6 @@
   
 - name: Write Line to CSV
   delegate_to: localhost
-  shell: "echo '{{ interface }},{{ desc }},{{ stat }},{{ mac }},{{ ip }}' >> {{ csv_file }}"
+  lineinfile:
+    path: "{{ csv_file }}"
+    line: "{{ interface }},{{ desc }},{{ stat }},{{ mac }},{{ ip }}"
