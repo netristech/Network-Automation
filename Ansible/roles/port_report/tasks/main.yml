@@ -23,4 +23,6 @@
 
 - name: Delete Local CSV File
   delegate_to: localhost
-  shell: "rm -f {{ csv_file }}"
+  file:
+    path: "{{ csv_file }}"
+    state: absent
