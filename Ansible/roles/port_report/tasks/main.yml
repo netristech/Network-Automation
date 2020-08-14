@@ -1,7 +1,14 @@
 ---
-- name: Write CSV File and Header
+#- name: Write CSV File and Header
+  #delegate_to: localhost
+  #shell: "echo 'Port,Description,Status,MAC Address,IP Address' > {{ csv_file }}"
+  
+- name: Create CSV file and Write Header
   delegate_to: localhost
-  shell: "echo 'Port,Description,Status,MAC Address,IP Address' > {{ csv_file }}"
+  lineinfile:
+    path: "{{ csv_file }}"
+    line: Port,Description,Status,MAC Address,IP Address
+    create: yes
 
 - name: Loop through interfaces
   include_tasks: loop.yml
