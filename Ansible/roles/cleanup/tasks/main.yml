@@ -10,5 +10,5 @@
   file:
     path: "{{ item.path }}" 
     state: absent
-  with_items: "{{ old_files | list }}"
-  when: old_files is defined
+  with_items: "{{ old_files.files }}"
+  when: old_files.files is defined
