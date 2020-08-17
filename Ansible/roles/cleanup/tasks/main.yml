@@ -1,1 +1,13 @@
 ---
+- name: Find All Files Older Than 7 days
+  find:
+    paths: "{{ cleanup_path }}"
+    age: "{{ max_age }}"
+    file_type: file
+  register: old_files
+
+- name: Remove Old Files
+  file:
+    path: "{{ item.path }}" 
+    state: absent
+  with_items: "{{ old_files | list }}"
