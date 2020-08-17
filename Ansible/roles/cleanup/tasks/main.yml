@@ -8,6 +8,6 @@
 
 - name: Remove Old Files
   file:
-    path: "{{ item.path }}" 
+    path: "{{ item }}" 
     state: absent
   with_items: "{{ old_files | list }}"
