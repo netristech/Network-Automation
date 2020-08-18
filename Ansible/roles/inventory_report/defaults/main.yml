@@ -1,0 +1,2 @@
+---
+csv_file: "/root/inventory_report_{{ timestamp }}"
