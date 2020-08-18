@@ -1,1 +1,43 @@
 ---
+- name: Create CSV file and Write Header
+  delegate_to: localhost
+  lineinfile:
+    path: "{{ csv_file }}"
+    line: Hostname,IP Address,Model,Software Version,Serial Number
+    create: yes
+
+- name: Set Defaults
+  set_fact:
+    hostname: ''
+    ip: ''
+    model: ''
+    vers: ''
+    serials: ''
+    
+- name: Set Hostname
+  set_fact:
+    hostname: "{{ ansible_net_hostname }}"
+  when: ansible_net_hostname is defined
+  
+- name: Set IP Address
+  set_fact:
+    ip:
+  when:
+  
+- name: Email CSV
+  delegate_to: localhost
+  mail:
+    host: 212.0.16.135
+    port: 25
+    subject: "Inventory Report"
+    body: Your report has been generated and is attached to this email.
+    from: BBMUS@bbraunusa.com
+    to: "{{ email }}"
+    attach:
+    - "{{ csv_file }}"
+
+- name: Delete Local CSV File
+  delegate_to: localhost
+  file:
+    path: "{{ csv_file }}"
+    state: absent
