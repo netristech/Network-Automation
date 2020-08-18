@@ -3,7 +3,7 @@
   delegate_to: localhost
   lineinfile:
     path: "{{ csv_file }}"
-    line: Hostname,IP Address,Model,Software Version,Serial Number
+    line: Hostname,IP Address,Model,Software Version,Platform,Serial Number
     create: yes
 
 - name: Set Defaults
@@ -11,8 +11,9 @@
     hostname: ''
     ip: ''
     model: ''
-    vers: ''
-    serials: ''
+    version: ''
+    platform: ''
+    serial: ''
     
 - name: Set Hostname
   set_fact:
@@ -21,9 +22,35 @@
   
 - name: Set IP Address
   set_fact:
-    ip:
-  when:
+    ip: "{{ ansible_net_all_ipv4_addresses[0] }}"
+    when: ansible_net_all_ipv4_addresses[0] is defined
+    
+- name: Set Model
+  set_fact:
+    model: "{{ ansible_net_model }}"
+  when: ansible_net_model is defined
   
+- name: Set Version
+  set_fact:
+    version: "{{ ansible_net_version }}"
+  when: ansible_net_version is defined
+  
+- name: Set Platform
+  set_fact:
+    platform: "{{ ansible_net_platform }}"
+  when: ansible_net_platform is defined
+  
+- name: Set Serial
+  set_fact:
+    serial: "{{ ansible_net_serialnum }}"
+  when: ansible_net_serialnum is defined
+  
+- name: Write Line to CSV
+  delegate_to: localhost
+  lineinfile:
+    path: "{{ csv_file }}"
+    line: "{{ hostname }},{{ ip }},{{ model }},{{ version }},{{ platform }},{{ serial }}"
+
 - name: Email CSV
   delegate_to: localhost
   mail:
