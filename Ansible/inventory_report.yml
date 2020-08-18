@@ -1,3 +1,8 @@
 ---
-hosts: all
-gather_facts: no
+- hosts: all
+  connection: network_cli
+  gather_facts: no
+  
+  roles:
+    - common
+    - inventory_report
