@@ -1,2 +1,3 @@
 ---
-csv_file: "/root/inventory_report_{{ timestamp }}"
+csv_file: "/root/inventory_report_{{ date }}"
+email: "email@domain.com"
