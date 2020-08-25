@@ -1,3 +1,4 @@
 ---
+oui_url: "http://standards-oui.ieee.org/oui.txt"
 csv_file: "/root/{{ ansible_net_hostname }}_port_report_{{ date }}.csv"
 email: "email@domain.com"
