@@ -3,6 +3,10 @@
   #delegate_to: localhost
   #shell: "echo 'Port,Description,Status,MAC Address,IP Address' > {{ csv_file }}"
   
+- name: Get OUI File From IEEE
+  shell:
+    command: "wget {{ oui_file }}"
+  
 - name: Create CSV file and Write Header
   delegate_to: localhost
   lineinfile:
