@@ -5,8 +5,8 @@
   
 - name: Get OUI File From IEEE
   shell:
-    command: "wget {{ oui_file }}"
-  
+    command: "cd /root && wget {{ oui_url }}"
+    
 - name: Create CSV file and Write Header
   delegate_to: localhost
   lineinfile:
