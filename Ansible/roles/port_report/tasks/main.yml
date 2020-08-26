@@ -1,7 +1,7 @@
 ---
 #- name: Write CSV File and Header
   #delegate_to: localhost
-  #shell: "echo 'Port,Description,Status,Extended Status,MAC Address,Vendor,IP Address,PoE' > {{ csv_file }}"
+  #shell: "echo 'Port,Description,Status,Extended Status,Speed/Duplex,MAC Address,Vendor,IP Address,PoE' > {{ csv_file }}"
   
 #- name: Get OUI File From IEEE
   #delegate_to: localhost
@@ -11,7 +11,7 @@
   delegate_to: localhost
   lineinfile:
     path: "{{ csv_file }}"
-    line: Port,Description,Status,Extended Status,MAC Address,Vendor,IP Address,PoE
+    line: Port,Description,Status,Extended Status,Speed/Duplex,MAC Address,Vendor,IP Address,PoE
     create: yes
 
 - name: Loop through interfaces
