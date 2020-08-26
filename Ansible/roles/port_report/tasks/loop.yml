@@ -4,7 +4,9 @@
     interface: ''
     desc: ''
     stat: ''
+    speed_dup: ''
     mac: ''
+    vendor: ''
     ip: ''
     
 - name: Set Interface
@@ -26,6 +28,13 @@
   set_fact:
     stat: "{{ item.value.operstatus }}"
   when: item.value.operstatus is defined
+  
+- name: Set Speed and Duplex
+  set_fact:
+    speed_dup: "{{ item.value.speed }} {{ item.value.duplex }}"
+  when: 
+    - item.value.speed is defined
+    - item.value.duplex is defined
   
 - name: Get MAC from table
   cli_command:
