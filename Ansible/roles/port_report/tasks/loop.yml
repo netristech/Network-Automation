@@ -4,10 +4,12 @@
     interface: ''
     desc: ''
     stat: ''
+    ext_stat: ''
     speed_dup: ''
     mac: ''
     vendor: ''
     ip: ''
+    poe: ''
     
 - name: Set Interface
   set_fact:
@@ -28,6 +30,17 @@
   set_fact:
     stat: "{{ item.value.operstatus }}"
   when: item.value.operstatus is defined
+  
+- name: Get Extended Status
+  cli_command:
+    command: "show interface {{ item.key }} | inc {{ item.key }}"
+  register: stat_line
+  when: item.key is search("Gig.*|gig.*|Fast.*|fast.*|Eth.*|eth.*")
+  
+- name: Set Extended Status
+  set_fact:
+    ext_stat: "{{ stat_line.split()[-1] }}"
+  when: stat_line is defined
   
 - name: Set Speed and Duplex
   set_fact:
@@ -72,4 +85,4 @@
   delegate_to: localhost
   lineinfile:
     path: "{{ csv_file }}"
-    line: "{{ interface }},{{ desc }},{{ stat }},{{ mac }},{{ ip }}"
+    line: "{{ interface }},{{ desc }},{{ stat }},{{ ext_stat }},{{ speed_dup }},{{ mac }},{{ vendor }},{{ ip }},{{ poe }}"
