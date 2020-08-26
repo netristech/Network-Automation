@@ -42,12 +42,16 @@
     ext_stat: "{{ stat_line.stdout.split()[-1] }}"
   when: stat_line.stdout is defined
   
+- name: Get Speed and Duplex
+  cli_command:
+    command: "show interface {{ item.key }} | inc -duplex
+  register: speed_dup_line
+  when: item.key is search("Gig.*|gig.*|Fast.*|fast.*|Eth.*|eth.*")
+  
 - name: Set Speed and Duplex
   set_fact:
-    speed_dup: "{{ item.value.speed }} {{ item.value.duplex }}"
-  when: 
-    - item.value.speed is defined
-    - item.value.duplex is defined
+    speed_dup: "{{ speed_dup_line.stdout.split(',')[1] }} {{ speed_dup_line.stdout.splt(',')[0] }}"
+  when: speed_dup_line.stdout is defined
   
 - name: Get MAC from table
   cli_command:
