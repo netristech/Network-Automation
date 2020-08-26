@@ -1,17 +1,17 @@
 ---
 #- name: Write CSV File and Header
   #delegate_to: localhost
-  #shell: "echo 'Port,Description,Status,MAC Address,IP Address' > {{ csv_file }}"
+  #shell: "echo 'Port,Description,Status,Extended Status,MAC Address,Vendor,IP Address,PoE' > {{ csv_file }}"
   
 - name: Get OUI File From IEEE
-  shell:
-    command: "cd /root && wget {{ oui_url }}"
+  delegate_to: localhost
+  shell: "cd /root && wget {{ oui_url }}"
     
 - name: Create CSV file and Write Header
   delegate_to: localhost
   lineinfile:
     path: "{{ csv_file }}"
-    line: Port,Description,Status,MAC Address,IP Address
+    line: Port,Description,Status,Extended Status,MAC Address,Vendor,IP Address,PoE
     create: yes
 
 - name: Loop through interfaces
