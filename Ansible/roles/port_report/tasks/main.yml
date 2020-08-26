@@ -3,9 +3,9 @@
   #delegate_to: localhost
   #shell: "echo 'Port,Description,Status,Extended Status,MAC Address,Vendor,IP Address,PoE' > {{ csv_file }}"
   
-- name: Get OUI File From IEEE
-  delegate_to: localhost
-  shell: "cd /root && wget {{ oui_url }}"
+#- name: Get OUI File From IEEE
+  #delegate_to: localhost
+  #shell: "cd /root && wget {{ oui_url }}"
     
 - name: Create CSV file and Write Header
   delegate_to: localhost
