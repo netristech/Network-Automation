@@ -39,8 +39,8 @@
   
 - name: Set Extended Status
   set_fact:
-    ext_stat: "{{ stat_line.split()[-1] }}"
-  when: stat_line is defined
+    ext_stat: "{{ stat_line.stdout.split()[-1] }}"
+  when: stat_line.stdout is defined
   
 - name: Set Speed and Duplex
   set_fact:
@@ -79,7 +79,17 @@
 - name: Set IP address - fallback 2
   set_fact:
     ip: "{{ item.value.ipv4[0].address }}"
-  when: item.value.ipv4[0].address is defined  
+  when: item.value.ipv4[0].address is defined
+  
+- name: Get PoE Status
+  cli_command:
+    command: "show power inline {{ item.key }} detail | inc status"
+  register: poe_stat
+  
+- name: Set PoE Status
+  set_fact:
+    poe: "{{ poe_stat.stdout.split(':')[-1] }}"
+  when: poe_stat.stdout is defined
   
 - name: Write Line to CSV
   delegate_to: localhost
