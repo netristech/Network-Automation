@@ -1,22 +1,32 @@
 ---
+- name: Check for Lookup File
+  delegate_to: localhost
+  stat:
+    path: /root/lookup.txt
+  register: lookup_file
+  
 - name: Download OUI File From IEEE
   delegate_to: localhost
   get_url:
     url: "{{ oui_url }}"
     dest: /root
     mode: '0755'
+  when: not lookup_file.stat.exists
     
 - name: Create Vendor File
   delegate_to: localhost
   shell: "cat /root/oui.txt | grep '(base 16)' | cut -f3 > /root/vendor.txt"
+  when: not lookup_file.stat.exists
   
 - name: Create MAC File
   delegate_to: localhost
   shell: "cat /root/oui.txt | grep '(base 16)' | cut -f1 -d' ' > /root/mac.txt"
+  when: not lookup_file.stat.exists
   
 - name: Join MAC and Vendor files
   delegate_to: localhost
   shell: "paste /root/mac.txt /root/vendor.txt > /root/lookup.txt"
+  when: not lookup_file.stat.exists
   
 - name: Cleanup Temporary Files
   delegate_to: localhost
@@ -36,8 +46,6 @@
 
 - name: Loop through interfaces
   include_tasks: loop.yml
-  #debug:
-    #msg: "{{ item }}"
   loop: "{{ lookup('dict', ansible_net_interfaces) }}"
   
 - name: Email CSV
@@ -55,9 +63,5 @@
 - name: Cleanup Local Files
   delegate_to: localhost
   file:
-    path: "{{ item }}"
+    path: "{{ csv_file }}"
     state: absent
-  with_items:
-    - "{{ csv_file }}"
-    - /root/oui.txt
-    - /root/lookup.txt
