@@ -63,17 +63,17 @@
   
 - name: Set Port Type
   set_fact:
-    type: "{{ int_config.stdout | regex_search('switchport mode .*').split()[2] }}"
+    type: "{{ int_config.stdout | regex_search('\\b(?:switchport mode [A-Za-z]{5,6})\\b').split()[2] }}"
   when:
     - int_config is defined
-    - int_config.stdout is search("switchport mode")
+    - int_config.stdout is search("\\b(?:switchport mode [A-Za-z]{5,6})\\b")
   
 - name: Set VLAN ID
   set_fact:
-    vlan: "{{ int_config.stdout | regex_search('access vlan [0-9]{1,4}').split()[2] }}"
+    vlan: "{{ int_config.stdout | regex_search('\\b(?:access vlan [0-9]{1,4})\\b').split()[2] }}"
   when:
     - int_config is defined
-    - int_config.stdout is search("access vlan")
+    - int_config.stdout is search("\\b(?:access vlan [0-9]{1,4})\\b")
     
 - name: Set VLAN ID - Fallback
   set_fact:
