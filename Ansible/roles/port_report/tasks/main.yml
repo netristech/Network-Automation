@@ -3,9 +3,33 @@
   #delegate_to: localhost
   #shell: "echo 'Port,Description,Status,Extended Status,Speed/Duplex,MAC Address,Vendor,IP Address,PoE' > {{ csv_file }}"
   
-#- name: Get OUI File From IEEE
-  #delegate_to: localhost
-  #shell: "cd /root && wget {{ oui_url }}"
+- name: Download OUI File From IEEE
+  delegate_to: localhost
+  get_url:
+    url: "{{ oui_url }}"
+    dest: /root
+    mode: '0755'
+    
+- name: Create Vendor File
+  delegate_to: localhost
+  shell: "cat /root/oui.txt | grep '(base 16)' | cut -f3 > /root/vendor.txt"
+  
+- name: Create MAC File
+  delegate_to: localhost
+  shell: "cat /root/oui.txt | grep '(base 16)' | cut -f1 -d' ' > /root/mac.txt"
+  
+- name: Join MAC and Vendor files
+  delegate_to: localhost
+  shell: "paste /root/mac.txt /root/vendor.txt > /root/lookup.txt"
+  
+- name: Cleanup Temporary Files
+  delegate_to: localhost
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /root/vendor.txt
+    - /root/mac.txt
     
 - name: Create CSV file and Write Header
   delegate_to: localhost
