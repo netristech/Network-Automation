@@ -1,8 +1,4 @@
 ---
-#- name: Write CSV File and Header
-  #delegate_to: localhost
-  #shell: "echo 'Port,Description,Status,Extended Status,Speed/Duplex,MAC Address,Vendor,IP Address,PoE' > {{ csv_file }}"
-  
 - name: Download OUI File From IEEE
   delegate_to: localhost
   get_url:
@@ -56,8 +52,12 @@
     attach:
     - "{{ csv_file }}"
 
-- name: Delete Local CSV File
+- name: Cleanup Local Files
   delegate_to: localhost
   file:
-    path: "{{ csv_file }}"
+    path: "{{ item }}"
     state: absent
+  loop:
+    - "{{ csv_file }}"
+    - /root/oui.txt
+    - /root/lookup.txt
