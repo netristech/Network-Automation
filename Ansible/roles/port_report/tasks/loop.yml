@@ -6,6 +6,8 @@
     stat: ''
     ext_stat: ''
     speed_dup: ''
+    type: ''
+    vlan: ''
     mac: ''
     vendor: ''
     ip: ''
@@ -44,7 +46,7 @@
   
 - name: Get Speed and Duplex
   cli_command:
-    command: "show interface {{ item.key }} | inc -duplex
+    command: "show interface {{ item.key }} | inc -duplex"
   register: speed_dup_line
   when: item.key is search("Gig.*|gig.*|Fast.*|fast.*|Eth.*|eth.*")
   
@@ -52,7 +54,34 @@
   set_fact:
     speed_dup: "{{ speed_dup_line.stdout.split(',')[1] }} {{ speed_dup_line.stdout.splt(',')[0] }}"
   when: speed_dup_line.stdout is defined
+
+- name: Get Interface Configuration
+  cli_command:
+    command: "show running-config interface {{ item.key }}"
+  register: int_config
+  when: item.key is search("Gig.*|gig.*|Fast.*|fast.*|Eth.*|eth.*")
   
+- name: Set Port Type
+  set_fact:
+    type: "{{ int_config.stdout | regex_search('switchport mode .*').split()[2] }}"
+  when:
+    - int_config is defined
+    - int_config.stdout is search("switchport mode")
+  
+- name: Set VLAN ID
+  set_fact:
+    vlan: "{{ int_config.stdout | regex_search('access vlan [0-9]{1,4}').split()[2] }}"
+  when:
+    - int_config is defined
+    - int_config.stdout is search("access vlan")
+    
+- name: Set VLAN ID - Fallback
+  set_fact:
+    vlan: 1
+  when:
+    - vlan == ''
+    - mode == 'access'
+
 - name: Get MAC from table
   cli_command:
     command: "show mac address interf {{ item.key }}"
@@ -63,6 +92,21 @@
   set_fact:
     mac: "{{ mac_list.stdout | regex_search('\\b(?:[0-9a-f]{4}\\.){2}[0-9a-f]{4}\\b') }}"
   when: mac_list.stdout is defined
+  
+- name: Get OUI from MAC
+  set_fact:
+    oui: "{{ mac.split('.').join()[:6] }}"
+  when: mac != ''
+  
+- name: Store OUI file as variable
+  set_fact:
+    oui_file: "{{ item }}"
+  with_file: /root/oui.txt
+  
+- name: Set Vendor
+  set_fact:
+    vendor: "{{ oui_file | regex_search('{{ oui }}.*').split()[1] }}"
+  when: oui is defined
   
 - name: Get IP from ARP
   cli_command:
@@ -100,4 +144,4 @@
   delegate_to: localhost
   lineinfile:
     path: "{{ csv_file }}"
-    line: "{{ interface }},{{ desc }},{{ stat }},{{ ext_stat }},{{ speed_dup }},{{ mac }},{{ vendor }},{{ ip }},{{ poe }}"
+    line: "{{ interface }},{{ desc }},{{ stat }},{{ ext_stat }},{{ speed_dup }},{{ type }},{{ vlan }},{{ mac }},{{ vendor }},{{ ip }},{{ poe }}"
