@@ -41,7 +41,7 @@
   delegate_to: localhost
   lineinfile:
     path: "{{ csv_file }}"
-    line: Port,Description,Status,Extended Status,Speed/Duplex,MAC Address,Vendor,IP Address,PoE
+    line: Port,Description,Status,Extended Status,Speed/Duplex,Port Type,VLAN,MAC Address,Vendor,IP Address,PoE
     create: yes
 
 - name: Loop through interfaces
