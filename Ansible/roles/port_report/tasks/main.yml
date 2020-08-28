@@ -57,7 +57,7 @@
   file:
     path: "{{ item }}"
     state: absent
-  loop:
+  with_items:
     - "{{ csv_file }}"
     - /root/oui.txt
     - /root/lookup.txt
