@@ -76,7 +76,7 @@
     vlan: 1
   when:
     - vlan == ''
-    - mode == 'access'
+    - type == 'access'
 
 - name: Get MAC from table
   cli_command:
