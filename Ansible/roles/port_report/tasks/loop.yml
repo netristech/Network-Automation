@@ -53,7 +53,9 @@
 - name: Set Speed and Duplex
   set_fact:
     speed_dup: "{{ speed_dup_line.stdout.split(',')[1] }} {{ speed_dup_line.stdout.splt(',')[0] }}"
-  when: speed_dup_line.stdout is defined
+  when: 
+    - speed_dup_line.stdout is defined
+    - speed_dup_line != ''
 
 - name: Get Interface Configuration
   cli_command:
