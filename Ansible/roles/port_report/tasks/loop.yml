@@ -96,11 +96,6 @@
     oui: "{{ mac.split('.').join()[:6] }}"
   when: mac != ''
   
-- name: Store OUI file as variable
-  set_fact:
-    oui_file: "{{ item }}"
-  with_file: /root/oui.txt
-  
 - name: Set Vendor
   set_fact:
     vendor: "{{ oui_file | regex_search('{{ oui }}.*').split()[1] }}"
