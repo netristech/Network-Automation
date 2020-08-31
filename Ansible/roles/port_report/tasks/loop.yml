@@ -55,7 +55,7 @@
     speed_dup: "{{ speed_dup_line.stdout.split(',')[1] }} {{ speed_dup_line.stdout.split(',')[0] }}"
   when: 
     - speed_dup_line.stdout is defined
-    - speed_dup_line != ''
+    - speed_dup_line.stdout != ''
 
 - name: Get Interface Configuration
   cli_command:
