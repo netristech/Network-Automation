@@ -99,7 +99,9 @@
 - name: Get Vendor
   set_fact:
     vendor_line: "{{ oui_file | regex_search( oui | string + '.*') }}"
-  when: oui is defined
+  when: 
+    - oui is defined
+    - mac != ''
 
 - name: Set Vendor
   set_fact:
