@@ -1,6 +1,6 @@
 ---
 - name: Set Defaults
-  vars:
+  set_fact:
     interface: ''
     desc: ''
     stat: ''
@@ -14,22 +14,22 @@
     poe: ''
     
 - name: Set Interface
-  vars:
+  set_fact:
     interface: "{{ item.key }}"
   when: item.key is defined
   
 - name: Set Description
-  vars:
+  set_fact:
     desc: "{{ item.value.description }}"
   when: item.value.description is defined
   
 - name: Set Status
-  vars:
+  set_fact:
     stat: "{{ item.value.state }}"
   when: item.value.state is defined
   
 - name: Set Status 2
-  vars:
+  set_fact:
     stat: "{{ item.value.operstatus }}"
   when: item.value.operstatus is defined
   
@@ -40,7 +40,7 @@
   when: item.key is search("Gig.*|gig.*|Fast.*|fast.*|Eth.*|eth.*")
   
 - name: Set Extended Status
-  vars:
+  set_fact:
     ext_stat: "{{ stat_line.stdout.split()[-1] }}"
   when: stat_line.stdout is defined
   
@@ -51,7 +51,7 @@
   when: item.key is search("Gig.*|gig.*|Fast.*|fast.*|Eth.*|eth.*")
   
 - name: Set Speed and Duplex
-  vars:
+  set_fact:
     speed_dup: "{{ speed_dup_line.stdout.split(',')[1] }} {{ speed_dup_line.stdout.split(',')[0] }}"
   when: 
     - speed_dup_line.stdout is defined
@@ -64,17 +64,17 @@
   when: item.key is search("Gig.*|gig.*|Fast.*|fast.*|Eth.*|eth.*")
   
 - name: Set Port Type
-  vars:
+  set_fact:
     type: "{{ int_config.stdout | regex_search('\\b(?:switchport mode [A-Za-z]{5,6})\\b') | regex_replace('switchport mode ') }}"
   when: int_config.stdout is defined
   
 - name: Set VLAN ID
-  vars:
+  set_fact:
     vlan: "{{ int_config.stdout | regex_search('\\b(?:access vlan [0-9]{1,4})\\b') | regex_replace('access vlan ') }}"
   when: int_config.stdout is defined
     
 - name: Set VLAN ID - Fallback
-  vars:
+  set_fact:
     vlan: 1
   when:
     - vlan == ''
@@ -87,22 +87,22 @@
   when: item.key is search("Gig.*|gig.*|Fast.*|fast.*|Eth.*|eth.*")
   
 - name: Set MAC address
-  vars:
+  set_fact:
     mac: "{{ mac_list.stdout | regex_search('\\b(?:[0-9a-f]{4}\\.){2}[0-9a-f]{4}\\b') }}"
   when: mac_list.stdout is defined
   
 - name: Get OUI from MAC
-  vars:
+  set_fact:
     oui: "{{ mac.split('.') | join() | regex_replace('^([0-9a-f]{6})[0-9a-f]{6}$', '\\1')  | upper }}"
   when: mac != ''
   
 - name: Get Vendor
-  vars:
+  set_fact:
     vendor_line: "{{ oui_file | regex_search( oui | string + '.*') }}"
   when: oui is defined
 
 - name: Set Vendor
-  vars:
+  set_fact:
     vendor: "{{ vendor_line.split()[3:] | join(' ') | regex_replace(',') }}"
   when: 
     - vendor_line is defined
@@ -115,17 +115,17 @@
   when: mac != ''
   
 - name: Set IP address
-  vars:
+  set_fact:
     ip: "{{ arp_list.stdout | regex_search('\\b(?:[0-9]{1,3}\\.){3}[0-9]{1,3}\\b') }}"
   when: arp_list.stdout is defined
   
 - name: Set IP address - fallback
-  vars:
+  set_fact:
     ip: "{{ item.value.ipv4.address }}"
   when: item.value.ipv4.address is defined
   
 - name: Set IP address - fallback 2
-  vars:
+  set_fact:
     ip: "{{ item.value.ipv4[0].address }}"
   when: item.value.ipv4[0].address is defined
   
@@ -136,7 +136,7 @@
   when: item.key is search("^Gi.*|^gi.*|^Fa.*|^fa.*|^Eth.*|^eth.*")
   
 - name: Set PoE Status
-  vars:
+  set_fact:
     poe: "{{ poe_stat.stdout.split(':')[-1] }}"
   when: poe_stat.stdout is defined
   
