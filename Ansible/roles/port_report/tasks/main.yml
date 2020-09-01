@@ -44,6 +44,7 @@
     create: yes
     
 - name: Store OUI file as variable
+  delegate_to: localhost
   set_fact:
     oui_file: "{{ lookup('file', '/root/oui.txt') }}"
     
