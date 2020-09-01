@@ -98,7 +98,7 @@
   
 - name: Set Vendor
   set_fact:
-    vendor: "{{ oui_file | regex_search('{{ oui }}.*').split()[1] }}"
+    vendor: "{{ oui_file | regex_search( oui | string + '.*').split()[1] }}"
   when: oui is defined
   
 - name: Get IP from ARP
