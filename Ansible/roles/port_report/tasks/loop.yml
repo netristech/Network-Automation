@@ -93,7 +93,7 @@
   
 - name: Get OUI from MAC
   set_fact:
-    oui: "{{ mac.split('.') | join() | regex_replace('^([0-9a-f]{6})[0-9a-f]{6}$', '\\1') }}"
+    oui: "{{ mac.split('.') | join() | regex_replace('^([0-9a-f]{6})[0-9a-f]{6}$', '\\1')  | upper }}"
   when: mac != ''
   
 - name: Get Vendor
@@ -104,7 +104,7 @@
 - name: Set Vendor
   set_fact:
     vendor: "{{ vendor_line.split()[1] }}"  
-  when: vendor_line is defined
+  when: vendor_line != ''
 
 - name: Get IP from ARP
   cli_command:
