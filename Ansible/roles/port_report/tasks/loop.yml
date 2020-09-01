@@ -133,7 +133,7 @@
   cli_command:
     command: "show power inline {{ item.key }} detail | inc status"
   register: poe_stat
-  when: item.key is search("Gig.*|gig.*|Fast.*|fast.*|Eth.*|eth.*")
+  when: item.key is search("^Gi.*|^gi.*|^Fa.*|^fa.*|^Eth.*|^eth.*")
   
 - name: Set PoE Status
   set_fact:
