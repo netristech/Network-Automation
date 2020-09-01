@@ -93,7 +93,7 @@
   
 - name: Get OUI from MAC
   set_fact:
-    oui: "{{ mac.split('.').join()[:6] }}"
+    oui: "{{ mac.split('.') | join()[:6] }}"
   when: mac != ''
   
 - name: Set Vendor
