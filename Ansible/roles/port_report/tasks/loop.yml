@@ -109,6 +109,7 @@
   when: 
     - vendor_line is defined
     - vendor_line != ''
+    - mac != ''
 
 - name: Get IP from ARP
   cli_command:
