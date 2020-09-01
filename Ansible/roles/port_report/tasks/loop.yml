@@ -103,8 +103,10 @@
 
 - name: Set Vendor
   set_fact:
-    vendor: "{{ vendor_line.split()[1] }}"  
-  when: vendor_line != ''
+    vendor: "{{ vendor_line.split()[1] }}"
+  when: 
+    - vendor_line is defined
+    - vendor_line != ''
 
 - name: Get IP from ARP
   cli_command:
