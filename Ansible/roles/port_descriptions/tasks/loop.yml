@@ -7,5 +7,5 @@
 
 - name: Set Description
   set_fact:
-    desc: "{{ ansible_net_interfaces[item.key][description] }}"
-  when: ansible_net_interfaces[item.key][description] is defined
+    desc: "{{ ansible_net_interfaces[item.key] }}"
+  when: ansible_net_interfaces[item.key] is defined
