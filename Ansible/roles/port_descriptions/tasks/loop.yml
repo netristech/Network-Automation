@@ -9,3 +9,33 @@
   set_fact:
     desc: "{{ ansible_net_interfaces[item.key].description }}"
   when: ansible_net_interfaces[item.key].description is defined
+
+- name: Set Status
+  set_fact:
+    stat: "{{ ansible_net_interfaces[item.key].state }}"
+  when: ansible_net_interfaces[item.key].state is defined
+  
+- name: Set Status 2
+  set_fact:
+    stat: "{{ ansible_net_interfaces[item.key].operstatus }}"
+  when: ansible_net_interfaces[item.key].operstatus is defined
+
+- name: Get MAC from table
+  cli_command:
+    command: "show mac address interf {{ item.key }}"
+  register: mac_list
+  when: item.key is search("Gig.*|gig.*|Fast.*|fast.*|Eth.*|eth.*")
+  
+- name: Set MAC address
+  set_fact:
+    mac: "{{ mac_list.stdout | regex_search('\\b(?:[0-9a-f]{4}\\.){2}[0-9a-f]{4}\\b') }}"
+  when: mac_list.stdout is defined  
+
+- name: Set Port Description
+  ios_interface:
+    name: "{{ item.key }}"
+    description: "Link to {{ item[0].value.host }}"
+  when:
+    - stat == 'up'
+    - mac != ''
+    - desc == ''  
