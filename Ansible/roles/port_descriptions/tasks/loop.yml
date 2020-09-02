@@ -34,7 +34,7 @@
 - name: Set Port Description
   ios_interface:
     name: "{{ item.key }}"
-    description: "Link to {{ item[0].value.host }}"
+    description: "Link to {{ item.value.host }}"
   when:
     - stat == 'up'
     - mac != ''
