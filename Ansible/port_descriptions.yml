@@ -1,0 +1,8 @@
+---
+- hosts: all
+  connection: network_cli
+  gather_facts: no
+
+  roles:
+    - common
+    - port_descriptions
