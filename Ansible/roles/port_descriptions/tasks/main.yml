@@ -1,6 +1,4 @@
 ---
 - name: Loop Through Neighbors and Set Port Description
-  ios_interface:
-    name: "{{ item.key }}"
-    description: "Link to {{ item[0].value.host }}"
+  include_tasks: loop.yml
   loop: "{{ lookup('dict', ansible_net_neighbors) }}"

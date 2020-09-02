@@ -1,0 +1,10 @@
+---
+- name: Set Defaults
+  desc: ''
+  status: ''
+  mac: ''
+
+- name: Set Description
+  set_fact:
+    desc: "{{ lookup('vars', 'ansible_net_interfaces.' + item.key + '.description') }}"
+  when: lookup('vars', 'ansible_net_interfaces.' + item.key + '.description') is defined
