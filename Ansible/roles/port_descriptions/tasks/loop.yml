@@ -8,4 +8,4 @@
 - name: Set Description
   set_fact:
     desc: "{{ ansible_net_interfaces[item.key][description] }}"
-  #when: lookup('dict', 'ansible_net_interfaces[' + item.key + '][description]') is defined
+  when: ansible_net_interfaces[item.key][description] is defined
