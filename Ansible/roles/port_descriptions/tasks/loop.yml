@@ -1,8 +1,9 @@
 ---
 - name: Set Defaults
-  desc: ''
-  status: ''
-  mac: ''
+  set_fact:
+    desc: ''
+    status: ''
+    mac: ''
 
 - name: Set Description
   set_fact:
