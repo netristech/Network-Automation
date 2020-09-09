@@ -1,0 +1,5 @@
+---
+- name: Set Model
+  debug:
+    msg: "{{ item }}"
+  

@@ -44,13 +44,20 @@
 - name: Set Serial
   set_fact:
     serial: "{{ ansible_net_serialnum }}"
-  when: ansible_net_serialnum is defined
+  when: ansible_net_serialnum is defined  
   
 - name: Write Line to CSV
   delegate_to: localhost
   lineinfile:
     path: "{{ csv_file }}"
     line: "{{ hostname }},{{ ip }},{{ model }},{{ version }},{{ platform }},{{ serial }}"
+
+- name: Loop Through Stacked Switches
+  include_tasks: loop.yml
+  loop: "{{ ansible_net_stacked_models | length - 1 }}"
+  when: 
+    - ansible_net_stacked_models is defined
+    - ansible_net_stacked_models | length > 1
 
 - name: Email CSV
   delegate_to: localhost
