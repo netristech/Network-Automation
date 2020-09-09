@@ -55,13 +55,13 @@
 - name: Loop Through Stacked Switches
   lineinfile:
     path: "{{ csv_file }}"
-    line: "{{ hostname }}-{{ index }},(stacked),{{ item.0 }},(stacked),(stacked),{{ item.1 }}"
+    line: "{{ hostname }}-{{ index | int + 2 }},(stacked),{{ item.0 }},(stacked),(stacked),{{ item.1 }}"
   loop: "{{ ansible_net_stacked_models[1:] | zip(ansible_net_stacked_serialnums[1:]) | list }}"
   loop_control:
     index_var: index
   when: 
-    - ansible_net_stacked_models is defined
-    - ansible_net_stacked_models | length > 1
+    - ansible_net_stacked_serialnums is defined
+    - ansible_net_stacked_serialnums | length > 1
 
 - name: Email CSV
   delegate_to: localhost
