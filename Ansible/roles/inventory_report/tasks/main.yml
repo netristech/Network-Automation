@@ -55,10 +55,10 @@
 - name: Loop Through Stacked Switches
   lineinfile:
     path: "{{ csv_file }}"
-    line: "{{ hostname }}-{{ ansible_loop.index }},(stacked),{{ item.0 }},(stacked),(stacked),{{ item.1 }}"
-  with_together: 
-    - "{{ ansible_net_stacked_models[1:] }}"
-    - "{{ ansible_net_stacked_serialnums[1:] }}"
+    line: "{{ hostname }}-{{ index }},(stacked),{{ item.0 }},(stacked),(stacked),{{ item.1 }}"
+  loop: "{{ ansible_net_stacked_models[1:] | zip(ansible_net_stacked_serialnums[1:]) | list }}"
+  loop_control:
+    index_var: index
   when: 
     - ansible_net_stacked_models is defined
     - ansible_net_stacked_models | length > 1
