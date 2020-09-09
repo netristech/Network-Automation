@@ -53,8 +53,12 @@
     line: "{{ hostname }},{{ ip }},{{ model }},{{ version }},{{ platform }},{{ serial }}"
 
 - name: Loop Through Stacked Switches
-  include_tasks: loop.yml
-  loop: "{{ ansible_net_stacked_models | length - 1 }}"
+  lineinfile:
+    path: "{{ csv_file }}"
+    line: "{{ hostname }}-{{ loop.index }},(stacked),{{ item.0 }},(stacked),(stacked),{{ item.1 }}"
+  with_together: 
+    - "{{ ansible_net_stacked_models[1:] }}"
+    - "{{ ansible_net_stacked_serialnums[1:] }}"
   when: 
     - ansible_net_stacked_models is defined
     - ansible_net_stacked_models | length > 1

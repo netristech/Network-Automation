@@ -1,5 +1,9 @@
 ---
 - name: Set Model
-  debug:
-    msg: "{{ item }}"
+  set_fact:
+    model: "{{ item }}"
+
+- name: Set Serial
+  set_fact:
+    serial: "{{ ansible_net_stacked_serialnums[]"
   
