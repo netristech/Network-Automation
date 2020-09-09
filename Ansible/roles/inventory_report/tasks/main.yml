@@ -36,10 +36,15 @@
     version: "{{ ansible_net_version }}"
   when: ansible_net_version is defined
   
+#- name: Set Platform
+  #set_fact:
+    #platform: "{{ ansible_net_platform }}"
+  #when: ansible_net_platform is defined
+
 - name: Set Platform
   set_fact:
-    platform: "{{ ansible_net_platform }}"
-  when: ansible_net_platform is defined
+    platform: "{{ ansible_net_system }}"
+  when: ansible_net_system is defined
   
 - name: Set Serial
   set_fact:
