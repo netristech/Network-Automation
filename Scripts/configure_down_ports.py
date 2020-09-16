@@ -53,17 +53,17 @@ def main():
 
                 # Get list of down ports and configure as client access ports
                 ports = net_connect.send_command(command).split()[0]
-                int_commands = [
-                    f'interface {port}',
-                    'switchport mode access',
-                    'switchport access vlan 2',
-                    'switchport voice vlan 10',
-                    'spanning portfast',
-                    'spanning link point',
-                    'no logging event link',
-                    'no snmp trap link'
-                ]
                 for port in ports:
+                    int_commands = [
+                        f'interface {port}',
+                        'switchport mode access',
+                        'switchport access vlan 2',
+                        'switchport voice vlan 10',
+                        'spanning portfast',
+                        'spanning link point',
+                        'no logging event link',
+                        'no snmp trap link'
+                    ]
                     if port.startswith(('Eth', 'eth', 'Gig', 'gig', 'Fa', 'fa')):
                         output = net_connect.send_config_set(int_commands)
                         print(output)
