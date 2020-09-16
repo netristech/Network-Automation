@@ -30,7 +30,7 @@ def main():
                 
             # Create connection object for Netmiko
             conn = {
-                "host": dev,
+                "host": str(dev),
                 "username": cisco_user,
                 "password": cisco_pass,
                 "device_type": "cisco_ios",
