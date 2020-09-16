@@ -52,7 +52,7 @@ def main():
                     command = 'show ip int brief | inc down'
 
                 # Get list of down ports and configure as client access ports
-                ports = net_connect.send_command(command).split()[0]
+                ports = net_connect.send_command(command).split()
                 for port in ports:
                     int_commands = [
                         f'interface {port}',
