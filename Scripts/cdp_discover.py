@@ -2,12 +2,11 @@
 
 #import modules
 import csv
-import re
-import sys
 import os
 import ipaddress
 from datetime import datetime
 from getpass import getpass
+from telnetlib import Telnet
 from netmiko import Netmiko
 
 def main():
@@ -72,16 +71,20 @@ def main():
                         cdp = net_connect.send_command(f'sho cdp nei int {port} det')
                         switch_ip = cdp[cdp.find("Mgmt address(es):"):].splitlines()[1].split(':')[1].strip()
                         try:
-                            net_connect.send_command_timing(f"telnet {switch_ip}")
-                            net_connect.send_command_timing(f"stratix_user")
-                            net_connect.send_command_timing(f"stratix_pass")
+                            tn = Telnet(switch_ip)
+                            tn.read_until("Username: ")
+                            tn.write(stratix_user + "\n")
+                            tn.read_until("Password: ")
+                            tn.write(stratix_pass + "\n")
                         except:
                             print(f"Connection to {switch_ip} failed.")
                         else:
-                            switch = net_connect.send_command_timing('show run | inc hostname').split()[1]
-                            port = net_connect.send_command_timing(f'sho mac add | inc {mac}').split()[7]
+                            tn.write('show run | inc hostname\n')
+                            switch = tn.read_all().split()[1]
+                            tn.write(f'sho mac add | inc {mac}\n')
+                            port = tn.read_all().split()[7]
                             report_writer.writerow([ip, switch, port])
-                            net_connect.send_command_timing('exit')
+                            tn.write('exit\n')
                     except:
                         print(f"Failed to gather information for {ip}.")
                     else:
