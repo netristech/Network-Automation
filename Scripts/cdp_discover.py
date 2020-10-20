@@ -36,7 +36,7 @@ def main():
         else:
             break
     
-    if len(input_ips) > 0 and len(dev_ip) > 0:
+    if len(input_ips) > 0:
 
         # gather username and password
         cisco_user = input("Device Username: ")
