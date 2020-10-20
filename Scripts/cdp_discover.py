@@ -69,10 +69,12 @@ def main():
                         port = net_connect.send_command(f'sho mac add | inc {mac}').split()[7]
                         cdp = net_connect.send_command(f'sho cdp nei int {port} det')
                         switch_ip = cdp[cdp.find("Mgmt address(es):"):].splitlines()[1].split(':')[1].strip()
+                        user = input("Switch Username: ")
+                        passw = getpass("Switch Password: ")
                         new_conn = {
                             "host": switch_ip,
-                            "username": cisco_user,
-                            "password": cisco_pass,
+                            "username": user,
+                            "password": passw,
                             "device_type": "cisco_ios",
                         }
                         try:
