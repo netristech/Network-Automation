@@ -85,10 +85,11 @@ def main():
                         else:
                             switch = net_connect.find_prompt().split('#')[0]
                             port = net_connect.send_command(f'sho mac add | inc {mac}').split()[7]
+                            report_writer.writerow([ip, switch, port])
                     except:
                         print(f"Failed to gather information for {ip}.")
                     else:
-                        report_writer.writerow([ip, switch, port])
+                        pass
                 net_connect.disconnect()
 
 if __name__ == "__main__":
