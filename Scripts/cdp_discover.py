@@ -71,21 +71,17 @@ def main():
                         port = net_connect.send_command(f'sho mac add | inc {mac}').split()[7]
                         cdp = net_connect.send_command(f'sho cdp nei int {port} det')
                         switch_ip = cdp[cdp.find("Mgmt address(es):"):].splitlines()[1].split(':')[1].strip()
-                        new_conn = {
-                            "host": switch_ip,
-                            "username": stratix_user,
-                            "password": stratix_pass,
-                            "device_type": "cisco_ios",
-                        }
                         try:
-                            net_connect = Netmiko(**new_conn)
-                            vers = net_connect.send_command('show version')
+                            net_connect.send_command_timing(f"telnet {switch_ip}")
+                            net_connect.send_command_timing(f"stratix_user")
+                            net_connect.send_command_timing(f"stratix_pass")
                         except:
                             print(f"Connection to {switch_ip} failed.")
                         else:
-                            switch = net_connect.find_prompt().split('#')[0]
-                            port = net_connect.send_command(f'sho mac add | inc {mac}').split()[7]
+                            switch = net_connect.send_command_timing('show run | inc hostname').split()[1]
+                            port = net_connect.send_command_timing(f'sho mac add | inc {mac}').split()[7]
                             report_writer.writerow([ip, switch, port])
+                            net_connect.send_command_timing('exit')
                     except:
                         print(f"Failed to gather information for {ip}.")
                     else:
