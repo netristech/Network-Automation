@@ -39,8 +39,10 @@ def main():
     if len(input_ips) > 0:
 
         # gather username and password
-        cisco_user = input("Device Username: ")
-        cisco_pass = getpass("Device Password: ")
+        cisco_user = input("Core Username: ")
+        cisco_pass = getpass("Core Password: ")
+        stratix_user = input("Access Username: ")
+        stratix_pass = getpass("Access Password: ")
         
         # Open csv file for write operation
         with open(f'{os.getcwd()}/cdp_{timestamp}.csv', 'w') as csv_file:
@@ -69,12 +71,10 @@ def main():
                         port = net_connect.send_command(f'sho mac add | inc {mac}').split()[7]
                         cdp = net_connect.send_command(f'sho cdp nei int {port} det')
                         switch_ip = cdp[cdp.find("Mgmt address(es):"):].splitlines()[1].split(':')[1].strip()
-                        user = input("Switch Username: ")
-                        passw = getpass("Switch Password: ")
                         new_conn = {
                             "host": switch_ip,
-                            "username": user,
-                            "password": passw,
+                            "username": stratix_user,
+                            "password": stratix_pass,
                             "device_type": "cisco_ios",
                         }
                         try:
