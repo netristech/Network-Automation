@@ -98,7 +98,7 @@ def main():
                             tn.sendline('show run | inc hostname')
                             tn.logfile_send = log_file
                             tn.expect('.*\#')
-                            tn.sendline('show mac add | inc ' + mac.encode('ascii'))
+                            tn.sendline('show mac add | inc ' + mac + b'\n')
                             tn.logfile_send = log_file
                             tn.expect('.*\#')
                             tn.close()
