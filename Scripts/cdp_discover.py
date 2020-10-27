@@ -49,7 +49,7 @@ def main():
             access_pass = core_pass
         
         # Open csv file for write operation
-        with open(f'{os.getcwd()}/log_{timestamp}.txt', 'wb') as log_file:
+        with open(f'{os.getcwd()}/log_{timestamp}.csv', 'w') as csv_file:
             report_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             report_writer.writerow(['IP Address', 'Switch', 'Port'])
                 
