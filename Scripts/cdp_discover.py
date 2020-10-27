@@ -49,68 +49,112 @@ def main():
             access_pass = core_pass
         
         # Open csv file for write operation
-        #with open(f'{os.getcwd()}/log_{timestamp}.txt', 'wb') as log_file:
-            #report_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            #report_writer.writerow(['IP Address', 'Switch', 'Port'])
+        with open(f'{os.getcwd()}/log_{timestamp}.txt', 'wb') as log_file:
+            report_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            report_writer.writerow(['IP Address', 'Switch', 'Port'])
                 
-        # Create connection object for Netmiko
-        conn = {
-            "host": str(dev_ip),
-            "username": core_user,
-            "password": core_pass,
-            "device_type": "cisco_ios",
-        }
+            # Create connection object for Netmiko
+            conn = {
+                "host": str(dev_ip),
+                "username": core_user,
+                "password": core_pass,
+                "device_type": "cisco_ios",
+            }
 
-        # Attempt connection
-        try:
-            net_connect = Netmiko(**conn)
-            vers = net_connect.send_command('show version')
-        except:
-            print(f"Connection to {dev_ip} failed.")
-        else:
-            for ip in input_ips:
+            # Attempt connection
+            try:
+                net_connect = Netmiko(**conn)
+                vers = net_connect.send_command('show version')
+            except:
+                print(f"Connection to {dev_ip} failed.")
+            else:
+                for ip in input_ips:
 
-                # Reset variables
-                switch_ip = ''
-                mac = ''
-                port = ''
-                cdp = ''
+                    # Reset variables
+                    switch_ip = ''
+                    mac = ''
+                    port = ''
+                    cdp = ''
 
-                try:
-                    net_connect.send_command(f'ping {ip} count 1')
-                    mac = net_connect.send_command(f'sho ip arp {ip} | inc {ip}').split()[2]
-                    port = net_connect.send_command(f'sho mac add | inc {mac}').split()[7]
-                    cdp = net_connect.send_command(f'sho cdp nei int {port} det')
-                    switch_ip = cdp[cdp.find("Mgmt address(es):"):].splitlines()[1].split(':')[1].strip()
-                except:
-                    print(f"Failed to gather information for {ip}.")
-                else:                    
                     try:
-                        tn = pexpect.spawn(f'telnet {switch_ip}', encoding='utf-8')
-                        tn.expect('Username: ')
-                        tn.sendline(access_user)
-                        tn.expect('Password: ')
-                        tn.sendline(access_pass)
-                        tn.expect('.*\#')
+                        net_connect.send_command(f'ping {ip} count 1')
+                        mac = net_connect.send_command(f'sho ip arp {ip} | inc {ip}').split()[2]
+                        port = net_connect.send_command(f'sho mac add | inc {mac}').split()[7]
+                        cdp = net_connect.send_command(f'sho cdp nei int {port} det')
+                        switch_ip = cdp[cdp.find("Mgmt address(es):"):].splitlines()[1].split(':')[1].strip()
                     except:
-                        print(f"Connection to {switch_ip} failed.")
-                    else:
-                        log_file = open(os.getcwd() + '/log_file', 'w')
-                        #tn.logfile = log_file
-                        tn.sendline('show run | inc hostname')
-                        tn.logfile_read = log_file
-                        tn.expect('.*\#')
-                        tn.sendline(f'show mac add | inc {mac}')
-                        tn.logfile_send = log_file
-                        tn.expect('.*\#')
-                        tn.close()
-                        log_file.close()
-                        log_file = open(os.getcwd() + '/log_file', 'r')
-                        data = log_file.read()
-                        log_file.close()
-                        for line in data.splitlines():
-                            print(line)
-            net_connect.disconnect()
+                        print(f"Failed to gather information for {ip}.")
+                        report_writer.writerow([ip, 'Failed to get info', ''])
+                    else:                    
+                        try:
+                            tn = pexpect.spawn(f'telnet {switch_ip}', encoding='utf-8')
+                            tn.expect('Username: ')
+                            tn.sendline(access_user)
+                            tn.expect('Password: ')
+                            tn.sendline(access_pass)
+                            tn.expect('.*\#')
+                        except:
+                            print(f"Connection to {switch_ip} failed.")
+                        else:
+                            #Get Port
+                            log_file = open(os.getcwd() + '/log_file', 'w')
+                            tn.sendline(f'show mac add | inc {mac}')
+                            tn.logfile_send = log_file
+                            tn.expect('.*\#')
+                            log_file.close()
+                            log_file = open(os.getcwd() + '/log_file', 'r')
+                            data = log_file.read()
+                            log_file.close()
+                            port = data.splitlines()[1].split()[3]
+
+                            #Check port
+                            log_file = open(os.getcwd() + '/log_file', 'w')
+                            tn.sendline(f'show cdp neigh {port} det')
+                            tn.logfile_send = log_file
+                            tn.expect('.*\#')
+                            log_file.close()
+                            log_file = open(os.getcwd() + '/log_file', 'r')
+                            data = log_file.read()
+                            log_file.close()
+                            if "Cisco" in data:
+                                tn.close()
+                                switch_ip = data[data.find("Mgmt address(es):"):].splitlines()[1].split(':')[1].strip()
+                                try:
+                                    tn = pexpect.spawn(f'telnet {switch_ip}', encoding='utf-8')
+                                    tn.expect('Username: ')
+                                    tn.sendline(access_user)
+                                    tn.expect('Password: ')
+                                    tn.sendline(access_pass)
+                                    tn.expect('.*\#')
+                                except:
+                                    print(f"Connection to {switch_ip} failed.")
+                                else:
+                                    #Get Port
+                                    log_file = open(os.getcwd() + '/log_file', 'w')
+                                    tn.sendline(f'show mac add | inc {mac}')
+                                    tn.logfile_send = log_file
+                                    tn.expect('.*\#')
+                                    log_file.close()
+                                    log_file = open(os.getcwd() + '/log_file', 'r')
+                                    data = log_file.read()
+                                    log_file.close()
+                                    port = data.splitlines()[1].split()[3]
+                            
+                            #Get hostname
+                            log_file = open(os.getcwd() + '/log_file', 'w')
+                            tn.sendline('show run | inc hostname')
+                            tn.logfile_read = log_file
+                            tn.expect('.*\#')
+                            log_file.close()
+                            log_file = open(os.getcwd() + '/log_file', 'r')
+                            data = log_file.read()
+                            log_file.close()
+                            hostname = data.splitlines()[1].split()[1]
+                            tn.close()
+
+                            #Write CSV File
+                            report_writer.writerow([ip, hostname, port])
+                net_connect.disconnect()
 
 if __name__ == "__main__":
     main()
