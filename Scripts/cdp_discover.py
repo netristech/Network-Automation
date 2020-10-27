@@ -96,11 +96,12 @@ def main():
                         print(f"Connection to {switch_ip} failed.")
                     else:
                         log_file = open(os.getcwd() + '/log_file', 'wb')
+                        tn.logfile = log_file
                         tn.sendline('show run | inc hostname')
-                        tn.logfile_read = sys.stdout
+                        #tn.logfile_read = sys.stdout
                         tn.expect('.*\#')
                         tn.sendline(f'show mac add | inc {mac}')
-                        tn.logfile_send = log_file
+                        #tn.logfile_send = log_file
                         tn.expect('.*\#')
                         tn.close()
             net_connect.disconnect()
