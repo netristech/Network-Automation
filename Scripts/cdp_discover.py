@@ -95,7 +95,7 @@ def main():
                     except:
                         print(f"Connection to {switch_ip} failed.")
                     else:
-                        log_file = open(os.getcwd() + '/log_file', 'wb')
+                        log_file = open(os.getcwd() + '/log_file', 'w')
                         tn.logfile = log_file
                         tn.sendline('show run | inc hostname')
                         #tn.logfile_read = sys.stdout
