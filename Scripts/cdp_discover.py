@@ -69,12 +69,22 @@ def main():
                 print(f"Connection to {dev_ip} failed.")
             else:
                 for ip in input_ips:
+
+                    # Reset variables
+                    switch_ip = ''
+                    mac = ''
+                    port = ''
+                    cdp = ''
+
                     try:
                         net_connect.send_command(f'ping {ip} count 1')
                         mac = net_connect.send_command(f'sho ip arp {ip} | inc {ip}').split()[2]
                         port = net_connect.send_command(f'sho mac add | inc {mac}').split()[7]
                         cdp = net_connect.send_command(f'sho cdp nei int {port} det')
                         switch_ip = cdp[cdp.find("Mgmt address(es):"):].splitlines()[1].split(':')[1].strip()
+                    except:
+                        print(f"Failed to gather information for {ip}.")
+                    else:                    
                         try:
                             tn = pexpect.spawn(f'telnet {switch_ip}', encoding='utf-8')
                             tn.expect('Username: ')
@@ -92,10 +102,6 @@ def main():
                             tn.logfile_send = log_file
                             tn.expect('.*\#')
                             tn.close()
-                    except:
-                        print(f"Failed to gather information for {ip}.")
-                    else:
-                        pass
                 net_connect.disconnect()
 
 if __name__ == "__main__":
