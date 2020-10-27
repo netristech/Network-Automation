@@ -105,9 +105,11 @@ def main():
                         tn.expect('.*\#')
                         tn.close()
                         log_file.close()
-                        data = open(os.getcwd() + '/log_file', 'r')
-                        print(data.read())
-                        data.close()
+                        log_file = open(os.getcwd() + '/log_file', 'r')
+                        data = log_file.read()
+                        log_file.close()
+                        for line in data.splitlines():
+                            print(line)
             net_connect.disconnect()
 
 if __name__ == "__main__":
