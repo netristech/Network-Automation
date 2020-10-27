@@ -4,9 +4,10 @@
 import csv
 import os
 import ipaddress
+import pexpect
+#import sys
 from datetime import datetime
 from getpass import getpass
-from telnetlib import Telnet
 from netmiko import Netmiko
 
 def main():
@@ -38,21 +39,25 @@ def main():
     if len(input_ips) > 0:
 
         # gather username and password
-        cisco_user = input("Core Username: ")
-        cisco_pass = getpass("Core Password: ")
-        stratix_user = input("Access Username: ")
-        stratix_pass = getpass("Access Password: ")
+        core_user = input("Core Switch Username: ")
+        core_pass = getpass("Core Switch Password: ")
+        access_user = input("Access Switch Username (Leave Blank if the Same): ")
+        access_pass = getpass("Access Switch Password (Leave Blank if the Same): ")
+        if access_user == '':
+            access_user = core_user
+        if access_pass = '':
+            access_pass = core_pass
         
         # Open csv file for write operation
-        with open(f'{os.getcwd()}/cdp_{timestamp}.csv', 'w') as csv_file:
-            report_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            report_writer.writerow(['IP Address', 'Switch', 'Port'])
+        with open(f'{os.getcwd()}/log_{timestamp}.txt', 'wb') as log_file:
+            #report_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            #report_writer.writerow(['IP Address', 'Switch', 'Port'])
                 
             # Create connection object for Netmiko
             conn = {
                 "host": str(dev_ip),
-                "username": cisco_user,
-                "password": cisco_pass,
+                "username": core_user,
+                "password": core_pass,
                 "device_type": "cisco_ios",
             }
 
@@ -65,26 +70,28 @@ def main():
             else:
                 for ip in input_ips:
                     try:
-                        net_connect.send_command(f'ping {ip}')
+                        net_connect.send_command(f'ping {ip} count 1')
                         mac = net_connect.send_command(f'sho ip arp {ip} | inc {ip}').split()[2]
                         port = net_connect.send_command(f'sho mac add | inc {mac}').split()[7]
                         cdp = net_connect.send_command(f'sho cdp nei int {port} det')
                         switch_ip = cdp[cdp.find("Mgmt address(es):"):].splitlines()[1].split(':')[1].strip()
                         try:
-                            tn = Telnet(switch_ip)
-                            tn.read_until("Username: ")
-                            tn.write(stratix_user + "\n")
-                            tn.read_until("Password: ")
-                            tn.write(stratix_pass + "\n")
+                            tn = pexpect.spawn(f'telnet {switch_ip}', encoding='utf-8')
+                            tn.expect('Username: ')
+                            tn.sendline(access_user)
+                            tn.expect('Password: ')
+                            tn.sendline(access_pass)
                         except:
                             print(f"Connection to {switch_ip} failed.")
                         else:
-                            tn.write('show run | inc hostname\n')
-                            switch = tn.read_all().split()[1]
-                            tn.write(f'sho mac add | inc {mac}\n')
-                            port = tn.read_all().split()[7]
-                            report_writer.writerow([ip, switch, port])
-                            tn.write('exit\n')
+                            tn.expect('.*\#')
+                            tn.sendline('show run | inc hostname')
+                            tn.logfile_send = log_file
+                            tn.expect('.*\#')
+                            tn.sendline(f'show mac add | inc {mac}')
+                            tn.logfile_send = log_file
+                            tn.expect('.*\#')
+                            tn.close()
                     except:
                         print(f"Failed to gather information for {ip}.")
                     else:
