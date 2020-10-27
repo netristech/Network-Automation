@@ -104,8 +104,11 @@ def main():
                         tn.logfile_send = log_file
                         tn.expect('.*\#')
                         tn.close()
-                        for line in log_file:
+                        log_file.close()
+                        data = open(os.getcwd() + '/log_file', 'r')
+                        for line in data:
                             print(line)
+                        data.close()
             net_connect.disconnect()
 
 if __name__ == "__main__":
