@@ -106,8 +106,7 @@ def main():
                         tn.close()
                         log_file.close()
                         data = open(os.getcwd() + '/log_file', 'r')
-                        for line in data:
-                            print(line)
+                        print(data)
                         data.close()
             net_connect.disconnect()
 
