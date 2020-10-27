@@ -49,60 +49,60 @@ def main():
             access_pass = core_pass
         
         # Open csv file for write operation
-        with open(f'{os.getcwd()}/log_{timestamp}.txt', 'wb') as log_file:
+        #with open(f'{os.getcwd()}/log_{timestamp}.txt', 'wb') as log_file:
             #report_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             #report_writer.writerow(['IP Address', 'Switch', 'Port'])
                 
-            # Create connection object for Netmiko
-            conn = {
-                "host": str(dev_ip),
-                "username": core_user,
-                "password": core_pass,
-                "device_type": "cisco_ios",
-            }
+        # Create connection object for Netmiko
+        conn = {
+            "host": str(dev_ip),
+            "username": core_user,
+            "password": core_pass,
+            "device_type": "cisco_ios",
+        }
 
-            # Attempt connection
-            try:
-                net_connect = Netmiko(**conn)
-                vers = net_connect.send_command('show version')
-            except:
-                print(f"Connection to {dev_ip} failed.")
-            else:
-                for ip in input_ips:
+        # Attempt connection
+        try:
+            net_connect = Netmiko(**conn)
+            vers = net_connect.send_command('show version')
+        except:
+            print(f"Connection to {dev_ip} failed.")
+        else:
+            for ip in input_ips:
 
-                    # Reset variables
-                    switch_ip = ''
-                    mac = ''
-                    port = ''
-                    cdp = ''
+                # Reset variables
+                switch_ip = ''
+                mac = ''
+                port = ''
+                cdp = ''
 
+                try:
+                    net_connect.send_command(f'ping {ip} count 1')
+                    mac = net_connect.send_command(f'sho ip arp {ip} | inc {ip}').split()[2]
+                    port = net_connect.send_command(f'sho mac add | inc {mac}').split()[7]
+                    cdp = net_connect.send_command(f'sho cdp nei int {port} det')
+                    switch_ip = cdp[cdp.find("Mgmt address(es):"):].splitlines()[1].split(':')[1].strip()
+                except:
+                    print(f"Failed to gather information for {ip}.")
+                else:                    
                     try:
-                        net_connect.send_command(f'ping {ip} count 1')
-                        mac = net_connect.send_command(f'sho ip arp {ip} | inc {ip}').split()[2]
-                        port = net_connect.send_command(f'sho mac add | inc {mac}').split()[7]
-                        cdp = net_connect.send_command(f'sho cdp nei int {port} det')
-                        switch_ip = cdp[cdp.find("Mgmt address(es):"):].splitlines()[1].split(':')[1].strip()
+                        tn = pexpect.spawn(f'telnet {switch_ip}', logfile=sys.stdout)
+                        tn.expect('Username: ')
+                        tn.sendline(access_user)
+                        tn.expect('Password: ')
+                        tn.sendline(access_pass)
                     except:
-                        print(f"Failed to gather information for {ip}.")
-                    else:                    
-                        try:
-                            tn = pexpect.spawn(f'telnet {switch_ip}', encoding='utf-8')
-                            tn.expect('Username: ')
-                            tn.sendline(access_user)
-                            tn.expect('Password: ')
-                            tn.sendline(access_pass)
-                        except:
-                            print(f"Connection to {switch_ip} failed.")
-                        else:
-                            tn.expect('.*\#')
-                            tn.sendline('show run | inc hostname')
-                            tn.logfile_send = log_file
-                            tn.expect('.*\#')
-                            tn.sendline('show mac add | inc ' + mac + b'\n')
-                            tn.logfile_send = log_file
-                            tn.expect('.*\#')
-                            tn.close()
-                net_connect.disconnect()
+                        print(f"Connection to {switch_ip} failed.")
+                    else:
+                        tn.expect('.*\#')
+                        tn.sendline('show run | inc hostname')
+                        #tn.logfile_send = log_file
+                        tn.expect('.*\#')
+                        tn.sendline(f'show mac add | inc {mac}')
+                        #tn.logfile_send = log_file
+                        tn.expect('.*\#')
+                        tn.close()
+            net_connect.disconnect()
 
 if __name__ == "__main__":
-    main()
+main()
