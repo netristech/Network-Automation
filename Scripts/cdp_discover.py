@@ -86,20 +86,20 @@ def main():
                     print(f"Failed to gather information for {ip}.")
                 else:                    
                     try:
-                        tn = pexpect.spawn(f'telnet {switch_ip}', logfile=sys.stdout)
+                        tn = pexpect.spawn(f'telnet {switch_ip}', encoding='utf-8')
                         tn.expect('Username: ')
                         tn.sendline(access_user)
                         tn.expect('Password: ')
                         tn.sendline(access_pass)
+                        tn.expect('.*\#')
                     except:
                         print(f"Connection to {switch_ip} failed.")
                     else:
-                        tn.expect('.*\#')
                         tn.sendline('show run | inc hostname')
-                        #tn.logfile_send = log_file
+                        tn.logfile_read = sys.stdout
                         tn.expect('.*\#')
                         tn.sendline(f'show mac add | inc {mac}')
-                        #tn.logfile_send = log_file
+                        tn.logfile_read = sys.stdout
                         tn.expect('.*\#')
                         tn.close()
             net_connect.disconnect()
