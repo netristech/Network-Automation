@@ -45,7 +45,7 @@ def main():
         access_pass = getpass("Access Switch Password (Leave Blank if the Same): ")
         if access_user == '':
             access_user = core_user
-        if access_pass = '':
+        if access_pass == '':
             access_pass = core_pass
         
         # Open csv file for write operation
