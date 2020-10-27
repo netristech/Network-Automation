@@ -105,7 +105,8 @@ def main():
                             log_file = open(os.getcwd() + '/log_file', 'r')
                             data = log_file.read()
                             log_file.close()
-                            port = data.splitlines()[1].split()[3]
+                            if data != '':
+                                port = data.splitlines()[1].split()[3]
 
                             #Check port
                             log_file = open(os.getcwd() + '/log_file', 'w')
@@ -149,7 +150,8 @@ def main():
                             log_file = open(os.getcwd() + '/log_file', 'r')
                             data = log_file.read()
                             log_file.close()
-                            hostname = data.splitlines()[1].split()[1]
+                            if data != '':
+                                hostname = data.splitlines()[1].split()[1]
                             tn.close()
 
                             #Write CSV File
