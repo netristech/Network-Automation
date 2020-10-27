@@ -5,7 +5,7 @@ import csv
 import os
 import ipaddress
 import pexpect
-#import sys
+import sys
 from datetime import datetime
 from getpass import getpass
 from netmiko import Netmiko
