@@ -9,6 +9,7 @@ import sys
 from datetime import datetime
 from getpass import getpass
 from netmiko import Netmiko
+from pathlib import Path
 
 def main():
     timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
@@ -102,9 +103,10 @@ def main():
                             tn.logfile_send = log_file
                             tn.expect('.*\#')
                             log_file.close()
-                            log_file = open(os.getcwd() + '/log_file', 'r')
-                            data = log_file.read()
-                            log_file.close()
+                            data = Path(os.getcwd() + '/log_file').read_text()
+                            #log_file = open(os.getcwd() + '/log_file', 'r')
+                            #data = log_file.read()
+                            #log_file.close()
                             if data != '':
                                 port = data.splitlines()[1].split()[3]
 
@@ -114,9 +116,10 @@ def main():
                             tn.logfile_send = log_file
                             tn.expect('.*\#')
                             log_file.close()
-                            log_file = open(os.getcwd() + '/log_file', 'r')
-                            data = log_file.read()
-                            log_file.close()
+                            data = Path(os.getcwd() + '/log_file').read_text()
+                            #log_file = open(os.getcwd() + '/log_file', 'r')
+                            #data = log_file.read()
+                            #log_file.close()
                             if "Cisco" in data:
                                 tn.close()
                                 switch_ip = data[data.find("Mgmt address(es):"):].splitlines()[1].split(':')[1].strip()
@@ -136,10 +139,12 @@ def main():
                                     tn.logfile_send = log_file
                                     tn.expect('.*\#')
                                     log_file.close()
-                                    log_file = open(os.getcwd() + '/log_file', 'r')
-                                    data = log_file.read()
-                                    log_file.close()
-                                    port = data.splitlines()[1].split()[3]
+                                    data = Path(os.getcwd() + '/log_file').read_text()
+                                    #log_file = open(os.getcwd() + '/log_file', 'r')
+                                    #data = log_file.read()
+                                    #log_file.close()
+                                    if data != '':
+                                        port = data.splitlines()[1].split()[3]
                             
                             #Get hostname
                             log_file = open(os.getcwd() + '/log_file', 'w')
@@ -155,7 +160,7 @@ def main():
                             tn.close()
 
                             #Write CSV File
-                            report_writer.writerow([ip, hostname, port])
+                            report_writer.writerow([ip, mac, hostname, port])
                 net_connect.disconnect()
 
 if __name__ == "__main__":
