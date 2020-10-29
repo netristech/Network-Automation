@@ -51,7 +51,7 @@ def main():
         # Open csv file for write operation
         with open(f'{os.getcwd()}/log_{timestamp}.csv', 'w') as csv_file:
             report_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            report_writer.writerow(['IP Address', 'Switch', 'Port'])
+            report_writer.writerow(['IP Address', 'MAC Address','Switch', 'Port'])
                 
             # Create connection object for Netmiko
             conn = {
