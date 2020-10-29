@@ -102,6 +102,7 @@ def main():
                             #Get Port
                             log_file = open(os.getcwd() + '/log_file', 'w')
                             tn.sendline('show run | inc hostname')
+                            tn.logfile_send = log_file
                             tn.expect('.*\#')
                             tn.sendline(f'show mac add | inc {mac}')
                             tn.logfile_send = log_file
@@ -112,7 +113,7 @@ def main():
                             #data = log_file.read()
                             #log_file.close()
                             #if data != '':
-                                #port = data.splitlines()[1].split()[3]
+                                #hostname = data.splitlines()[1].split()[1]
                             print(data)
 
                             '''
