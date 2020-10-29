@@ -51,40 +51,39 @@ def main():
         with open(f'{os.getcwd()}/log_{timestamp}.csv', 'w') as csv_file:
             report_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             report_writer.writerow(['MAC Address','Switch', 'Port'])
-                for mac in input_macs:
-                        # Reset variables   
-                        try:
-                            tn = pexpect.spawn(f'telnet {dev_ip}', encoding='utf-8')
-                            tn.expect('Username: ')
-                            tn.sendline(access_user)
-                            tn.expect('Password: ')
-                            tn.sendline(access_pass)
-                            tn.expect('.*\#')
-                        except:
-                            print(f"Connection to {switch_ip} failed.")
-                            report_writer.writerow([mac, 'Failed to get info', ''])
-                        else:
-                            #Get Info
-                            log_file = open(os.getcwd() + '/log_file', 'w')
-                            tn.logfile = log_file
-                            tn.sendline('show run | inc hostname')
-                            tn.expect('.*\#')
-                            tn.sendline(f'show mac add | inc {mac}')
-                            tn.expect('.*\#')
-                            data = Path(os.getcwd() + '/log_file').read_text()
-                            if data != '':
-                                hostname = data.splitlines()[2].split()[1]
-                                port = data.splitlines()[5].split()[3]
-                            #print(f'{hostname} {port}')
+            for mac in input_macs:
+                # Reset variables   
+                try:
+                    tn = pexpect.spawn(f'telnet {dev_ip}', encoding='utf-8')
+                    tn.expect('Username: ')
+                    tn.sendline(access_user)
+                    tn.expect('Password: ')
+                    tn.sendline(access_pass)
+                    tn.expect('.*\#')
+                except:
+                    print(f"Connection to {switch_ip} failed.")
+                    report_writer.writerow([mac, 'Failed to get info', ''])
+                else:
+                    #Get Info
+                    log_file = open(os.getcwd() + '/log_file', 'w')
+                    tn.logfile = log_file
+                    tn.sendline('show run | inc hostname')
+                    tn.expect('.*\#')
+                    tn.sendline(f'show mac add | inc {mac}')
+                    tn.expect('.*\#')
+                    data = Path(os.getcwd() + '/log_file').read_text()
+                    if data != '':
+                        hostname = data.splitlines()[2].split()[1]
+                        port = data.splitlines()[5].split()[3]
+                    #print(f'{hostname} {port}')
 
-                            #Close out log file and telnet session
-                            log_file.close()
-                            os.remove(os.getcwd() + '/log_file')
-                            tn.close()
+                    #Close out log file and telnet session
+                    log_file.close()
+                    os.remove(os.getcwd() + '/log_file')
+                    tn.close()
 
-                            #Write CSV File
-                            report_writer.writerow([mac, hostname, port])
-                net_connect.disconnect()
+                    #Write CSV File
+                    report_writer.writerow([mac, hostname, port])
 
 if __name__ == "__main__":
     main()
