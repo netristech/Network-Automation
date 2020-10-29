@@ -110,7 +110,7 @@ def main():
                             if data != '':
                                 port = data.splitlines()[1].split()[3]
 
-                            #Check port
+                            #Check Port
                             log_file = open(os.getcwd() + '/log_file', 'w')
                             tn.sendline(f'show cdp neigh {port} det')
                             tn.logfile_send = log_file
@@ -119,7 +119,7 @@ def main():
                             data = Path(os.getcwd() + '/log_file').read_text()
                             #log_file = open(os.getcwd() + '/log_file', 'r')
                             #data = log_file.read()
-                            #log_file.close()
+                            #log_file.close()                            
                             if "Cisco" in data:
                                 tn.close()
                                 switch_ip = data[data.find("Mgmt address(es):"):].splitlines()[1].split(':')[1].strip()
