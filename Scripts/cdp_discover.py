@@ -112,9 +112,10 @@ def main():
                             #log_file = open(os.getcwd() + '/log_file', 'r')
                             #data = log_file.read()
                             #log_file.close()
-                            #if data != '':
-                                #hostname = data.splitlines()[1].split()[1]
-                            print(data)
+                            if data != '':
+                                hostname = data.splitlines()[2].split()[1]
+                                port = data.splitlines()[5].split()[3]
+                            print(f'{hostname} {port}')
 
                             '''
                             #Check Port
