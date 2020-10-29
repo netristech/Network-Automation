@@ -87,74 +87,69 @@ def main():
                     except:
                         print(f"Failed to gather information for {ip}.")
                         report_writer.writerow([ip, 'Failed to get info', '', ''])
-                    else:
-                        def tn_conn(switch_ip):         
-                            try:
-                                tn = pexpect.spawn(f'telnet {switch_ip}', encoding='utf-8')
-                                tn.expect('Username: ')
-                                tn.sendline(access_user)
-                                tn.expect('Password: ')
-                                tn.sendline(access_pass)
-                                tn.expect('.*\#')
-                            except:
-                                print(f"Connection to {switch_ip} failed.")
-                                report_writer.writerow([ip, 'Failed to get info', '', ''])
-                            else:
-                                #Get Info
-                                log_file = open(os.getcwd() + '/log_file', 'w')
-                                tn.logfile = log_file
-                                tn.sendline('show run | inc hostname')
-                                tn.expect('.*\#')
-                                tn.sendline(f'show mac add | inc {mac}')
-                                tn.expect('.*\#')
-                                data = Path(os.getcwd() + '/log_file').read_text()
-                                if data != '':
-                                    hostname = data.splitlines()[2].split()[1]
-                                    port = data.splitlines()[5].split()[3]
-                                #print(f'{hostname} {port}')
-
-                                #Check Port
-                                tn.sendline(f'show cdp neigh {port} det')
-                                tn.expect('.*\#')
-                                data = Path(os.getcwd() + '/log_file').read_text()                           
-                                if "Cisco" in data:
-                                    log_file.close()
-                                    tn.close()
-                                    switch_ip = data[data.find("Mgmt address(es):"):].splitlines()[1].split(':')[1].strip()
-                                    tn_conn(switch_ip)
-                                    '''
-                                    try:
-                                        tn = pexpect.spawn(f'telnet {switch_ip}', encoding='utf-8')
-                                        tn.expect('Username: ')
-                                        tn.sendline(access_user)
-                                        tn.expect('Password: ')
-                                        tn.sendline(access_pass)
-                                        tn.expect('.*\#')
-                                    except:
-                                        print(f"Connection to {switch_ip} failed.")
-                                        report_writer.writerow([ip, 'Failed to get info', '', ''])
-                                    else:
-                                        #Get Info
-                                        log_file = open(os.getcwd() + '/log_file', 'w')
-                                        tn.logfile = log_file
-                                        tn.sendline('show run | inc hostname')
-                                        tn.expect('.*\#')
-                                        tn.sendline(f'show mac add | inc {mac}')
-                                        tn.expect('.*\#')
-                                        data = Path(os.getcwd() + '/log_file').read_text()
-                                        if data != '':
-                                            hostname = data.splitlines()[2].split()[1]
-                                            port = data.splitlines()[5].split()[3]
-                                    '''
-                                tn_conn(switch_ip)
-
-                                #Close out log file and telnet session
+                    else:         
+                        try:
+                            tn = pexpect.spawn(f'telnet {switch_ip}', encoding='utf-8')
+                            tn.expect('Username: ')
+                            tn.sendline(access_user)
+                            tn.expect('Password: ')
+                            tn.sendline(access_pass)
+                            tn.expect('.*\#')
+                        except:
+                            print(f"Connection to {switch_ip} failed.")
+                            report_writer.writerow([ip, 'Failed to get info', '', ''])
+                        else:
+                            #Get Info
+                            log_file = open(os.getcwd() + '/log_file', 'w')
+                            tn.logfile = log_file
+                            tn.sendline('show run | inc hostname')
+                            tn.expect('.*\#')
+                            tn.sendline(f'show mac add | inc {mac}')
+                            tn.expect('.*\#')
+                            data = Path(os.getcwd() + '/log_file').read_text()
+                            if data != '':
+                                hostname = data.splitlines()[2].split()[1]
+                                port = data.splitlines()[5].split()[3]
+                            #print(f'{hostname} {port}')
+                            '''
+                            #Check Port
+                            tn.sendline(f'show cdp neigh {port} det')
+                            tn.expect('.*\#')
+                            data = Path(os.getcwd() + '/log_file').read_text()                           
+                            if "Cisco" in data:
                                 log_file.close()
-                                os.remove(os.getcwd() + '/log_file')
                                 tn.close()
+                                switch_ip = data[data.find("Mgmt address(es):"):].splitlines()[1].split(':')[1].strip()
+                                try:
+                                    tn = pexpect.spawn(f'telnet {switch_ip}', encoding='utf-8')
+                                    tn.expect('Username: ')
+                                    tn.sendline(access_user)
+                                    tn.expect('Password: ')
+                                    tn.sendline(access_pass)
+                                    tn.expect('.*\#')
+                                except:
+                                    print(f"Connection to {switch_ip} failed.")
+                                    report_writer.writerow([ip, 'Failed to get info', '', ''])
+                                else:
+                                    #Get Info
+                                    log_file = open(os.getcwd() + '/log_file', 'w')
+                                    tn.logfile = log_file
+                                    tn.sendline('show run | inc hostname')
+                                    tn.expect('.*\#')
+                                    tn.sendline(f'show mac add | inc {mac}')
+                                    tn.expect('.*\#')
+                                    data = Path(os.getcwd() + '/log_file').read_text()
+                                    if data != '':
+                                        hostname = data.splitlines()[2].split()[1]
+                                        port = data.splitlines()[5].split()[3]
+                            '''
+                            #Close out log file and telnet session
+                            log_file.close()
+                            os.remove(os.getcwd() + '/log_file')
+                            tn.close()
 
-                                #Write CSV File
-                                report_writer.writerow([ip, mac, hostname, port])
+                            #Write CSV File
+                            report_writer.writerow([ip, mac, hostname, port])
                 net_connect.disconnect()
 
 if __name__ == "__main__":
