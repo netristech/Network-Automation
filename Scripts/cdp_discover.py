@@ -104,7 +104,7 @@ def main():
                             tn.sendline(f'show mac add | inc {mac}')
                             tn.logfile_send = log_file
                             tn.expect('.*\#')
-                            log_file.close()
+                            #log_file.close()
                             data = Path(os.getcwd() + '/log_file').read_text()
                             #log_file = open(os.getcwd() + '/log_file', 'r')
                             #data = log_file.read()
@@ -150,7 +150,7 @@ def main():
                                         port = data.splitlines()[1].split()[3]
                             '''
                             #Get hostname
-                            log_file = open(os.getcwd() + '/log_file', 'w')
+                            #log_file = open(os.getcwd() + '/log_file', 'w')
                             tn.sendline('show run | inc hostname')
                             tn.logfile_read = log_file
                             tn.expect('.*\#')
