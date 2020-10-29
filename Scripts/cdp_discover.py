@@ -109,8 +109,9 @@ def main():
                             #log_file = open(os.getcwd() + '/log_file', 'r')
                             #data = log_file.read()
                             #log_file.close()
-                            if data != '':
-                                port = data.splitlines()[1].split()[3]
+                            #if data != '':
+                                #port = data.splitlines()[1].split()[3]
+                            print(data)
 
                             '''
                             #Check Port
@@ -159,12 +160,13 @@ def main():
                             #log_file = open(os.getcwd() + '/log_file', 'r')
                             #data = log_file.read()
                             #log_file.close()
-                            if data != '':
-                                hostname = data.splitlines()[1].split()[1]
+                            #if data != '':
+                                #hostname = data.splitlines()[1].split()[1]
+                            print(data)
                             tn.close()
 
                             #Write CSV File
-                            report_writer.writerow([ip, mac, hostname, port])
+                            #report_writer.writerow([ip, mac, hostname, port])
                 net_connect.disconnect()
 
 if __name__ == "__main__":
