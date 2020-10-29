@@ -9,7 +9,7 @@ import sys
 from datetime import datetime
 from getpass import getpass
 from netmiko import Netmiko
-from pathlib import Path
+from pathlib import Path    
 
 def main():
     timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
@@ -75,6 +75,7 @@ def main():
                     switch_ip = ''
                     mac = ''
                     port = ''
+                    hostname = ''
                     cdp = ''
 
                     try:
@@ -85,7 +86,7 @@ def main():
                         switch_ip = cdp[cdp.find("Mgmt address(es):"):].splitlines()[1].split(':')[1].strip()
                     except:
                         print(f"Failed to gather information for {ip}.")
-                        report_writer.writerow([ip, 'Failed to get info', ''])
+                        report_writer.writerow([ip, 'Failed to get info', '', ''])
                     else:                    
                         try:
                             tn = pexpect.spawn(f'telnet {switch_ip}', encoding='utf-8')
@@ -96,6 +97,7 @@ def main():
                             tn.expect('.*\#')
                         except:
                             print(f"Connection to {switch_ip} failed.")
+                            report_writer.writerow([ip, 'Failed to get info', '', ''])
                         else:
                             #Get Port
                             log_file = open(os.getcwd() + '/log_file', 'w')
@@ -110,6 +112,7 @@ def main():
                             if data != '':
                                 port = data.splitlines()[1].split()[3]
 
+                            '''
                             #Check Port
                             log_file = open(os.getcwd() + '/log_file', 'w')
                             tn.sendline(f'show cdp neigh {port} det')
@@ -145,16 +148,17 @@ def main():
                                     #log_file.close()
                                     if data != '':
                                         port = data.splitlines()[1].split()[3]
-                            
+                            '''
                             #Get hostname
                             log_file = open(os.getcwd() + '/log_file', 'w')
                             tn.sendline('show run | inc hostname')
                             tn.logfile_read = log_file
                             tn.expect('.*\#')
                             log_file.close()
-                            log_file = open(os.getcwd() + '/log_file', 'r')
-                            data = log_file.read()
-                            log_file.close()
+                            data = Path(os.getcwd() + '/log_file').read_text()
+                            #log_file = open(os.getcwd() + '/log_file', 'r')
+                            #data = log_file.read()
+                            #log_file.close()
                             if data != '':
                                 hostname = data.splitlines()[1].split()[1]
                             tn.close()
