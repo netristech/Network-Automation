@@ -28,14 +28,14 @@ def main():
     # get list of IPs to perform ARP lookup against
     while True:
         try:
-            input_macs = input("Enter a space delimited list of IPs: ").split()
+            input_macs = input("Enter a space delimited list of MAC addresses: ").split()
         except:
             if input("Invalid data entered. Press any key to continue or 'q' to quit. ") == 'q':
                 exit()
         else:
             break
     
-    if len(input_ips) > 0:
+    if len(input_macs) > 0:
 
         # gather username and password
         core_user = input("Core Switch Username: ")
