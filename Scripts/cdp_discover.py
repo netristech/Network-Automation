@@ -101,11 +101,12 @@ def main():
                         else:
                             #Get Port
                             log_file = open(os.getcwd() + '/log_file', 'w')
+                            tn.logfile = log_file
                             tn.sendline('show run | inc hostname')
-                            tn.logfile_send = log_file
+                            #tn.logfile_send = log_file
                             tn.expect('.*\#')
                             tn.sendline(f'show mac add | inc {mac}')
-                            tn.logfile_send = log_file
+                            #tn.logfile_send = log_file
                             tn.expect('.*\#')
                             data = Path(os.getcwd() + '/log_file').read_text()
                             #log_file = open(os.getcwd() + '/log_file', 'r')
