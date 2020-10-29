@@ -107,7 +107,6 @@ def main():
                             tn.sendline(f'show mac add | inc {mac}')
                             tn.logfile_send = log_file
                             tn.expect('.*\#')
-                            log_file.close()
                             data = Path(os.getcwd() + '/log_file').read_text()
                             #log_file = open(os.getcwd() + '/log_file', 'r')
                             #data = log_file.read()
@@ -167,6 +166,7 @@ def main():
                                 #hostname = data.splitlines()[1].split()[1]
                             print(data)
                             '''
+                            log_file.close()
                             tn.close()
 
                             #Write CSV File
