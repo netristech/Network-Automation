@@ -99,36 +99,25 @@ def main():
                             print(f"Connection to {switch_ip} failed.")
                             report_writer.writerow([ip, 'Failed to get info', '', ''])
                         else:
-                            #Get Port
+                            #Get Info
                             log_file = open(os.getcwd() + '/log_file', 'w')
                             tn.logfile = log_file
                             tn.sendline('show run | inc hostname')
-                            #tn.logfile_send = log_file
                             tn.expect('.*\#')
                             tn.sendline(f'show mac add | inc {mac}')
-                            #tn.logfile_send = log_file
                             tn.expect('.*\#')
                             data = Path(os.getcwd() + '/log_file').read_text()
-                            #log_file = open(os.getcwd() + '/log_file', 'r')
-                            #data = log_file.read()
-                            #log_file.close()
                             if data != '':
                                 hostname = data.splitlines()[2].split()[1]
                                 port = data.splitlines()[5].split()[3]
-                            print(f'{hostname} {port}')
+                            #print(f'{hostname} {port}')
 
-                            '''
                             #Check Port
-                            log_file = open(os.getcwd() + '/log_file', 'w')
                             tn.sendline(f'show cdp neigh {port} det')
-                            tn.logfile_send = log_file
                             tn.expect('.*\#')
-                            log_file.close()
-                            data = Path(os.getcwd() + '/log_file').read_text()
-                            #log_file = open(os.getcwd() + '/log_file', 'r')
-                            #data = log_file.read()
-                            #log_file.close()                            
+                            data = Path(os.getcwd() + '/log_file').read_text()                           
                             if "Cisco" in data:
+                                log_file.close()
                                 tn.close()
                                 switch_ip = data[data.find("Mgmt address(es):"):].splitlines()[1].split(':')[1].strip()
                                 try:
@@ -140,39 +129,26 @@ def main():
                                     tn.expect('.*\#')
                                 except:
                                     print(f"Connection to {switch_ip} failed.")
+                                    report_writer.writerow([ip, 'Failed to get info', '', ''])
                                 else:
-                                    #Get Port
+                                    #Get Info
                                     log_file = open(os.getcwd() + '/log_file', 'w')
-                                    tn.sendline(f'show mac add | inc {mac}')
-                                    tn.logfile_send = log_file
+                                    tn.logfile = log_file
+                                    tn.sendline('show run | inc hostname')
                                     tn.expect('.*\#')
-                                    log_file.close()
+                                    tn.sendline(f'show mac add | inc {mac}')
+                                    tn.expect('.*\#')
                                     data = Path(os.getcwd() + '/log_file').read_text()
-                                    #log_file = open(os.getcwd() + '/log_file', 'r')
-                                    #data = log_file.read()
-                                    #log_file.close()
                                     if data != '':
-                                        port = data.splitlines()[1].split()[3]
-                            
-                            #Get hostname
-                            #log_file = open(os.getcwd() + '/log_file', 'w')
-                            tn.sendline('show run | inc hostname')
-                            tn.logfile_read = log_file
-                            tn.expect('.*\#')
-                            log_file.close()
-                            data = Path(os.getcwd() + '/log_file').read_text()
-                            #log_file = open(os.getcwd() + '/log_file', 'r')
-                            #data = log_file.read()
-                            #log_file.close()
-                            #if data != '':
-                                #hostname = data.splitlines()[1].split()[1]
-                            print(data)
-                            '''
+                                        hostname = data.splitlines()[2].split()[1]
+                                        port = data.splitlines()[5].split()[3]
+
+                            #Close out log file and telnet session
                             log_file.close()
                             tn.close()
 
                             #Write CSV File
-                            #report_writer.writerow([ip, mac, hostname, port])
+                            report_writer.writerow([ip, mac, hostname, port])
                 net_connect.disconnect()
 
 if __name__ == "__main__":
