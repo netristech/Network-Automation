@@ -74,13 +74,13 @@ def main():
                 tn.expect('.*\#')
                 data = Path(os.getcwd() + '/log_file').read_text()
                 if data != '':
-                    data = ''
                     hostname = data.splitlines()[2].split()[1]
                     port = data.splitlines()[5].split()[3]
                 
                     #Check Port
                     tn.sendline(f'show cdp neigh {port} det')
                     tn.expect('.*\#')
+                    data = ''
                     data = Path(os.getcwd() + '/log_file').read_text()                           
                     if "Cisco" in data:
                         ret = [data[data.find("Mgmt address(es):"):].splitlines()[1].split(':')[1].strip()]
