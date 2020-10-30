@@ -86,7 +86,7 @@ def main():
                     data = ''
                     data = Path(os.getcwd() + '/log_file').read_text()                           
                     if "Cisco" in data:
-                        ret = [data[data.find("Mgmt address(es):"):].splitlines()[1].split(':')[1].strip()]
+                        ret = [data[data.find("address(es):"):].splitlines()[1].split(':')[1].strip()]
                     else:
                         ret = [ip, mac, hostname, port]
 
