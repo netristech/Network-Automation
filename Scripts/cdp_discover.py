@@ -62,6 +62,8 @@ def main():
                 tn.expect('Password: ')
                 tn.sendline(access_pass)
                 tn.expect('.*\#')
+                tn.sendline('term len 0')
+                tn.expect('.*\#')
             except:
                 return ret
             else:
@@ -79,7 +81,7 @@ def main():
                 
                     #Check Port
                     tn.sendline(f'show cdp neigh {port} det')
-                    tn.sendline('q')
+                    #tn.sendline('q')
                     tn.expect('.*\#')
                     data = ''
                     data = Path(os.getcwd() + '/log_file').read_text()                           
