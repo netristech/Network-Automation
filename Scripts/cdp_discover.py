@@ -86,7 +86,7 @@ def main():
                         tn.sendline('term len 0')
                         tn.expect('.*\#')
                     except:
-                        print(f'Telnet connection to {switch_ip} failed. {ip}, {mac}')
+                        print(f'Telnet connection to {switch_ip} failed. {access_user}, {ip}, {mac}')
                         return ret
                     else:
                         #Get Info
