@@ -97,7 +97,7 @@ def main():
                         tn.sendline(f'show mac add | inc {mac}')
                         tn.expect('.*\#')
                         data = Path(os.getcwd() + '/log_file').read_text()
-                        if data != '':
+                        if mac in data:
                             #hostname = data.splitlines()[2].split()[1]
                             port = data.splitlines()[2].split()[3]
                         
