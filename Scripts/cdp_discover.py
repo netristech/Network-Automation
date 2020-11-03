@@ -47,54 +47,7 @@ def main():
         if access_user == '':
             access_user = core_user
         if access_pass == '':
-            access_pass = core_pass
-
-        def tn_conn(tn):
-            ip = tn[0]
-            switch_ip = tn[1]
-            mac = tn[2]
-            ret = [ip, 'Failed to get info', '', '']
-
-            try:
-                tn = pexpect.spawn(f'telnet {switch_ip}', encoding='utf-8')
-                tn.expect('Username: ')
-                tn.sendline(access_user)
-                tn.expect('Password: ')
-                tn.sendline(access_pass)
-                tn.expect('.*\#')
-                tn.sendline('term len 0')
-                tn.expect('.*\#')
-            except:
-                return ret
-            else:
-                #Get Info
-                log_file = open(os.getcwd() + '/log_file', 'w')
-                tn.logfile = log_file
-                tn.sendline('show run | inc hostname')
-                tn.expect('.*\#')
-                tn.sendline(f'show mac add | inc {mac}')
-                tn.expect('.*\#')
-                data = Path(os.getcwd() + '/log_file').read_text()
-                if data != '':
-                    hostname = data.splitlines()[2].split()[1]
-                    port = data.splitlines()[5].split()[3]
-                
-                    #Check Port
-                    tn.sendline(f'show cdp neigh {port} det')
-                    #tn.sendline('q')
-                    tn.expect('.*\#')
-                    data = ''
-                    data = Path(os.getcwd() + '/log_file').read_text()                           
-                    if "Cisco" in data:
-                        ret = [data[data.find("address(es):"):].splitlines()[1].split(':')[1].strip()]
-                    else:
-                        ret = [ip, mac, hostname, port]
-
-                #Close out log file and telnet session
-                log_file.close()
-                os.remove(os.getcwd() + '/log_file')
-                tn.close()
-                return ret         
+            access_pass = core_pass      
         
         # Open csv file for write operation
         with open(f'{os.getcwd()}/log_{timestamp}.csv', 'w') as csv_file:
@@ -116,6 +69,53 @@ def main():
             except:
                 print(f"Connection to {dev_ip} failed.")
             else:
+                def tn_conn(params):
+                    #Set variables
+                    ip = params[0]
+                    switch_ip = params[1]
+                    mac = params[2]
+                    ret = [ip, 'Failed to get info', '', '']
+
+                    try:
+                        tn = pexpect.spawn(f'telnet {switch_ip}', encoding='utf-8')
+                        tn.expect('Username: ')
+                        tn.sendline(access_user)
+                        tn.expect('Password: ')
+                        tn.sendline(access_pass)
+                        tn.expect('.*\#')
+                        tn.sendline('term len 0')
+                        tn.expect('.*\#')
+                    except:
+                        return ret
+                    else:
+                        #Get Info
+                        log_file = open(os.getcwd() + '/log_file', 'w')
+                        tn.logfile = log_file
+                        tn.sendline('show run | inc hostname')
+                        tn.expect('.*\#')
+                        tn.sendline(f'show mac add | inc {mac}')
+                        tn.expect('.*\#')
+                        data = Path(os.getcwd() + '/log_file').read_text()
+                        if data != '':
+                            hostname = data.splitlines()[2].split()[1]
+                            port = data.splitlines()[5].split()[3]
+                        
+                            #Check Port
+                            tn.sendline(f'show cdp neigh {port} det')
+                            tn.expect('.*\#')
+                            data = ''
+                            data = Path(os.getcwd() + '/log_file').read_text()                           
+                            if "Cisco" in data:
+                                ret = [data[data.find("address(es):"):].splitlines()[1].split(':')[1].strip()]
+                            else:
+                                ret = [ip, mac, hostname, port]
+
+                        #Close out log file and telnet session
+                        log_file.close()
+                        os.remove(os.getcwd() + '/log_file')
+                        tn.close()
+                        return ret   
+
                 for ip in input_ips:
                     # Reset variables
                     switch_ip = ''
