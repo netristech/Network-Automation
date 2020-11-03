@@ -136,7 +136,7 @@ def main():
                     else:
                         row = tn_conn([ip, switch_ip, mac])
                         while len(row) == 1:
-                            row = tn_conn([ip, row, mac])
+                            row = tn_conn([ip, row[0], mac])
                         report_writer.writerow(row)
                 net_connect.disconnect()
 
