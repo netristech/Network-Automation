@@ -86,6 +86,7 @@ def main():
                         tn.sendline('term len 0')
                         tn.expect('.*\#')
                     except:
+                        print(f'Telnet connection to {switch_ip} failed. {ip}, {mac}')
                         return ret
                     else:
                         #Get Info
@@ -131,7 +132,7 @@ def main():
                         switch_ip = cdp[cdp.find("address(es):"):].splitlines()[1].split(':')[1].strip()
                     except:
                         print(f"Failed to gather information for {ip}.")
-                        report_writer.writerow([ip, 'Failed to get info', '', ''])
+                        report_writer.writerow([ip, 'Failed to ping', '', ''])
                     else:
                         row = tn_conn([ip, switch_ip, mac])
                         while len(row) == 1:
