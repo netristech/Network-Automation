@@ -89,17 +89,17 @@ def main():
                         print(f'Telnet connection to {switch_ip} failed. {access_user}, {ip}, {mac}')
                         return ret
                     else:
-                        #Get Info
+                        #Get Port Info
                         log_file = open(os.getcwd() + '/log_file', 'w')
                         tn.logfile = log_file
-                        tn.sendline('show run | inc hostname')
-                        tn.expect('.*\#')
+                        #tn.sendline('show run | inc hostname')
+                        #tn.expect('.*\#')
                         tn.sendline(f'show mac add | inc {mac}')
                         tn.expect('.*\#')
                         data = Path(os.getcwd() + '/log_file').read_text()
                         if data != '':
-                            hostname = data.splitlines()[2].split()[1]
-                            port = data.splitlines()[5].split()[3]
+                            #hostname = data.splitlines()[2].split()[1]
+                            port = data.splitlines()[2].split()[3]
                         
                             #Check Port
                             tn.sendline(f'show cdp neigh {port} det')
@@ -109,6 +109,11 @@ def main():
                             if "Cisco" in data:
                                 ret = [data[data.find("address(es):"):].splitlines()[1].split(':')[1].strip()]
                             else:
+                                tn.sendline('show run | inc hostname')
+                                tn.expect('.*\#')
+                                data = ''
+                                data = Path(os.getcwd() + '/log_file').read_text()
+                                hostname = data.splitlines()[2].split()[1]
                                 ret = [ip, mac, hostname, port]
 
                         #Close out log file and telnet session
