@@ -92,14 +92,14 @@ def main():
                         #Get Port Info
                         log_file = open(os.getcwd() + '/log_file', 'w')
                         tn.logfile = log_file
-                        #tn.sendline('show run | inc hostname')
-                        #tn.expect('.*\#')
+                        tn.sendline('show run | inc hostname')
+                        tn.expect('.*\#')
                         tn.sendline(f'show mac add | inc {mac}')
                         tn.expect('.*\#')
                         data = Path(os.getcwd() + '/log_file').read_text()
                         try:
-                            #hostname = data.splitlines()[2].split()[1]
-                            port = data.splitlines()[2].split()[3]
+                            hostname = data.splitlines()[2].split()[1]
+                            port = data.splitlines()[5].split()[3]
                         except:
                             pass
                         else:                        
@@ -115,7 +115,6 @@ def main():
                                 tn.expect('.*\#')
                                 data = ''
                                 data = Path(os.getcwd() + '/log_file').read_text()
-                                hostname = data.splitlines()[2].split()[1]
                                 ret = [ip, mac, hostname, port]
 
                         #Close out log file and telnet session
