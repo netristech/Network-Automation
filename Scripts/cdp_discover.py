@@ -119,7 +119,7 @@ def main():
 
                         #Close out log file and telnet session
                         log_file.close()
-                        #os.remove(os.getcwd() + '/log_file')
+                        os.remove(os.getcwd() + '/log_file')
                         tn.close()
                         return ret   
 
