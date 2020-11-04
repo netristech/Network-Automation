@@ -97,10 +97,12 @@ def main():
                         tn.sendline(f'show mac add | inc {mac}')
                         tn.expect('.*\#')
                         data = Path(os.getcwd() + '/log_file').read_text()
-                        if mac in data:
+                        try:
                             #hostname = data.splitlines()[2].split()[1]
                             port = data.splitlines()[2].split()[3]
-                        
+                        except:
+                            pass
+                        else:                        
                             #Check Port
                             tn.sendline(f'show cdp neigh {port} det')
                             tn.expect('.*\#')
