@@ -40,7 +40,7 @@ def main():
             def tn_conn(ip):
                 ret = [ip, 'Failed', '', '', '']
                 try:
-                    tn = pexpect.spawn(f'telnet {i p}', encoding='utf-8')
+                    tn = pexpect.spawn(f'telnet {ip}', encoding='utf-8')
                     tn.expect('Username: ')
                     tn.sendline(access_user)
                     tn.expect('Password: ')
