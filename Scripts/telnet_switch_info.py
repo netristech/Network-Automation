@@ -65,13 +65,16 @@ def main():
                     serial_num = data.splitlines()[5].split()[-1]
                     vlans = data[data.find("Vlan"):].splitlines()
                     for i in range(2, len(vlans)):
+                        '''
                         if vlans[i].split()[1] != "unassigned":
                             vlan = vlans[i].split()[0]
                             ip_addr = vlans[i].split()[1]
                             if i == 0:
                                 yield [hostname, serial_num, vlan, ip_addr]
                             else:
-                                yield ['', '', vlan, ip_addr]                       
+                                yield ['', '', vlan, ip_addr]
+                        '''
+                        print(vlans[i])
                 #Close out log file and telnet session
                 log_file.close()
                 os.remove(os.getcwd() + '/log_file')
