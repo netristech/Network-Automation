@@ -34,7 +34,7 @@ def main():
         # Open csv file for write operation
         with open(f'{os.getcwd()}/report_{timestamp}.csv', 'w') as csv_file:
             report_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            report_writer.writerow(['Hostname','Serial Number', 'VLAN ID', 'IP Address'])
+            report_writer.writerow(['Hostname','Serial Number','VLAN ID','IP Address'])
                 
             def tn_conn(ip):
                 data = ''
@@ -50,7 +50,6 @@ def main():
                 except:
                     print(f'Connection to {ip} failed.')
                     yield ['Failed', '', '', '']
-                    pass
                 else:
                     #Get Info
                     log_file = open(os.getcwd() + '/log_file', 'w')
@@ -77,12 +76,12 @@ def main():
                 log_file.close()
                 os.remove(os.getcwd() + '/log_file')
                 tn.close()
+                return
 
             for ip in dev_ips:
-
                 try:
                     for row in tn_conn(ip):
-                        report_writer.writerow(row)                    
+                        report_writer.writerow(row)                  
                 except:
                     print(f"Failed to gather information for {ip}.")
                     report_writer.writerow(['Failed', '', '', ''])
