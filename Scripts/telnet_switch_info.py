@@ -79,12 +79,16 @@ def main():
                 return
 
             for ip in dev_ips:
+                '''
                 try:
                     for row in tn_conn(ip):
                         report_writer.writerow(row)                  
                 except:
                     print(f"Failed to gather information for {ip}.")
                     report_writer.writerow(['Failed', '', '', ''])
+                '''
+                for row in tn_conn(ip):
+                    report_writer.writerow(row)
 
 if __name__ == "__main__":
     main()
