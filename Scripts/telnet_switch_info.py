@@ -51,9 +51,9 @@ def main():
                     print(f'Connection to {ip} failed.')
                     yield ['Failed', '', '', '']
                 else:
-                    #Get Info
+                    #Get Info                    
                     log_file = open(os.getcwd() + '/log_file', 'w')
-                    tn.logfile = log_file
+                    tn.logfile = log_file                    
                     tn.sendline('show run | inc hostname')
                     tn.expect('.*\#')
                     tn.sendline('show inv | inc SN:')
@@ -70,9 +70,9 @@ def main():
                             ip_addr = vlans[i].split()[1]
                             yield [hostname, serial_num, vlan, ip_addr]
                         #print(vlans[i])
-                #Close out log file and telnet session
-                log_file.close()
-                os.remove(os.getcwd() + '/log_file')
+                    #Close out log file and telnet session
+                    log_file.close()
+                    os.remove(os.getcwd() + '/log_file')
                 tn.close()
                 return
 
