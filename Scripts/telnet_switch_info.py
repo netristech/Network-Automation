@@ -64,7 +64,7 @@ def main():
                     hostname = data.splitlines()[2].split()[1]
                     serial_num = data.splitlines()[5].split()[-1]
                     vlans = data[data.find("Vlan"):].splitlines()
-                    for i in range(len(vlans)):
+                    for i in range(2, len(vlans)):
                         if vlans[i].split()[1] != "unassigned":
                             vlan = vlans[i].split()[0]
                             ip_addr = vlans[i].split()[1]
