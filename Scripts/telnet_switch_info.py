@@ -68,7 +68,7 @@ def main():
                         if vlans[i].split()[1] != "unassigned":
                             vlan = vlans[i].split()[0]
                             ip_addr = vlans[i].split()[1]
-                            if i == 0:
+                            if i == 2:
                                 yield [hostname, serial_num, vlan, ip_addr]
                             else:
                                 yield ['', '', vlan, ip_addr]
