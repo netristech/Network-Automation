@@ -8,7 +8,6 @@ import pexpect
 import sys
 from datetime import datetime
 from getpass import getpass
-#from netmiko import Netmiko
 from pathlib import Path    
 
 def main():
@@ -50,7 +49,8 @@ def main():
                     tn.expect('.*\#')
                 except:
                     print(f'Connection to {ip} failed.')
-                    return ['Failed', '', '', '']
+                    yield ['Failed', '', '', '']
+                    pass
                 else:
                     #Get Info
                     log_file = open(os.getcwd() + '/log_file', 'w')
@@ -73,10 +73,10 @@ def main():
                                 yield [hostname, serial_num, vlan, ip_addr]
                             else:
                                 yield ['', '', vlan, ip_addr]                       
-                    #Close out log file and telnet session
-                    log_file.close()
-                    os.remove(os.getcwd() + '/log_file')
-                    tn.close()
+                #Close out log file and telnet session
+                log_file.close()
+                os.remove(os.getcwd() + '/log_file')
+                tn.close()
 
             for ip in dev_ips:
 
