@@ -68,10 +68,7 @@ def main():
                         if vlans[i].split()[1] != "unassigned":
                             vlan = vlans[i].split()[0]
                             ip_addr = vlans[i].split()[1]
-                            if i == 2:
-                                yield [hostname, serial_num, vlan, ip_addr]
-                            else:
-                                yield ['', '', vlan, ip_addr]
+                            yield [hostname, serial_num, vlan, ip_addr]
                         #print(vlans[i])
                 #Close out log file and telnet session
                 log_file.close()
