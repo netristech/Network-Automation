@@ -35,10 +35,11 @@ def main():
         # Open csv file for write operation
         with open(f'{os.getcwd()}/report_{timestamp}.csv', 'w') as csv_file:
             report_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            report_writer.writerow(['IP Address', 'Hostname','Serial Number', 'VLAN ID', 'IP Address'])
+            report_writer.writerow(['Hostname','Serial Number', 'VLAN ID', 'IP Address'])
                 
             def tn_conn(ip):
-                ret = [ip, 'Failed', '', '', '']
+                ret = ['Failed', '', '', '']
+                data = ''
                 try:
                     tn = pexpect.spawn(f'telnet {ip}', encoding='utf-8')
                     tn.expect('Username: ')
@@ -62,41 +63,32 @@ def main():
                     tn.sendline('sh ip int bri | inc Vlan')
                     tn.expect('.*\#')
                     data = Path(os.getcwd() + '/log_file').read_text()
-                    '''
                     try:
                         hostname = data.splitlines()[2].split()[1]
-                        port = data.splitlines()[5].split()[3]
+                        serial_num = data.splitlines()[5].split()[-1]
+                        for i in range(len(data[data.find("Vlan"):].splitlines())):
+                            if i.split()[1] != "unassigned":
+                                vlan = i.split()[0]
+                                ip_addr = i.split()[1]
+                                if i == 0:
+                                    yield [hostname, serial_num, vlan, ip_addr]
+                                else:
+                                    yield ['', '', vlan, ip_addr]
                     except:
-                        pass
-                    else:                        
-                        #Check Port
-                        tn.sendline(f'show cdp neigh {port} det')
-                        tn.expect('.*\#')
-                        data = ''
-                        data = Path(os.getcwd() + '/log_file').read_text()                           
-                        if "Cisco" in data:
-                            ret = [data[data.find("address(es):"):].splitlines()[1].split(':')[1].strip()]
-                        else:
-                            tn.sendline('show run | inc hostname')
-                            tn.expect('.*\#')
-                            data = ''
-                            data = Path(os.getcwd() + '/log_file').read_text()
-                            ret = [ip, mac, hostname, port]
-                    '''
+                        pass                       
                     #Close out log file and telnet session
                     log_file.close()
-                    #os.remove(os.getcwd() + '/log_file')
+                    os.remove(os.getcwd() + '/log_file')
                     tn.close()
-                    #return ret   
 
             for ip in dev_ips:
 
                 try:
-                    row = tn_conn(ip)
-                    report_writer.writerow(row)                    
+                    for row in tn_conn(ip):
+                        report_writer.writerow(row)                    
                 except:
                     print(f"Failed to gather information for {ip}.")
-                    report_writer.writerow([ip, 'Failed', '', '', ''])
+                    report_writer.writerow(['Failed', '', '', ''])
 
 if __name__ == "__main__":
     main()
