@@ -66,10 +66,11 @@ def main():
                     try:
                         hostname = data.splitlines()[2].split()[1]
                         serial_num = data.splitlines()[5].split()[-1]
-                        for i in range(len(data[data.find("Vlan"):].splitlines())):
-                            if i.split()[1] != "unassigned":
-                                vlan = i.split()[0]
-                                ip_addr = i.split()[1]
+                        vlans = data[data.find("Vlan"):].splitlines()
+                        for i in range(len(vlans)):
+                            if vlans.split()[1] != "unassigned":
+                                vlan = vlans.split()[0]
+                                ip_addr = vlans.split()[1]
                                 if i == 0:
                                     yield [hostname, serial_num, vlan, ip_addr]
                                 else:
