@@ -38,7 +38,6 @@ def main():
             report_writer.writerow(['Hostname','Serial Number', 'VLAN ID', 'IP Address'])
                 
             def tn_conn(ip):
-                ret = ['Failed', '', '', '']
                 data = ''
                 try:
                     tn = pexpect.spawn(f'telnet {ip}', encoding='utf-8')
@@ -50,10 +49,10 @@ def main():
                     tn.sendline('term len 0')
                     tn.expect('.*\#')
                 except:
-                    print(f'Telnet connection to {ip} failed.')
-                    return ret
+                    print(f'Connection to {ip} failed.')
+                    return ['Failed', '', '', '']
                 else:
-                    #Get Port Info
+                    #Get Info
                     log_file = open(os.getcwd() + '/log_file', 'w')
                     tn.logfile = log_file
                     tn.sendline('show run | inc hostname')
@@ -63,20 +62,17 @@ def main():
                     tn.sendline('sh ip int bri | inc Vlan')
                     tn.expect('.*\#')
                     data = Path(os.getcwd() + '/log_file').read_text()
-                    try:
-                        hostname = data.splitlines()[2].split()[1]
-                        serial_num = data.splitlines()[5].split()[-1]
-                        vlans = data[data.find("Vlan"):].splitlines()
-                        for i in range(len(vlans)):
-                            if vlans.split()[1] != "unassigned":
-                                vlan = vlans.split()[0]
-                                ip_addr = vlans.split()[1]
-                                if i == 0:
-                                    yield [hostname, serial_num, vlan, ip_addr]
-                                else:
-                                    yield ['', '', vlan, ip_addr]
-                    except:
-                        pass                       
+                    hostname = data.splitlines()[2].split()[1]
+                    serial_num = data.splitlines()[5].split()[-1]
+                    vlans = data[data.find("Vlan"):].splitlines()
+                    for i in range(len(vlans)):
+                        if vlans[i].split()[1] != "unassigned":
+                            vlan = vlans[i].split()[0]
+                            ip_addr = vlans[i].split()[1]
+                            if i == 0:
+                                yield [hostname, serial_num, vlan, ip_addr]
+                            else:
+                                yield ['', '', vlan, ip_addr]                       
                     #Close out log file and telnet session
                     log_file.close()
                     os.remove(os.getcwd() + '/log_file')
