@@ -4,4 +4,4 @@
     command: "{{ item }}"
   loop:
   - "copy run start"
-  - ""
+  - \r
