@@ -1,4 +1,7 @@
 ---
 - name: save_config
   cli_command:
-    command: "copy run start"
+    command: "{{ item }}"
+  loop:
+  - "copy run start"
+  = ""
