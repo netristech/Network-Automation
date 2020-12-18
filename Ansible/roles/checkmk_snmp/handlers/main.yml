@@ -2,9 +2,11 @@
 - name: IOS Save
   cli_command:
     command: "write mem"
+  listen: "Save Config"
   when: ansible_network_os == "ios"
 
 - name: NXOS Save
   cli_command:
     command: "copy run start"
+  listen: "Save Config"
   when: ansible_network_os == "nxos"

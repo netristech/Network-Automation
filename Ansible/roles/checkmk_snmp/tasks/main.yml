@@ -2,6 +2,4 @@
 - name: Loop through configuration file
   cli_config:
     config: "{{ lookup('template', 'checkmk.j2') }}"
-  notify:
-    - IOS Save
-    - NXOS Save
+  notify: "Save Config"
