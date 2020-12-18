@@ -1,7 +1,10 @@
 ---
-- name: save_config
+- name: IOS Save
   cli_command:
-    command: "{{ item }}"
-  loop:
-  - "copy run start"
-  - \r
+    command: "write mem"
+  when: ansible_network_os == "ios"
+
+- name: NXOS Save
+  cli_command:
+    command: "copy run start"
+  when: ansible_network_os == "nxos"

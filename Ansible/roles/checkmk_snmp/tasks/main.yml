@@ -3,4 +3,5 @@
   cli_config:
     config: "{{ lookup('template', 'test.j2') }}"
   notify:
-    - save_config
+    - IOS Save
+    - NXOS Save
