@@ -2,8 +2,8 @@ $(document).ready(function(){
     $.getJSON("/data/data.json", function(data){
         for (i = 0; i < data.length; i++) {
             $("#sites").append([
-                '<div class="row">',
-                '<div class="col-2">',
+                `<div id="${data[i].name}" class="row">`,
+                '<div class="col-2 site">',
                 `${data[i].name}`,
                 '</div>',
                 '<div class="col-5">',
@@ -17,6 +17,11 @@ $(document).ready(function(){
         }
     }).fail(function(){
         console.log("Error reading JSON data file");
+    });
+
+    $(".site").click(function(e) {
+        e.preventDefault();
+        alert($(this).html());
     });
 });
 
