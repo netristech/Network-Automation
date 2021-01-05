@@ -18,10 +18,12 @@ $(document).ready(function(){
     }).fail(function(){
         console.log("Error reading JSON data file");
     });
+});
 
-    $(".site").click(function(e) {
+$(window).load(function(){
+    $('.site').click(function(e) {
         e.preventDefault();
-        alert($(this).html());
+        alert('test');
     });
 });
 
