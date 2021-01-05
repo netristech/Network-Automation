@@ -3,8 +3,8 @@ $(document).ready(function(){
         for (i = 0; i < data.length; i++) {
             $("#sites").append([
                 `<div id="${data[i].name}" class="row">`,
-                '<div class="col-2 site">',
-                `${data[i].name}`,
+                '<div class="col-2">',
+                `<button type="button" class="btn btn-link">${data[i].name}</button>`,
                 '</div>',
                 '<div class="col-5">',
                 `<a href="https://maps.google.com/?q=${encodeURIComponent(data[i].address)}" target="_blank">${data[i].address}</a>`,
