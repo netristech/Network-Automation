@@ -1,0 +1,24 @@
+snmp-server community {{ ro_snmp }} RO 97
+snmp-server community {{ rw_snmp }} view cutdown RW 98
+access-list 97 remark Permit RO SNMP access for BBraun
+access-list 97 permit 172.23.9.215
+access-list 97 permit 193.254.102.208
+access-list 97 permit 193.254.102.209
+access-list 97 permit 193.254.102.210
+access-list 97 permit 172.29.70.141
+access-list 97 permit 172.30.192.55
+access-list 97 permit 192.228.184.170
+access-list 97 permit 172.28.135.220
+access-list 97 permit 172.30.165.122 
+access-list 97 permit 172.30.165.201
+access-list 97 permit 172.30.82.157
+access-list 97 permit 172.30.82.158
+access-list 97 permit 212.0.29.0 0.0.0.255
+access-list 97 permit 10.193.1.0 0.0.0.255  
+access-list 97 deny any
+access-list 98 remark Permit RW SNMP access for BBraun
+access-list 98 permit 172.28.135.220
+access-list 98 permit 172.30.165.122
+access-list 98 permit 212.0.29.0 0.0.0.255
+access-list 98 permit 10.193.1.0 0.0.0.255
+access-list 98 deny any

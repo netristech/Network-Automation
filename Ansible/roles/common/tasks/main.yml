@@ -1,4 +1,9 @@
 ---
+- name: Error Handling
+  debug:
+    msg: "no acceptable network OS found on target device"
+  when: ansible_network_os not in [ 'ios', 'nxos' ]
+
 - name: Gather IOS Facts
   ios_facts:
   when: ansible_network_os == "ios"
