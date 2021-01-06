@@ -14,7 +14,7 @@
     <title>Network Automation UI - Dev</title>
   </head>
   <body>
-    <div id="sites" class="container">
+    <div id="sites" class="container table">
       <div class="row">
         <div class="col-2">Site Name</div>
         <div class="col-5">Address</div>
