@@ -1,7 +1,7 @@
 $(document).ready(function(){
     $.getJSON("/data/data.json", function(data){
         for (i = 0; i < data.length; i++) {
-            $("#sites").append([
+            $("#sites-table").append([
                 `<tr id="${data[i].name}">`,
                 '<th scope="col">',
                 `<button type="button" class="btn btn-link">${data[i].name}</button>`,
