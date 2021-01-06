@@ -17,7 +17,7 @@
   <body>
     <div id="sites" class="container">
       <div class="row">
-        <button type="button" class="btn btn-primary"><i class="bi bi-plus></i></button>
+        <button type="button" class="btn btn-primary"><i class="bi bi-plus"></i></button>
       </div>
       <div class="row">
         <table id="sites-table" class="table table-striped">
