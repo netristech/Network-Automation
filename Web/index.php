@@ -10,13 +10,14 @@
     <!-- Load CSS Libraries -->
     <link rel="stylesheet" href="/css/bootstrap.css">
     <link rel="stylesheet" href="/css/chart.min.css">
+    <link rel="stylesheet" href="/css/style.css">
 
     <title>Network Automation UI - Dev</title>
   </head>
   <body>
     <div id="sites" class="container">
       <div class="row">
-        <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span></button>
+        <button type="button" class="btn btn-primary"><i class="bi bi-plus></i></button>
       </div>
       <div class="row">
         <table id="sites-table" class="table table-striped">
