@@ -24,6 +24,8 @@
               <th scope="col">Management Subnet(s)</th>
             </tr>
           </thead>
+          <tbody>
+          </tbody>
         </table>
       </div>
     </div>
