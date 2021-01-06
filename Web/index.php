@@ -16,6 +16,9 @@
   <body>
     <div id="sites" class="container">
       <div class="row">
+        <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span></button>
+      </div>
+      <div class="row">
         <table id="sites-table" class="table table-striped">
           <thead class="thead-light">
             <tr>
