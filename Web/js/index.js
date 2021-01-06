@@ -19,7 +19,7 @@ $(document).ready(function(){
         console.log("Error reading JSON data file");
     });
 
-    $('.btn').click(function(e) {
+    $('#sites').on('click', '.btn', function(e) {
         e.preventDefault();
         alert('test');
     });
