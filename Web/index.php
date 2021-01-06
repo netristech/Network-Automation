@@ -14,11 +14,17 @@
     <title>Network Automation UI - Dev</title>
   </head>
   <body>
-    <div id="sites" class="container table">
+    <div id="sites" class="container">
       <div class="row">
-        <div class="col-2">Site Name</div>
-        <div class="col-5">Address</div>
-        <div class="col-5">Management Subnets</div>
+        <table id="sites-table" class="table table-striped">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">Site Name</th>
+              <th scope="col">Address</th>
+              <th scope="col">Management Subnet(s)</th>
+            </tr>
+          </thead>
+        </table>
       </div>
     </div>
 

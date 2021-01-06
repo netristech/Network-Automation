@@ -2,17 +2,17 @@ $(document).ready(function(){
     $.getJSON("/data/data.json", function(data){
         for (i = 0; i < data.length; i++) {
             $("#sites").append([
-                `<div id="${data[i].name}" class="row">`,
-                '<div class="col-2">',
+                `<tr id="${data[i].name}">`,
+                '<th scope="col">',
                 `<button type="button" class="btn btn-link">${data[i].name}</button>`,
-                '</div>',
-                '<div class="col-5">',
+                '</th>',
+                '<th scope="col">',
                 `<a href="https://maps.google.com/?q=${encodeURIComponent(data[i].address)}" target="_blank">${data[i].address}</a>`,
-                '</div>',
-                '<div class="col-5">',
+                '</th>',
+                '<th scope="col">',
                 `${data[i].subnets.toString()}`,
-                '</div>',
-                '</div>'
+                '</th>',
+                '</tr>'
             ].join('\n'));
         }
     }).fail(function(){
