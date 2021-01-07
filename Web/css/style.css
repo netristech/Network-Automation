@@ -1,3 +1,10 @@
+.hide {
+    /* display: none; */
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+    overflow: hidden;
+}
 .btn:focus, .btn-primary:focus {
     outline: none !important;
     box-shadow: none !important;
