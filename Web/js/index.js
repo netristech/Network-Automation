@@ -19,10 +19,12 @@ $(document).ready(function(){
     });
 
     $('#edit-btn').click(function(e) {
+        alert('test');
+        /*
         e.preventdefault();
         $('item').each(function() {
             $(this).replaceWith(`<input type="text" class="item" value="${$(this).html()}" />`);
-        });
+        });*/
     });
 });
 
