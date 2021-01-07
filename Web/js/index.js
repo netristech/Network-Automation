@@ -21,7 +21,6 @@ $(document).ready(function(){
     $('#nav').on('click', '.btn', function(e) {
         e.preventDefault();
         //alert('test');
-        e.preventdefault();
         $('.data-item').each(function() {
             $(this).replaceWith(`<input type="text" class="data-item" value="${$(this).html()}" />`);
         });
