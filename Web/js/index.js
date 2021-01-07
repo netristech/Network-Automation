@@ -13,7 +13,7 @@ $(document).ready(function(){
         console.log("Error reading JSON data file");
     });
 
-    $('#sites').on('click', '.btn', function(e) {
+    $('#sites-table').on('click', '.btn', function(e) {
         e.preventDefault();
         alert($(this).html());
     });
