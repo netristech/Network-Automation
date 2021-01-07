@@ -1,5 +1,6 @@
 <?php
 ?>
+    <div id="sites" class="container">
       <div class="row">
         <table id="sites-table" class="table table-striped">
           <thead class="thead-light">
