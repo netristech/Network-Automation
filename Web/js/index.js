@@ -3,9 +3,9 @@ $(document).ready(function(){
         for (i = 0; i < data.length; i++) {
             $("#sites-table tbody").append([
                 '<tr>',
-                `<td id="${data[i].name}"><button type="button" class="btn btn-link">${data[i].name}</button></td>`,
-                `<td><a href="https://maps.google.com/?q=${encodeURIComponent(data[i].address)}" target="_blank">${data[i].address}</a></td>`,
-                `<td>${data[i].subnets.toString()}</td>`,
+                `<td id="${data[i].name}"><button type="button" class="btn btn-link item">${data[i].name}</button></td>`,
+                `<td><a href="https://maps.google.com/?q=${encodeURIComponent(data[i].address)}" target="_blank" class="item">${data[i].address}</a></td>`,
+                `<td><span class="item">${data[i].subnets.toString()}</span></td>`,
                 '</tr>'
             ].join('\n'));
         }
@@ -18,7 +18,12 @@ $(document).ready(function(){
         alert($(this).html());
     });
 
-    $('#nav')
+    $('#edit-btn').click(function(e) {
+        e.preventdefault();
+        $('item').each(function() {
+            $(this).replaceWith(`<input type="text" class="item" value="${$(this).html()}" />`);
+        });
+    });
 });
 
 // class for sites
