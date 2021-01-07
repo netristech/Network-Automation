@@ -17,6 +17,8 @@ $(document).ready(function(){
         e.preventDefault();
         alert($(this).html());
     });
+
+    $('#nav')
 });
 
 // class for sites
