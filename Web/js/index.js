@@ -5,7 +5,7 @@ $(document).ready(function(){
                 '<tr>',
                 `<td id="${data[i].name}"><button type="button" class="btn btn-link">${data[i].name}</button></td>`,
                 `<td class="align-middle"><a href="https://maps.google.com/?q=${encodeURIComponent(data[i].address)}" target="_blank">${data[i].address}</a></td>`,
-                `<td><span>${data[i].subnets.toString()}</span></td>`,
+                `<td class="align-middle"><span>${data[i].subnets.toString()}</span></td>`,
                 '</tr>'
             ].join('\n'));
         }
@@ -18,7 +18,7 @@ $(document).ready(function(){
         alert($(this).html());
     });
 
-    $('#nav').on('click', '#edit-btn', function(e) {
+    $('#nav').on('click', '.btn', function(e) {
         e.preventDefault();
         alert('test');
         /*
