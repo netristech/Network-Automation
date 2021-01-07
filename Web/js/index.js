@@ -18,7 +18,7 @@ $(document).ready(function(){
         alert($(this).html());
     });
 
-    $('#nav').on('click', '.btn', function(e) {
+    $('#nav').on('click', '#edit-btn', function(e) {
         e.preventDefault();
         //alert('test');
         $('.data-item').each(function() {
