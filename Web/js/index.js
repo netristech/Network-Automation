@@ -1,14 +1,7 @@
 var view = 'sites';
 
 $(document).ready(function(){
-    if (view != 'edit') {
-        $('#add-btn').addClass('hide');
-        $('#save-btn').addClass('hide');
-        $('#cancel-btn').addClass('hide');
-    }
-    if (view != 'sites') {
-        $('#edit-btn').addClass('hide');
-    }
+    drawScreen();
     $.getJSON("/data/data.json", function(data){
         for (i = 0; i < data.length; i++) {
             $("#sites-table tbody").append([
@@ -35,15 +28,31 @@ $(document).ready(function(){
         $('.data-item').each(function() {
             $(this).replaceWith(`<input type="text" class="data-item" value="${$(this).html()}" />`);
         });
-        location.reload(true);
+        drawScreen();
     });
 });
 
-// class for sites
-class Site {
-    constructor(params) {
-        this.name = params.name;
-        this.address = params.address;
-        this.subnets = params.subnets;
+function drawScreen() {
+    switch(view) {
+        case 'sites':
+            hideElements(['#add-btn', '#save-btn', '#cancel-btn']);
+            showElements(['#edit-btn', '#export-btn']);
+            break;
+        case 'edit':
+            hideElements(['#edit-btn', '#export-btn']);
+            showElements(['#add-btn', '#save-btn', '#cancel-btn']);
+            break;
     }
+}
+
+function hideElements(elems) {
+    $.each(elems, function(index, value) {
+        $(value).addClass('hide');
+    });
+}
+
+function showElements(elems) {
+    $.each(elems, function(index, value) {
+        $(value).removeClass('hide');
+    });
 }
