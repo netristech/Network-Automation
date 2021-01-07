@@ -9,6 +9,7 @@
 
     <!-- Load CSS Libraries -->
     <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/fontawesome.min.css">
     <link rel="stylesheet" href="/css/chart.min.css">
     <link rel="stylesheet" href="/css/style.css">
 
@@ -17,7 +18,7 @@
   <body>
     <div id="sites" class="container">
       <div class="row">
-        <button type="button" class="btn btn-primary"><i class="bi bi-plus"></i></button>
+        <button type="button" class="btn btn-primary"><i class="fas fa-plus"></i></button>
       </div>
       <div class="row">
         <table id="sites-table" class="table table-striped">
