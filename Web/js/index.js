@@ -3,9 +3,9 @@ $(document).ready(function(){
         for (i = 0; i < data.length; i++) {
             $("#sites-table tbody").append([
                 '<tr>',
-                `<td id="${data[i].name}"><button type="button" class="btn btn-link">${data[i].name}</button></td>`,
-                `<td class="align-middle"><a href="https://maps.google.com/?q=${encodeURIComponent(data[i].address)}" target="_blank">${data[i].address}</a></td>`,
-                `<td class="align-middle"><span>${data[i].subnets.toString()}</span></td>`,
+                `<td id="${data[i].name}"><button type="button" class="btn btn-link data-item">${data[i].name}</button></td>`,
+                `<td class="align-middle"><a href="https://maps.google.com/?q=${encodeURIComponent(data[i].address)}" target="_blank" class="data-item">${data[i].address}</a></td>`,
+                `<td class="align-middle data-item"><span>${data[i].subnets.toString()}</span></td>`,
                 '</tr>'
             ].join('\n'));
         }
@@ -20,12 +20,11 @@ $(document).ready(function(){
 
     $('#nav').on('click', '.btn', function(e) {
         e.preventDefault();
-        alert('test');
-        /*
+        //alert('test');
         e.preventdefault();
-        $('item').each(function() {
-            $(this).replaceWith(`<input type="text" class="item" value="${$(this).html()}" />`);
-        });*/
+        $('.data-item').each(function() {
+            $(this).replaceWith(`<input type="text" class="data-item" value="${$(this).html()}" />`);
+        });
     });
 });
 
