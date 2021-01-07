@@ -17,7 +17,7 @@
   </head>
   <body>
     <div id="sites" class="container">
-      <div id ="navigation" class="row">
+      <div id ="navigation" class="row mt-1 mb-1">
         <button type="button" class="btn btn-primary"><i class="fas fa-plus"></i></button>
         <button type="button" class="btn btn-secondary"><i class="fas fa-file-export"></i>Export to CSV</button>
       </div>
