@@ -6,6 +6,9 @@ $(document).ready(function(){
         $('#save-btn').addClass('hide');
         $('#cancel-btn').addClass('hide');
     }
+    if (view != 'sites') {
+        $('#edit-btn').addClass('hide');
+    }
     $.getJSON("/data/data.json", function(data){
         for (i = 0; i < data.length; i++) {
             $("#sites-table tbody").append([
