@@ -4,7 +4,7 @@ $(document).ready(function(){
             $("#sites-table tbody").append([
                 '<tr>',
                 `<td id="${data[i].name}"><button type="button" class="btn btn-link">${data[i].name}</button></td>`,
-                `<td class="align-items-center"><a href="https://maps.google.com/?q=${encodeURIComponent(data[i].address)}" target="_blank">${data[i].address}</a></td>`,
+                `<td class="align-middle"><a href="https://maps.google.com/?q=${encodeURIComponent(data[i].address)}" target="_blank">${data[i].address}</a></td>`,
                 `<td><span>${data[i].subnets.toString()}</span></td>`,
                 '</tr>'
             ].join('\n'));
