@@ -3,8 +3,8 @@ var view = 'sites';
 $(document).ready(function(){
     if (view != 'edit') {
         $('#add-btn').addClass('hide');
-        $('#save-button').addClass('hide');
-        $('#cancel-button').addClass('hide');
+        $('#save-btn').addClass('hide');
+        $('#cancel-btn').addClass('hide');
     }
     $.getJSON("/data/data.json", function(data){
         for (i = 0; i < data.length; i++) {
