@@ -31,9 +31,11 @@ $(document).ready(function(){
     $('#nav').on('click', '#edit-btn', function(e) {
         e.preventDefault();
         //alert('test');
+        view = 'edit';
         $('.data-item').each(function() {
             $(this).replaceWith(`<input type="text" class="data-item" value="${$(this).html()}" />`);
         });
+        location.reload(true);
     });
 });
 
