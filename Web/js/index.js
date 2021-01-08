@@ -13,7 +13,6 @@ $(document).ready(function(){
                 `<td class="align-middle text-center"><i class="fas fa-circle data-item" style="color: ${site_color};"></i></td>`,
                 '</tr>'
             ].join('\n'));
-        });
         /*for (i = 0; i < data.length; i++) {
             $("#sites-table tbody").append([
                 '<tr>',
