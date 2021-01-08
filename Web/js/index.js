@@ -9,7 +9,7 @@ $(document).ready(function(){
         alert($(this).html());
     });
 
-    $('#nav').on('click', '#edit-btn', function(e) {
+    /*$('#nav').on('click', '#edit-btn', function(e) {
         e.preventDefault();
         //alert('test');
         view = 'edit';
@@ -17,7 +17,7 @@ $(document).ready(function(){
             $(this).replaceWith(`<input type="text" class="data-item" value="${$(this).html()}" />`);
         });
         drawScreen();
-    });
+    });*/
 });
 
 function hideElements(elems) {
@@ -35,8 +35,8 @@ function showElements(elems) {
 function drawScreen() {
     switch(view) {
         case 'sites':
-            hideElements(['#add-btn', '#save-btn', '#cancel-btn']);
-            showElements(['#edit-btn', '#export-btn']);
+            //hideElements(['#add-btn', '#save-btn', '#cancel-btn']);
+            showElements(['#import-btn', '#export-btn']);
             $.getJSON("/data/data.json", function(data){
                 for (i = 0; i < data.length; i++) {
                     $("#sites-table tbody").append([
@@ -52,9 +52,9 @@ function drawScreen() {
                 console.log("Error reading JSON data file");
             });
             break;
-        case 'edit':
-            hideElements(['#edit-btn', '#export-btn']);
-            showElements(['#add-btn', '#save-btn', '#cancel-btn']);
+        case 'devices':
+            //hideElements(['#edit-btn', '#export-btn']);
+            showElements(['#import-btn', '#export-btn']);
             break;
     }
 }
