@@ -4,7 +4,17 @@ var site_color = '#00ff00';
 $(document).ready(function(){
     drawScreen();
     $.getJSON("/data/data.json", function(data){
-        for (i = 0; i < data.length; i++) {
+        $.each(data, function(i, val) {
+            $("#sites-table tbody").append([
+                '<tr>',
+                `<td id="${val.name}"><button type="button" class="btn btn-link data-item">${val.name}</button></td>`,
+                `<td class="align-middle"><a href="https://maps.google.com/?q=${encodeURIComponent(val.address)}" target="_blank" class="data-item">${data[i].address}</a></td>`,
+                `<td class="align-middle"><span class="data-item">${val.subnets.toString()}</span></td>`,
+                `<td class="align-middle text-center"><i class="fas fa-circle data-item" style="color: ${site_color};"></i></td>`,
+                '</tr>'
+            ].join('\n'));
+        });
+        /*for (i = 0; i < data.length; i++) {
             $("#sites-table tbody").append([
                 '<tr>',
                 `<td id="${data[i].name}"><button type="button" class="btn btn-link data-item">${data[i].name}</button></td>`,
@@ -12,7 +22,7 @@ $(document).ready(function(){
                 `<td class="align-middle"><span class="data-item">${data[i].subnets.toString()}</span></td>`,
                 `<td class="align-middle text-center"><i class="fas fa-circle data-item" style="color: ${site_color};"></i></td>`,
                 '</tr>'
-            ].join('\n'));
+            ].join('\n'));*/
         }
     }).fail(function(){
         console.log("Error reading JSON data file");
