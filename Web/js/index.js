@@ -1,4 +1,5 @@
 var view = 'sites';
+var site_color = '#aaa';
 
 $(document).ready(function(){
     drawScreen();
@@ -9,6 +10,7 @@ $(document).ready(function(){
                 `<td id="${data[i].name}"><button type="button" class="btn btn-link data-item">${data[i].name}</button></td>`,
                 `<td class="align-middle"><a href="https://maps.google.com/?q=${encodeURIComponent(data[i].address)}" target="_blank" class="data-item">${data[i].address}</a></td>`,
                 `<td class="align-middle"><span class="data-item">${data[i].subnets.toString()}</span></td>`,
+                `<td class="align-middle"><i class="fas fa-circle data-item" style="color: ${site_color};"></i></td>`,
                 '</tr>'
             ].join('\n'));
         }
