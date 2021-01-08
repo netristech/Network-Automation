@@ -38,7 +38,7 @@ function drawScreen() {
             hideElements(['#add-btn', '#save-btn', '#cancel-btn']);
             showElements(['#edit-btn', '#export-btn']);
             $.getJSON("/data/data.json", function(data){
-                for (i = 0; i < data.length; i++) {
+                $.each(data, function(i, val) {
                     $("#sites-table tbody").append([
                         '<tr>',
                         `<td id="${data[i].name}"><button type="button" class="btn btn-link data-item" style="padding: 0px;">${data[i].name}</button></td>`,
