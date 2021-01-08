@@ -16,10 +16,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" id="import-btn" class="btn btn-primary">
-                        <i class="fas fa-file-import"></i>
-                    </button>
-                    <button type="button" id="cancel-btn" class="btn btn-danger">
-                        <i class="fas fa-times"></i>
+                        <i class="fas fa-file-import"></i>&nbsp;Import
                     </button>
                 </div>
             </div>
