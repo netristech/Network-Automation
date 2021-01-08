@@ -1,5 +1,5 @@
 var view = 'sites';
-var site_color = '#aaa';
+var site_color = '#00ff00';
 
 $(document).ready(function(){
     drawScreen();
