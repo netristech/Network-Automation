@@ -11,6 +11,7 @@ $(document).ready(function(){
 
     $('#import-modal').on('click', '#import-btn', function(e) {
         e.preventDefault();
+        $('#import-form .alert').hide();
         var fd = new FormData();
         var files = $('#import-file')[0].files[0];
         fd.append('file', files);
@@ -23,6 +24,13 @@ $(document).ready(function(){
             processData: false,
             success: function(response) {
                 if (response !=0) {
+                    $('#import-form .alert').hide();
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        fileContent = reader.result;
+                        alert(fileContent);
+                    }
+                    reader.readAsText(files);
                     //csvToJSON();
                     //$('#import-modal').modal('hide');
                     //view = 'sites';
