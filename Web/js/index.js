@@ -27,7 +27,7 @@ $(document).ready(function(){
                     //$('#import-modal').modal('hide');
                     //view = 'sites';
                     //drawScreen();
-                    alert(fd.toSource());
+                    alert(fd);
                 } else {
                     $('#import-form .modal-body').append('<div class="alert alert-danger">Error uploading file, please check file type and size are correct.</div>');
                 }
