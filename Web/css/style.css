@@ -9,3 +9,7 @@
     outline: none !important;
     box-shadow: none !important;
 }
+
+.modal-header, .modal-footer {
+    border: none !important;
+}
