@@ -29,7 +29,7 @@ $(document).ready(function(){
                     //drawScreen();
                     alert(files.toString());
                 } else {
-                    $('#import-form .modal-body').append('<div class="alert alert-danger">Error uploading file, please check file type and size are correct.</div>');
+                    $('#import-form').append('<div class="alert alert-danger">Error uploading file, please check file type and size are correct.</div>');
                 }
             },
         });
