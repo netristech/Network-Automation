@@ -9,6 +9,30 @@ $(document).ready(function(){
         alert($(this).html());
     });
 
+    $('#import-modal').on('click', '#import-btn', function(e) {
+        e.preventDefault();
+        var data = new FormData();
+        var files = $('#import-file')[0].files[0];
+        data.append('file', files);
+
+        $.ajax({
+            url: 'upload.php',
+            type: 'post',
+            data: data,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                if (response !=0) {
+                    //csvToJSON();
+                    view = 'sites';
+                    drawScreen();
+                } else {
+                    $('#import-form').append('<div class="alert alert-danger">Error uploading file, please check file type and size are correct.</div>');
+                }
+            }
+        });
+    });
+
     /*$('#nav').on('click', '#edit-btn', function(e) {
         e.preventDefault();
         //alert('test');

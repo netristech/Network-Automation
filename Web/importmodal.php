@@ -11,7 +11,7 @@
                 </div>
                 <div class="modal-body">
                     <form id="import-form" method="post" action="" enctype="multipart/form-data">
-                        <input type="file" name="file" />
+                        <input type="file" id="import-file" name="file" />
                     </form>
                 </div>
                 <div class="modal-footer">
