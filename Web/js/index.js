@@ -11,26 +11,27 @@ $(document).ready(function(){
 
     $('#import-modal').on('click', '#import-btn', function(e) {
         e.preventDefault();
-        var data = new FormData();
+        var fd = new FormData();
         var files = $('#import-file')[0].files[0];
-        data.append('file', files);
+        fd.append('file', files);
 
         $.ajax({
             url: 'upload.php',
             type: 'post',
-            data: data,
+            data: fd,
             contentType: false,
             processData: false,
             success: function(response) {
                 if (response !=0) {
                     //csvToJSON();
-                    $('#import-modal').modal('hide');
-                    view = 'sites';
-                    drawScreen();
+                    //$('#import-modal').modal('hide');
+                    //view = 'sites';
+                    //drawScreen();
+                    alert(fd);
                 } else {
                     $('#import-form .modal-body').append('<div class="alert alert-danger">Error uploading file, please check file type and size are correct.</div>');
                 }
-            }
+            },
         });
     });
 

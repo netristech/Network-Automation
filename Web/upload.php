@@ -1,6 +1,7 @@
 
 <?php
-if(isset($_FILES["file"]) && $_FILES["file"]["error"] == 0) {
+
+if(isset($_FILES["file"])) {
   $target_dir = "data/";
   $target_file = $target_dir . basename($_FILES["file"]["name"]);
   $uploadOk = 1;
