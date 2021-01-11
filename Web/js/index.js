@@ -64,7 +64,7 @@ function drawScreen() {
             showElements(['#import-btn', '#export-btn']);
             $.getJSON("/data/data.json", function(data){
                 for (i = 0; i < data.length; i++) {
-                    $("#sites-table tbody").append([
+                    $("#sites-table tbody").html([
                         '<tr>',
                         `<td id="${data[i].name}"><button type="button" class="btn btn-link data-item" style="padding: 0px;">${data[i].name}</button></td>`,
                         `<td class="align-middle"><a href="https://maps.google.com/?q=${encodeURIComponent(data[i].address)}" target="_blank" class="data-item">${data[i].address}</a></td>`,

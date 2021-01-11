@@ -10,7 +10,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="import-form" method="post" action="" enctype="multipart/form-data">
+                    <form id="import-form" method="post" action="upload.php" enctype="multipart/form-data">
                         <input type="file" id="import-file" name="file" />
                     </form>
                 </div>
