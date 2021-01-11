@@ -29,7 +29,7 @@ $(document).ready(function(){
                     //drawScreen();
                     alert(files.toString());
                 } else {
-                    $('#import-form .error').show();
+                    $('#import-form .alert').show();
                 }
             },
         });
