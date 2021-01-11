@@ -11,14 +11,16 @@
                 </div>
                 <div class="modal-body">
                     <form id="import-form" method="post" action="upload.php" enctype="multipart/form-data">
+                        <label for="import-file">Select a CSV file to import</label>
                         <input type="file" id="import-file" name="file" />
+                        <input type="submit" name="submit" value="Import" />
                     </form>
                 </div>
-                <div class="modal-footer">
+                <!--<div class="modal-footer">
                     <button type="button" id="import-btn" class="btn btn-primary">
                         <i class="fas fa-file-import"></i>&nbsp;Import
                     </button>
-                </div>
+                </div>-->
             </div>
         </div>
     </div>
