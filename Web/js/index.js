@@ -25,17 +25,11 @@ $(document).ready(function(){
             success: function(response) {
                 if (response !=0) {
                     $('#import-form .alert').hide();
-                    var reader = new FileReader();
-                    reader.onload = function(e) {
-                        fileContent = reader.result;
-                        alert(fileContent);
-                    }
-                    reader.readAsText(files);
+                    alert(readFile(files));
                     //csvToJSON();
                     //$('#import-modal').modal('hide');
                     //view = 'sites';
                     //drawScreen();
-                    alert(files.toString());
                 } else {
                     $('#import-form .alert').show();
                 }
@@ -91,4 +85,14 @@ function drawScreen() {
             showElements(['#import-btn', '#export-btn']);
             break;
     }
+}
+
+function readFile(file) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        fileContent = reader.result;
+        //alert(fileContent);
+        return fileContent;
+    }
+    reader.readAsText(file);
 }
