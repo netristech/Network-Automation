@@ -92,7 +92,7 @@ function readFile(file) {
     reader.onload = function(e) {
         fileContent = reader.result;
         //alert(fileContent);
-        return fileContent;
     }
     reader.readAsText(file);
+    return fileContent;
 }
