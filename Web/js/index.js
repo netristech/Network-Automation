@@ -37,15 +37,17 @@ $(document).ready(function(){
         });
     });
 
-    /*$('#nav').on('click', '#edit-btn', function(e) {
+    $('#nav').on('click', '#edit-btn', function(e) {
         e.preventDefault();
+        $('#import-form').trigger('reset');
+        clearError();
         //alert('test');
-        view = 'edit';
+        /*view = 'edit';
         $('.data-item').each(function() {
             $(this).replaceWith(`<input type="text" class="data-item" value="${$(this).html()}" />`);
         });
-        drawScreen();
-    });*/
+        drawScreen();*/
+    });
 });
 
 function hideElements(elems) {
@@ -57,6 +59,15 @@ function hideElements(elems) {
 function showElements(elems) {
     $.each(elems, function(index, value) {
         $(value).removeClass('hide');
+    });
+}
+
+function clearError() {
+    $('.alert-danger').each(function() {
+        $(this).addClass('hide');
+    });
+    $('input').each(function() {
+        $(this).removeClass('error');
     });
 }
 
