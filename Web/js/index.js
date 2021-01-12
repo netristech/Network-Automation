@@ -37,7 +37,7 @@ $(document).ready(function(){
         });
     });
 
-    $('#nav').on('click', '#edit-btn', function(e) {
+    $('#nav').on('click', '#import-btn', function(e) {
         e.preventDefault();
         $('#import-form').trigger('reset');
         clearError();
