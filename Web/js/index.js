@@ -25,7 +25,7 @@ $(document).ready(function(){
             success: function(response) {
                 if (response !=0) {
                     $('#import-form .alert').hide();
-                    alert(readFile(import-file));
+                    alert(readFile($('#import-file')[0].files[0]));
                     //csvToJSON();
                     //$('#import-modal').modal('hide');
                     //view = 'sites';
