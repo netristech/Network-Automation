@@ -11,7 +11,7 @@ $(document).ready(function(){
 
     $('#import-modal').on('click', '#import-btn', function(e) {
         e.preventDefault();
-        $('#import-form .alert').hide();
+        //$('#import-form .alert').hide();
         var fd = new FormData();
         var files = $('#import-file')[0].files[0];
         fd.append('file', files);
@@ -40,7 +40,7 @@ $(document).ready(function(){
     $('#nav').on('click', '#import-btn', function(e) {
         e.preventDefault();
         $('#import-form').trigger('reset');
-        clearError();
+        //clearError();
         //alert('test');
         /*view = 'edit';
         $('.data-item').each(function() {
