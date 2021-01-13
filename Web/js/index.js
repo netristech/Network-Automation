@@ -11,6 +11,7 @@ $(document).ready(function(){
 
     $('#import-modal').on('click', '#import-btn', function(e) {
         e.preventDefault();
+        clearError();
         //$('#import-form .alert').hide();
         var fd = new FormData();
         var files = $('#import-file')[0].files[0];
@@ -31,7 +32,8 @@ $(document).ready(function(){
                     //view = 'sites';
                     //drawScreen();
                 } else {
-                    $('#import-form .alert').show();
+                    //$('#import-form .alert').show();
+                    showError();
                 }
             },
         });
@@ -66,8 +68,17 @@ function clearError() {
     $('.alert-danger').each(function() {
         $(this).addClass('hide');
     });
-    $('input').each(function() {
+    $('input[type="text"]').each(function() {
         $(this).removeClass('error');
+    });
+}
+
+function showError() {
+    $('.alert-danger').each(function() {
+        $(this).removeClass('hide');
+    });
+    $('input[type="text"]').each(function() {
+        $(this).addClass('error');
     });
 }
 
