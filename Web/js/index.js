@@ -12,7 +12,6 @@ $(document).ready(function(){
     $('#import-modal').on('click', '#import-btn', function(e) {
         e.preventDefault();
         clearError();
-        //$('#import-form .alert').hide();
         var fd = new FormData();
         var files = $('#import-file')[0].files[0];
         fd.append('file', files);
@@ -25,14 +24,12 @@ $(document).ready(function(){
             processData: false,
             success: function(response) {
                 if (response !=0) {
-                    //$('#import-form .alert').hide();
                     alert(readFile($('#import-file')[0].files[0]));
                     //csvToJSON();
                     //$('#import-modal').modal('hide');
                     //view = 'sites';
                     //drawScreen();
                 } else {
-                    //$('#import-form .alert').show();
                     showError();
                 }
             },
@@ -43,12 +40,6 @@ $(document).ready(function(){
         e.preventDefault();
         $('#import-form').trigger('reset');
         clearError();
-        //alert('test');
-        /*view = 'edit';
-        $('.data-item').each(function() {
-            $(this).replaceWith(`<input type="text" class="data-item" value="${$(this).html()}" />`);
-        });
-        drawScreen();*/
     });
 });
 
@@ -66,7 +57,6 @@ function showElements(elems) {
 
 function clearError() {
     $('.alert-danger').each(function() {
-        //$(this).addClass('hide');
         $(this).hide();
     });
     $('input').each(function() {
@@ -76,7 +66,6 @@ function clearError() {
 
 function showError() {
     $('.alert-danger').each(function() {
-        //$(this).removeClass('hide');
         $(this).show();
     });
     $('input').each(function() {
@@ -87,7 +76,6 @@ function showError() {
 function drawScreen() {
     switch(view) {
         case 'sites':
-            //hideElements(['#add-btn', '#save-btn', '#cancel-btn']);
             showElements(['#import-btn', '#export-btn']);
             $.getJSON("/data/data.json", function(data){
                 for (i = 0; i < data.length; i++) {
@@ -105,7 +93,6 @@ function drawScreen() {
             });
             break;
         case 'devices':
-            //hideElements(['#edit-btn', '#export-btn']);
             showElements(['#import-btn', '#export-btn']);
             break;
     }
@@ -115,7 +102,6 @@ function readFile(file) {
     var reader = new FileReader();
     reader.onload = function(e) {
         fileContent = reader.result;
-        //alert(fileContent);
     }
     reader.readAsText(file);
     return fileContent;
