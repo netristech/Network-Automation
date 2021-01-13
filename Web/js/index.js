@@ -25,7 +25,7 @@ $(document).ready(function(){
             processData: false,
             success: function(response) {
                 if (response !=0) {
-                    $('#import-form .alert').hide();
+                    //$('#import-form .alert').hide();
                     alert(readFile($('#import-file')[0].files[0]));
                     //csvToJSON();
                     //$('#import-modal').modal('hide');
@@ -42,7 +42,7 @@ $(document).ready(function(){
     $('#nav').on('click', '#import-btn', function(e) {
         e.preventDefault();
         $('#import-form').trigger('reset');
-        //clearError();
+        clearError();
         //alert('test');
         /*view = 'edit';
         $('.data-item').each(function() {
@@ -66,18 +66,20 @@ function showElements(elems) {
 
 function clearError() {
     $('.alert-danger').each(function() {
-        $(this).addClass('hide');
+        //$(this).addClass('hide');
+        $(this).hide();
     });
-    $('input[type="text"]').each(function() {
+    $('input').each(function() {
         $(this).removeClass('error');
     });
 }
 
 function showError() {
     $('.alert-danger').each(function() {
-        $(this).removeClass('hide');
+        //$(this).removeClass('hide');
+        $(this).show();
     });
-    $('input[type="text"]').each(function() {
+    $('input').each(function() {
         $(this).addClass('error');
     });
 }
