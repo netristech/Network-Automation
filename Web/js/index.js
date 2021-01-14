@@ -22,7 +22,7 @@ $(document).ready(function(){
             contentType: false,
             processData: false,
             success: function(response) {
-                if (response !=0) {
+                if (response != 0) {
                     alert(response);
                     /*parseCSV($('#import-file')[0].files[0]));
                     view = 'sites';

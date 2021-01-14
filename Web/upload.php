@@ -2,7 +2,7 @@
 <?php
 
 if(isset($_FILES["file"]["name"])) {
-  $target_file = "data/" . $_FILES["file"]["name"];
+  $target_file = "upload/" . $_FILES["file"]["name"];
   $fileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
   
   // file validation
