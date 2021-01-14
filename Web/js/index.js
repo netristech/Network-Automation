@@ -1,5 +1,5 @@
 var view = 'sites';
-var site_color = '#00ff00';
+//var site_color = '#00ff00';
 
 $(document).ready(function(){
     drawScreen();
@@ -24,11 +24,10 @@ $(document).ready(function(){
             processData: false,
             success: function(response) {
                 if (response !=0) {
-                    alert(readFile($('#import-file')[0].files[0]));
-                    //csvToJSON();
-                    //$('#import-modal').modal('hide');
-                    //view = 'sites';
-                    //drawScreen();
+                    parseCSV($('#import-file')[0].files[0]));
+                    view = 'sites';
+                    drawScreen();
+                    $('#import-modal').modal('hide');
                 } else {
                     showError();
                 }
@@ -98,7 +97,7 @@ function drawScreen() {
     }
 }
 
-function readFile(file) {
+function parseCSV(file) {
     var reader = new FileReader();
     reader.onload = function(e) {
         fileContent = reader.result;
