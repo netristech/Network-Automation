@@ -12,6 +12,7 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
 function processLogin() {
     $username = $_POST['username'];
     $password = $_POST['password'];
-    $output = shell_exec("sudo ./auth.py $username $password");
+    //$output = shell_exec("sudo ./auth.py $username $password");
+    $output = $username . " " . $password
     echo "<pre>" . $output . "</pre>";
 }
