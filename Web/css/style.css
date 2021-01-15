@@ -5,6 +5,14 @@
     top: -9999px;
     overflow: hidden;
 }
+
+#login-form {
+    min-width: 400px;
+    max-width: 50vw;
+    min-height: 400px;
+    max-height: 50vh;
+}
+
 .btn:focus, .btn-primary:focus {
     outline: none !important;
     box-shadow: none !important;
