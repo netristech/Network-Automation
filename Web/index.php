@@ -1,5 +1,5 @@
 <?php
-session_start();
+//session_start();
 include header.php;?>
     <form id="login" action="" method="post" enctype="multipart/formdata">
         <div class="alert alert-danger">Authentication Failed</div>
