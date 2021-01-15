@@ -3,9 +3,9 @@ session_start();
 if(isset($_POST["submit"])) {
     $username = $_POST["username"];
     $password = $_POST["password"];
-    $command = escapeshellcmd("python3 auth.py $username $password");
-    $output = shell_exec($command);
-    echo $output;
+    $command = escapeshellcmd("./auth.py");
+    $output = shell_exec($command $username $password);
+    echo "<pre>" . $output . "</pre>";
 }
 include 'header.php';
 ?>
