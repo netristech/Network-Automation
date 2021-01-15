@@ -4,7 +4,7 @@ include 'header.php';
 ?>
     <div id="login" class="container text-center">
         <form id="login-form" class="align-middle mx-auto" action="" method="post" enctype="multipart/formdata">
-            <div class="alert alert-danger">Authentication Failed</div>
+            <div class="alert alert-danger" style="disp[lay: none;">Authentication Failed</div>
             <label for="username">Username: </label>
             <input id="username" type="text" name="username" value="" /><br />
             <label for="password">Password:  </label>
