@@ -1,7 +1,10 @@
 <?php
 session_start();
 if(isset($_POST['submit'])) {
-    $output = shell_exec(escapeshellcmd("./auth.py $_POST['username'] $_POST['password']"));
+    $username = $_POST["username"];
+    $password = $_POST["password"];
+    $command = escapeshellcmd("./auth.py $username $password");
+    $output = shell_exec($command);
     echo $output;
 }
 include 'header.php';
