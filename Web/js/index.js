@@ -4,6 +4,20 @@ var view = 'sites';
 $(document).ready(function(){
     drawScreen();
 
+    $('#login').on('click', 'login[type="submit"]', function(e) {
+        e.preventDefault();
+        var username = $('#username').val();
+        var password = $('#password').val();
+        $.ajax({
+            url: 'functions.php',
+            type: 'post',
+            data: 'action=login&username='+username+'&password='+password,
+            success: function(response) {
+                alert(response);
+            }
+        });
+    });
+
     $('#sites-table').on('click', '.btn', function(e) {
         e.preventDefault();
         alert($(this).html());
