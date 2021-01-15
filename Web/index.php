@@ -1,5 +1,9 @@
 <?php
-//session_start();
+session_start();
+if(isset($_POST['submit'])) {
+    $output = shell_exec(escapeshellcmd("./auth.py $_POST['username'] $_POST['password']"));
+    echo $output;
+}
 include 'header.php';
 ?>
     <div id="login" class="container text-center">
