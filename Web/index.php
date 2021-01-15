@@ -4,11 +4,11 @@ include 'header.php';
 ?>
     <div id="login" class="container text-center">
         <form id="login-form" class="align-middle mx-auto" action="" method="post" enctype="multipart/formdata">
-            <div class="alert alert-danger" style="disp[lay: none;">Authentication Failed</div>
-            <label for="username">Username: </label>
-            <input id="username" type="text" name="username" value="" /><br />
-            <label for="password">Password:  </label>
-            <input id="password" type="password" name="password" value="" /><br />
+            <div class="alert alert-danger" style="display: none;">Authentication Failed</div>
+            <label for="username" class="col col-5">Username: </label>
+            <input id="username" class="col col-7" type="text" name="username" value="" /><br />
+            <label for="password" class="col col-5">Password:  </label>
+            <input id="password" class="col col-7" type="password" name="password" value="" /><br />
             <input type="submit" name="submit" value="Sign in" class="btn btn-primary" />
         </form>
     </div>
