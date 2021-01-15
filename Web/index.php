@@ -1,6 +1,7 @@
 <?php
 //session_start();
-include header.php;?>
+include 'header.php';
+?>
     <form id="login" action="" method="post" enctype="multipart/formdata">
         <div class="alert alert-danger">Authentication Failed</div>
         <label for="username">Username: </label>
@@ -9,4 +10,4 @@ include header.php;?>
         <input id="password" type="password" name="password" value="" />
         <input type="submit" name="submit" value="Sign in" class="btn btn-primary" />
     </form>
-<?php include footer.php;?>
+<?php include 'footer.php'; ?>
