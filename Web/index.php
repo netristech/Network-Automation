@@ -3,7 +3,7 @@ session_start();
 if(isset($_POST["submit"])) {
     $username = $_POST["username"];
     $password = $_POST["password"];
-    $command = escapeshellcmd("./auth.py $username $password");
+    $command = escapeshellcmd("python3 auth.py $username $password");
     $output = shell_exec($command);
     echo $output;
 }
