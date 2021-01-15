@@ -4,7 +4,7 @@ var view = 'sites';
 $(document).ready(function(){
     drawScreen();
 
-    $('#login').on('click', 'login[type="submit"]', function(e) {
+    $('#login').on('click', '#login-btn', function(e) {
         e.preventDefault();
         var username = $('#username').val();
         var password = $('#password').val();
