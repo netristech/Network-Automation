@@ -2,8 +2,8 @@
 //session_start();
 include 'header.php';
 ?>
-    <div id="login" class="container">
-        <form id="login-form" action="" method="post" enctype="multipart/formdata">
+    <div id="login" class="container text-center">
+        <form id="login-form" class="align-middle" action="" method="post" enctype="multipart/formdata">
             <div class="alert alert-danger">Authentication Failed</div>
             <label for="username">Username: </label>
             <input id="username" type="text" name="username" value="" /><br />
