@@ -11,6 +11,10 @@
     max-width: 40vw;
     min-height: 400px;
     max-height: 40vh;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .btn:focus, .btn-primary:focus {
