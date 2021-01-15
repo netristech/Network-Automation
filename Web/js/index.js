@@ -11,6 +11,7 @@ $(document).ready(function(){
 
     $('#import-modal').on('click', '#import-btn', function(e) {
         e.preventDefault();
+        clearError();
         var fd = new FormData();
         var files = $('#import-file')[0].files[0];
         fd.append('file', files);
@@ -23,11 +24,9 @@ $(document).ready(function(){
             processData: false,
             success: function(response) {
                 if (response != 0) {
-                    alert(response);
-                    /*parseCSV($('#import-file')[0].files[0]));
-                    view = 'sites';
-                    drawScreen();
-                    $('#import-modal').modal('hide');*/
+                    //alert(response);
+                    parseCSV(response);
+                    $('#import-modal').modal('hide');
                 } else {
                     showError();
                 }
