@@ -7,9 +7,9 @@ include 'header.php';
             <img src="logo.png" /><br /><br />
             <div class="alert alert-danger" style="display: none;">Authentication Failed</div>
             <label for="username" class="col col-3">Username: </label>
-            <input id="username" class="col col-8" type="text" name="username" value="" /><br />
+            <input id="username" class="col col-7" type="text" name="username" value="" /><br />
             <label for="password" class="col col-3">Password:  </label>
-            <input id="password" class="col col-8" type="password" name="password" value="" /><br /><br />
+            <input id="password" class="col col-7" type="password" name="password" value="" /><br /><br />
             <input type="submit" name="submit" value="Sign in" class="btn btn-primary" style="width: 95%;" />
         </form>
     </div>
