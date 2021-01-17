@@ -1,6 +1,6 @@
 <?php
 
-include('phpseclib/Net/SSH2.php');
+use phpseclib\Net\SSH2;
 
 if(isset($_POST['action']) && !empty($_POST['action'])) {
     $action = $_POST['action'];
