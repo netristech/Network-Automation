@@ -10,7 +10,7 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
 }
 
 function processLogin() {
-    $server = $POST['server'];
+    $server = $_POST['server'];
     $username = $_POST['username'];
     $password = $_POST['password'];
     //$command = escapeshellcmd("/usr/bin/python3 ./auth.py " . $username . " " . $password);
