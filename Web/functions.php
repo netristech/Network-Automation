@@ -18,6 +18,6 @@ function processLogin() {
     //$command = escapeshellcmd("/usr/bin/python3 ./auth.py " . $username . " " . $password);
     $command = escapeshellcmd("sshpass -p " . $password . " ssh " . $username . "@" . $server . " 'exit'");
     //$output = shell_exec($command);
-    exec('ls -lah', $output, $return_var);
+    exec($command, $output, $return_var);
     print_r($output);
 }
