@@ -13,7 +13,8 @@ function processLogin() {
     $username = $_POST['username'];
     $password = $_POST['password'];
     //$output = shell_exec("sudo ./auth.py $username $password");
-    $output = shell_exec("/usr/bin/python3 ./auth.py " . $username . " " . $password);
+    $command = escapeshellcmd("/usr/bin/python3 ./auth.py " . $username . " " . $password);
+    $output = shell_exec($command);
     //echo "<pre>" . $output . "</pre>";
     echo $output;
 }
