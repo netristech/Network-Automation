@@ -1,6 +1,6 @@
 <?php
 
-include('Net/SSH2.php');
+include('SSH2.php');
 
 if(isset($_POST['action']) && !empty($_POST['action'])) {
     $action = $_POST['action'];
