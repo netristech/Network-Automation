@@ -1,6 +1,6 @@
 <?php
 
-include('SSH2.php');
+include('phpeclib/Net/SSH2.php');
 
 if(isset($_POST['action']) && !empty($_POST['action'])) {
     $action = $_POST['action'];
@@ -15,7 +15,7 @@ function processLogin() {
     $server = $_POST['server'];
     $username = $_POST['username'];
     $password = $_POST['password'];
-    $ssh = new Net_SSH2($server);
+    $ssh = new SSH2($server, '22');
     if(!$ssh->login($username, $password)) {
         echo 1;
     } else {
