@@ -19,5 +19,5 @@ function processLogin() {
     $command = escapeshellcmd("sshpass -p " . $password . " ssh " . $username . "@" . $server . " 'exit'");
     //$output = shell_exec($command);
     exec($command, $output, $return_var);
-    echo $return;
+    echo $return_var;
 }
