@@ -6,12 +6,13 @@ $(document).ready(function(){
 
     $('#login').on('click', '#login-btn', function(e) {
         e.preventDefault();
+        var server = $('#server').val();
         var username = $('#username').val();
         var password = $('#password').val();
         $.ajax({
             url: 'functions.php',
             type: 'post',
-            data: 'action=login&username='+username+'&password='+password,
+            data: 'action=login&server='+server+'&username='+username+'&password='+password,
             success: function(response) {
                 alert(response);
             }
