@@ -165,5 +165,7 @@ def main():
             # Write results to CSV file                                
             report_writer.writerow([phone, phone_ip, mac_address, phone_pat, phone_desc, phone_css, phone_devpool, phone_loc, phone_rpn, phone_mask, line_css, notes])
 
-main()
+if __name__ == "__main__":
+    main()
+
 print("Report has been generated")

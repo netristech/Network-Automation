@@ -60,5 +60,7 @@ def main():
             output = ""
     net_connect.disconnect()
 
-main()
+if __name__ == "__main__":
+    main()
+    
 print("\nReport generation complete!")

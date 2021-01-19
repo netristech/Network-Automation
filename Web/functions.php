@@ -1,7 +1,9 @@
 <?php
-set_include_path(get_include_path() . PATH_SEPARATOR . 'phpseclib');
+include('autoloader.php');
 
-include('Net/SSH2.php');
+$loader = new \Composer\Autoload\ClassLoader();
+$loader->addPsr4('phpseclib\\', __DIR__.'/phpseclib');
+$loader->register();
 
 if(isset($_POST['action']) && !empty($_POST['action'])) {
     $action = $_POST['action'];
