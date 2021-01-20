@@ -1,4 +1,3 @@
 ---
 - name: Test
-  delegate_to: localhost
   shell: "ip addr show"
