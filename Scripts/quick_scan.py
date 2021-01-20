@@ -10,13 +10,17 @@ from datetime import datetime
 from multiprocessing import Pool
 
 def ping(ip):
+    # Determine platform and set argument accordingly
     if platform.system().lower() == 'windows':
         opt = '-n'
     else:
         opt = '-c'
-    command = ['ping', opt, '1', ip]
-    if subprocess.call(command) == 0:
-        return ip
+
+    # Execute command and return ip if return code is zero
+    with open(os.devnull, 'w') as devnull:
+        command = ['ping', opt, '1', ip]
+        if subprocess.call(command, stdout=devnull, stderr=devnull) == 0:
+            return ip
 
 def main():
     timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
