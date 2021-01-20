@@ -1,0 +1,4 @@
+---
+csv_file: "/root/subnet_scan_{{ date }}.csv"
+subnets: []
+email: "email@domain.com"
