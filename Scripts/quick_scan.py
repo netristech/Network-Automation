@@ -9,19 +9,17 @@ import ipaddress
 from datetime import datetime
 from multiprocessing import Pool
 
+def ping(ip):
+    if platform.system().lower() == 'windows':
+        opt = '-n'
+    else:
+        opt = '-c'
+    command = ['ping', opt, '1', ip]
+    if subprocess.call(command) == 0:
+        return ip
+
 def main():
     timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
-
-    def ping(ip):
-        if platform.system().lower() == 'windows':
-            param = '-n'
-        else:
-            param = '-c'
-
-        # Building the command. Ex: "ping -c 1 google.com"
-        command = ['ping', param, '1', ip]
-        if subprocess.call(command) == 0:
-            return ip
     
     # Get subnets from user
     while True:
