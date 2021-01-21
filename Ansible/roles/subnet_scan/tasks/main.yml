@@ -1,13 +1,3 @@
 ---
-- name: Create CSV File and Write Header
-  delegate_to: localhost
-  run_once: true
-  lineinfile:
-    path: "{{ csv_file }}"
-    line: Subnet, Alive Host Count
-    create: yes
-
-- name: Loop Through Subnets
-  delegate_to: localhost
-  shell: "python3 subnet_scan.py {{ item }}"
-  loop: "{{ subnets }}"
+- name: Run Python Script
+  shell: "python3 /root/Network-Automation/Scripts/subnet_scan.py {{ subnets }}"
