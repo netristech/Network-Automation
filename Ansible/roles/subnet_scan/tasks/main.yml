@@ -1,3 +1,4 @@
 ---
-- name: Run Python Script
-  shell: "python3 /root/Network-Automation/Scripts/subnet_scan.py {{ subnets }}"
+- name: Loop through subnets and execute Script
+  shell: "sudo python3 /root/Network-Automation/Scripts/subnet_scan.py {{ item }}"
+  loop: "{{ subnets.split() }}"
