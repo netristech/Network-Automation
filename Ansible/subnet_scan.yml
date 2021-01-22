@@ -2,7 +2,6 @@
 - hosts: all
   become: yes
   become_method: sudo
-  become_user: bbraun
   gather_facts: no
   
   roles:
