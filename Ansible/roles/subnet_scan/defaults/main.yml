@@ -1,4 +1,4 @@
 ---
-csv_file: "/root/subnet_scan_{{ date }}.csv"
+csv_file: "/root/subnet_scan_{{ lookup('pipe', 'date +%Y%m%d') }}.csv"
 subnets: []
 email: "email@domain.com"
