@@ -18,7 +18,7 @@
     from: BBMUS@bbraunusa.com
     to: "{{ email }}"
     attach:
-    - "{{ cev_file }}"
+    - "{{ csv_file }}"
 
 - name: Cleanup Local Files
   file:
