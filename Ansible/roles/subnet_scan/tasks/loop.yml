@@ -1,0 +1,9 @@
+---
+- name: Run Python Script
+  command: "/usr/bin/python3 /root/Network-Automation/Scripts/subnet_scan.py {{ item }}"
+  register: output
+
+- name: Write Line to CSV
+  lineinfile:
+    path: "{{ csv_file }}"
+    line: "{{ item }},{{ output.stdout }}"

@@ -1,4 +1,26 @@
 ---
+- name: Create CSV File and Write Header
+  lineinfile:
+    path: "{{ csv_file }}"
+    line: "Subnet,Alive Host Count"
+    create: yes
+
 - name: Loop through subnets and execute Script
-  command: "/usr/bin/python3 /root/Network-Automation/Scripts/subnet_scan.py {{ item }}"
+  include_tasks: loop.yml
   loop: "{{ subnets.split() }}"
+
+- name: Email CSV File
+  mail:
+    host: 212.0.16.135
+    port: 25
+    subject: "Subnet Scan Results"
+    body: "Your report has been generated and is attached to this email."
+    from: BBMUS@bbraunusa.com
+    to: "{{ email }}"
+    attach:
+    - "{{ cev_file }}"
+
+- name: Cleanup Local Files
+  file:
+    path: "{{ csv_file }}"
+    state: absent
