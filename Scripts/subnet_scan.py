@@ -10,7 +10,7 @@ from multiprocessing import Pool
 def ping(ip):
     # Execute command and return ip if return code is zero
     with open(os.devnull, 'w') as devnull:
-        command = ['ping', opt, '1', ip]
+        command = ['ping', '-c', '1', ip]
         if subprocess.call(command, stdout=devnull, stderr=devnull) == 0:
             return ip
 
