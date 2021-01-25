@@ -17,7 +17,7 @@ $(document).ready(function(){
                 if (response == 0) {
                     //alert('success');
                     $.post('/main.php', {'login': true});
-                    window.navigate('main.php');
+                    window.location.replace('/main.php');
                 } else {
                     alert('fail');
                 }
