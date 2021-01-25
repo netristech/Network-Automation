@@ -20,7 +20,7 @@ function processLogin() {
     if(!$ssh->login($username, $password)) {
         echo 1;
     } else {
-        $ssh->exec('exit');
+        $ssh->disconnect();
         echo 0;
     }
     /*$command = escapeshellcmd("/usr/bin/python3 ./auth.py " . $username . " " . $password);
