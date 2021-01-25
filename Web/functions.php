@@ -1,7 +1,7 @@
 <?php
 
 set_include_path(get_include_path() . PATH_SEPARATOR . 'phpseclib');
-include('NET/SSH2.php');
+include('Net/SSH2.php');
 
 if(isset($_POST['action']) && !empty($_POST['action'])) {
     $action = $_POST['action'];
