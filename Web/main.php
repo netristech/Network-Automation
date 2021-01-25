@@ -9,6 +9,7 @@ if($_SESSION['login']) {
     include 'footer.php';
 
 } else {
-    echo 'invalid login';
+    header("Location: $_SERVER['HTTP_HOST']");
+    die();
 }
 ?>
