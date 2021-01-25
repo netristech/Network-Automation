@@ -16,7 +16,7 @@ $(document).ready(function(){
             success: function(response) {
                 if (response == 0) {
                     //alert('success');
-                    $.post('/main.php', {'login': true});
+                    $.post('/main.php', {'login': 'valid'});
                     window.location.replace('/main.php');
                 } else {
                     alert('fail');

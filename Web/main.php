@@ -2,7 +2,7 @@
 session_start();
 if(isset($_POST['login'])) {
     $_SESSION['login'] = $_POST['login'];
-    if($_SESSION['login']) {
+    if($_SESSION['login'] == 'valid') {
         include 'header.php';
         include 'importmodal.php';
         include 'nav.php';
