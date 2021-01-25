@@ -16,7 +16,7 @@ function processLogin() {
     $server = $_POST['server'];
     $username = $_POST['username'];
     $password = $_POST['password'];
-    $ssh = new SSH2($server, '22');
+    $ssh = new Net_SSH2($server, '22');
     if(!$ssh->login($username, $password)) {
         echo 1;
     } else {
