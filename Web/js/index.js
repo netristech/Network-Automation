@@ -14,7 +14,12 @@ $(document).ready(function(){
             type: 'post',
             data: 'action=login&server='+server+'&username='+username+'&password='+password,
             success: function(response) {
-                alert(response);
+                //alert(response);
+                if (response == 0) {
+                    alert('success');
+                } else {
+                    alert('fail');
+                }
             }
         });
     });
