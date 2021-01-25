@@ -9,7 +9,7 @@ if($_SESSION['login']) {
     include 'footer.php';
 
 } else {
-    header("Location: $_SERVER['HTTP_HOST']");
+    header("Location: /index.php");
     die();
 }
 ?>
