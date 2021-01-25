@@ -14,9 +14,10 @@ $(document).ready(function(){
             type: 'post',
             data: 'action=login&server='+server+'&username='+username+'&password='+password,
             success: function(response) {
-                //alert(response);
                 if (response == 0) {
-                    alert('success');
+                    //alert('success');
+                    $.post('/main.php', {'login': true});
+                    window.navigate('main.php');
                 } else {
                     alert('fail');
                 }

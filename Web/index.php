@@ -1,5 +1,6 @@
 <?php
 session_start();
+$_SESSION['login'] = $_POST['login'];
 include 'header.php';
 ?>
     <div id="login" class="container text-center">
