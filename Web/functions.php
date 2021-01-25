@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 set_include_path(get_include_path() . PATH_SEPARATOR . 'phpseclib');
 include('Net/SSH2.php');
 
@@ -21,6 +21,7 @@ function processLogin() {
         echo 1;
     } else {
         $ssh->disconnect();
+        $_SESSION['login'] = true;
         echo 0;
     }
     /*$command = escapeshellcmd("/usr/bin/python3 ./auth.py " . $username . " " . $password);
