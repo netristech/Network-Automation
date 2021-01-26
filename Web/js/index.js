@@ -24,6 +24,18 @@ $(document).ready(function(){
         });
     });
 
+    $('#nav').on('click', '#sing-out-btn', function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: 'functions.php',
+            type: 'post',
+            data: 'action=logout',
+            success: function(response) {
+                window.location.replace('/index.php');
+            }
+        });
+    });
+
     $('#sites-table').on('click', '.btn', function(e) {
         e.preventDefault();
         alert($(this).html());
