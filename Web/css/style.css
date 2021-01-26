@@ -17,6 +17,10 @@
     background-color: #f2f2f2;
 }
 
+#sign-out-btn {
+    margin-left: auto;
+}
+
 .btn:focus, .btn-primary:focus {
     outline: none !important;
     box-shadow: none !important;
