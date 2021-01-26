@@ -8,8 +8,7 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
     switch($action) {
         case 'login':
             processLogin();
-            break;
-        
+            break;       
         case 'logout':
             processLogout();
             break;
@@ -30,6 +29,6 @@ function processLogin() {
     }
 }
 
-function processLogout(){
+function processLogout() {
     session_destroy();
 }
