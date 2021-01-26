@@ -19,7 +19,7 @@
             <button id="export-btn" type="button" class="btn btn-secondary mr-2">
                 <i class="fas fa-file-download"></i>&nbsp;Export CSV
             </button>
-            <button id="sign-out-btn" type="button" class="btn btn-secondary mr-2">
+            <button id="sign-out-btn" type="button" class="btn btn-secondary mr-2 float-right">
                 <i class="fas fa-sign-out-alt"></i>&nbsp;Sign Out
             </button>
         </div>
