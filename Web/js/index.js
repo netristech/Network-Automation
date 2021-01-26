@@ -18,7 +18,8 @@ $(document).ready(function(){
                     //alert('success');
                     window.location.replace('/main.php');
                 } else {
-                    alert('fail');
+                    //alert('fail');
+                    showError();
                 }
             },
         });

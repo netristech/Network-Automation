@@ -7,9 +7,8 @@ if($_SESSION['login']) {
     include 'nav.php';
     include 'sites.php';
     include 'footer.php';
-
 } else {
-    header("Location: /index.php");
-    die();
+    session_destroy();
+    die('<script type="text/javascript">window.location.replace("/index.php");</script>');
 }
 ?>
