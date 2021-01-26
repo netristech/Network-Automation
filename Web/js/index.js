@@ -6,7 +6,7 @@ $(document).ready(function(){
 
     $('#login').on('click', '#login-btn', function(e) {
         e.preventDefault();
-        var server = $('#server').val();
+        //var server = $('#server').val();
         var username = $('#username').val();
         var password = $('#password').val();
         $.ajax({
