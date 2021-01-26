@@ -6,6 +6,7 @@ $(document).ready(function(){
 
     $('#login').on('click', '#login-btn', function(e) {
         e.preventDefault();
+        $('#login-btn').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
         //var server = $('#server').val();
         var username = $('#username').val();
         var password = $('#password').val();
