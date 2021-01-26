@@ -30,6 +30,9 @@ $(document).ready(function(){
             url: 'functions.php',
             type: 'post',
             data: 'action=logout',
+            success: function() {
+                window.location.replace('/index.php');
+            },
         });
     });
 
