@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if($_SESSION['login']) {
+if(isset($_SESSION['login']) && $_SESSION['login']) {
     include 'header.php';
     include 'importmodal.php';
     include 'nav.php';
