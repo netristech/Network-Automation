@@ -24,7 +24,7 @@ $(document).ready(function(){
         });
     });
 
-    $('#nav').on('click', '#sing-out-btn', function(e) {
+    $('#nav').on('click', '#sign-out-btn', function(e) {
         e.preventDefault();
         $.ajax({
             url: 'functions.php',
