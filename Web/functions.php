@@ -31,4 +31,6 @@ function processLogin() {
 
 function processLogout() {
     session_destroy();
+    header("Location: /index.php");
+    die();
 }

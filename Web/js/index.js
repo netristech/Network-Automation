@@ -20,7 +20,7 @@ $(document).ready(function(){
                 } else {
                     alert('fail');
                 }
-            }
+            },
         });
     });
 
@@ -30,9 +30,6 @@ $(document).ready(function(){
             url: 'functions.php',
             type: 'post',
             data: 'action=logout',
-            success: function(response) {
-                window.location.replace('/index.php');
-            }
         });
     });
 
