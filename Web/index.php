@@ -12,7 +12,9 @@ include 'header.php';
             <input id="username" class="col col-7" type="text" name="username" value="" /><br />
             <label for="password" class="col col-4">Password: </label>
             <input id="password" class="col col-7" type="password" name="password" value="" /><br /><br />
-            <button type="button" id="login-btn" class="btn btn-primary" style="width: 95%;">Sign In</button>
+            <button type="button" id="login-btn" class="btn btn-primary" style="width: 95%;">
+                <span class="spinner-border hide" role="status" aria-hidden="true"></span>Sign In
+            </button>
         </form>
     </div>
 <?php include 'footer.php'; ?>

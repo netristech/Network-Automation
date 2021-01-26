@@ -6,7 +6,7 @@ $(document).ready(function(){
 
     $('#login').on('click', '#login-btn', function(e) {
         e.preventDefault();
-        $('#login-btn').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
+        $('#login-btn .spinner-border').removeClass('hide');
         //var server = $('#server').val();
         var username = $('#username').val();
         var password = $('#password').val();
@@ -21,6 +21,7 @@ $(document).ready(function(){
                 } else {
                     //alert('fail');
                     showError();
+                    $('#login-btn .spinner-border').addClass('hide');
                 }
             },
         });
