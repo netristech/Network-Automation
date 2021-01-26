@@ -2,6 +2,7 @@
 session_start();
 set_include_path(get_include_path() . PATH_SEPARATOR . 'phpseclib');
 include('Net/SSH2.php');
+$server = '172.30.191.45';
 
 if(isset($_POST['action']) && !empty($_POST['action'])) {
     $action = $_POST['action'];
@@ -16,7 +17,7 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
 }
 
 function processLogin() {
-    $server = $_POST['server'];
+    //$server = $_POST['server'];
     $username = $_POST['username'];
     $password = $_POST['password'];
     $ssh = new Net_SSH2($server, '22');

@@ -12,7 +12,7 @@ $(document).ready(function(){
         $.ajax({
             url: 'functions.php',
             type: 'post',
-            data: 'action=login&server='+server+'&username='+username+'&password='+password,
+            data: 'action=login&username='+username+'&password='+password,
             success: function(response) {
                 if (response == 0) {
                     //alert('success');
