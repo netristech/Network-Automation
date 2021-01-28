@@ -12,7 +12,11 @@
                 <div class="modal-body">
                     <form id="import-form" method="post" action="" enctype="multipart/form-data">
                         <div class="alert alert-danger" style="display: none;">Error uploading file, please check file type and size are correct.</div>
-                        <div class="alert alert-secondary">Select a CSV file to import</div>
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                Select a CSV file to import
+                            </div>
+                        </div>
                         <input type="file" id="import-file" name="import-file" />
                         <!--<input type="submit" name="submit" value="Import" />-->
                     </form>
