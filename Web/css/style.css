@@ -17,6 +17,10 @@
     background-color: #f2f2f2;
 }
 
+#login-btn {
+    background-color: #00B482 !important;
+}
+
 #sign-out-btn {
     margin-left: auto;
 }
