@@ -39,6 +39,18 @@ $(document).ready(function(){
         });
     });
 
+    $('#nav').on('click', '#export-btn', function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: 'http://172.31.104.28/api/v2/job_templates/12/launch/',
+            type: 'get',
+            dataType: 'json',
+            success: function(response) {
+                alert(response);
+            },
+        });
+    });
+
     $('#sites-table').on('click', '.btn', function(e) {
         e.preventDefault();
         alert($(this).html());

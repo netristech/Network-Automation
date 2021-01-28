@@ -12,7 +12,7 @@ include 'header.php';
             <input id="username" class="col col-7" type="text" name="username" value="" /><br />
             <label for="password" class="col col-4">Password: </label>
             <input id="password" class="col col-7" type="password" name="password" value="" /><br /><br />
-            <button type="button" id="login-btn" class="btn btn-primary" style="width: 95%;">
+            <button type="button" id="login-btn" class="btn btn-success" style="width: 95%;">
                 Sign In&nbsp;<span class="spinner-border spinner-border-sm hide" role="status" aria-hidden="true"></span>
             </button>
         </form>
