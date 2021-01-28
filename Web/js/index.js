@@ -41,6 +41,7 @@ $(document).ready(function(){
 
     $('#nav').on('click', '#export-btn', function(e) {
         e.preventDefault();
+        alert('click');
         $.ajax({
             url: 'http://172.31.104.28/api/v2/job_templates/12/launch/',
             type: 'get',
