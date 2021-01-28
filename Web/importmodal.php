@@ -12,8 +12,8 @@
                 <div class="modal-body">
                     <form id="import-form" method="post" action="" enctype="multipart/form-data">
                         <div class="alert alert-danger" style="display: none;">Error uploading file, please check file type and size are correct.</div>
-                        <div class="panel panel-default">
-                            <div class="panel-body">
+                        <div class="card">
+                            <div class="card-body">
                                 Select a CSV file to import
                             </div>
                         </div>
