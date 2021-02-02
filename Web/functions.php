@@ -39,6 +39,6 @@ function processLogout() {
 }
 
 function test() {
-    $output = shell_exec('curl -k -s --user admin:Ans1bl3 -X GET -H "Content-Type: application/json" http://172.31.104.28/api/v2/job_templates/12/launch/');
-    echo $output
+    $output = shell_exec("curl -k -s --user admin:Ans1bl3 -X GET -H 'Content-Type: application/json' http://172.31.104.28/api/v2/job_templates/12/launch/");
+    echo $output;
 }
