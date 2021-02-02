@@ -35,7 +35,7 @@ function processLogin() {
 
 function processLogout() {
     session_destroy();
-    die('<script type="text/javascript">window.replace("index.html");</script>');
+    die("<script type='text/javascript'>window.replace('/index.html');</script>");
 }
 
 function test() {
